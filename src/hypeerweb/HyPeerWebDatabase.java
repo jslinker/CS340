@@ -10,8 +10,8 @@ import java.sql.*;
  */
 public class HyPeerWebDatabase {
 
-	public static final String DATABASE_DIRECTORY = "databases";
-	public static final String DEFAULT_DATABASE_NAME = "hypeerweb.db";
+	public static final String DATABASE_DIRECTORY = "db/";
+	public static final String DEFAULT_DATABASE_NAME = "HyPeerWeb.db";
 	private static final String SQLITE_DRIVER = "org.sqlite.JDBC";
 	private static final String SQLITE_DRIVER_URL_PREFIX = "jdbc:sqlite";
 	
