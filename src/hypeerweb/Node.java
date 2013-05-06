@@ -74,7 +74,11 @@ public class Node {
 	}
 	
 	public void setWebId(WebId webId){
-		
+		this.webId = webId;
+	}
+	
+	public WebId getWebId(){
+		return webId;
 	}
 	
 	public boolean equals(Node otherNode){
