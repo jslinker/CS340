@@ -77,10 +77,6 @@ public class Node {
 		this.webId = webId;
 	}
 	
-	public WebId getWebId(){
-		return webId;
-	}
-	
 	public boolean equals(Node otherNode){
 		return this.webId == otherNode.webId;
 	}
