@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS nodes
 (
 	web_id INTEGER UNIQUE NOT NULL,
+	height INTEGER NOT NULL,
 	fold INTEGER,
 	surrogate_fold INTEGER,
 	inverse_surrogate_fold INTEGER,
