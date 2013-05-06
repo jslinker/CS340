@@ -14,6 +14,8 @@ public class Node {
 	
 	public static final Node NULL_NODE = new Node();
 	
+	private final int DEFAULT_HEIGHT = 0;
+	
 	private Node(){
 		webId = WebId.NULL_WEB_ID;
 		downPointers = new ArrayList<Node>();
@@ -22,11 +24,13 @@ public class Node {
 	}
 
 	public Node(int id){
-		
+		assert(id >= 0);
+		webId = new WebId(id, DEFAULT_HEIGHT);
 	}
 	
 	public Node(int id, int height){
-		
+		assert(id >= 0 && height >= 0);
+		webId = new WebId(id, height);
 	}
 	
 	public void addDownPointer(Node downPointer){
