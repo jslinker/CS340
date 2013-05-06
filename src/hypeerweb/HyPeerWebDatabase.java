@@ -46,16 +46,47 @@ public class HyPeerWebDatabase {
 		}
 	}
 	
+	private static final String CREATE_TABLE_NODES = "CREATE TABLE IF NOT EXISTS nodes("+
+														"web_id INTEGER UNIQUE NOT NULL,"+
+														"height INTEGER NOT NULL,"+
+														"fold INTEGER,"+
+														"surrogate_fold INTEGER,"+
+														"inverse_surrogate_fold INTEGER);";
+	private static final String CREATE_TABLE_NEIGHBORS = "CREATE TABLE IF NOT EXISTS neighbors("+
+															"node INTEGER NOT NULL,"+
+															"neighbor INTEGER NOT NULL,"+
+															"UNIQUE (node, neighbor));";
+	private static final String CREATE_TABLE_UP_POINTERS = "CREATE TABLE IF NOT EXISTS up_pointers"+
+															"node INTEGER NOT NULL,"+
+															"edge_node INTEGER NOT NULL,"+
+															"UNIQUE (node, edge_node));";
+	
+	private static final String CREATE_TABLE_DOWN_POINTERS = "CREATE TABLE IF NOT EXISTS down_pointers("+
+																"node INTEGER NOT NULL,"+
+																"surrogate_neighbor INTEGER NOT NULL,"+
+																"UNIQUE (node, surrogate_neighbor));";
+	
 	/**
 	 * Ensures that the database has the proper tables.
 	 * @param con A valid non-null Connection object.
 	 * @Precondition <code>con</code> is non-null
-	 * @Postcondition The database <code>con</code> is 
-	 * connected to contains the necessary tables.
+	 * @Postcondition The database connection <code>con</code>  contains the necessary tables.
 	 * @author Craig Jacobson
 	 */
 	private void initHyPeerWebTables(Connection con){
 		assert con != null;
+		
+		String sql = CREATE_TABLE_NODES + CREATE_TABLE_NEIGHBORS + 
+						CREATE_TABLE_UP_POINTERS + CREATE_TABLE_DOWN_POINTERS;
+		
+		try{
+			Statement createAllTables = con.createStatement();
+			createAllTables.executeUpdate(sql);
+			createAllTables.close();
+		}
+		catch(SQLException e){
+			System.out.println(e);
+		}
 	}
 	
 	/**
@@ -104,5 +135,14 @@ public class HyPeerWebDatabase {
 	public SimplifiedNodeDomain getNode(int webId){
 		assert webId >= 0;
 		return null;
+	}
+	
+	
+	/**
+	 * Stores/updates the node and all of that nodes references.
+	 * @param node 
+	 */
+	public void storeNode(Node node){
+		
 	}
 }
