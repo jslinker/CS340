@@ -1,6 +1,8 @@
 package hypeerweb;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 
 public class Node {
 	
@@ -45,8 +47,28 @@ public class Node {
 		this.upPointers.add(upPointer);
 	}
 	
+	/**
+	 * 
+	 * @return The created SimplifiedNodeDomain object.
+	 */
 	public SimplifiedNodeDomain constructSimplifiedNodeDomain(){
-		return null;
+		HashSet<Integer> neighbor_Ids = new HashSet<Integer>();
+		for(Iterator<Node> i = neighbors.iterator() ; i.hasNext(); ){
+			neighbor_Ids.add(i.next().getWebIdValue());
+		}
+		
+		HashSet<Integer> up_Ids = new HashSet<Integer>();
+		for(Iterator<Node> i = upPointers.iterator(); i.hasNext(); ){
+			up_Ids.add(i.next().getWebIdValue());
+		}
+		
+		HashSet<Integer> down_Ids = new HashSet<Integer>();
+		for(Iterator<Node> i = downPointers.iterator(); i.hasNext(); ){
+			down_Ids.add(i.next().getWebIdValue());
+		}
+		
+		return new SimplifiedNodeDomain(webId.getValue(), webId.getHeight(), neighbor_Ids, up_Ids, down_Ids, 
+									    fold.getWebIdValue(), surrogateFold.getWebIdValue(), inverseSurrogateFold.getWebIdValue());
 	}
 	
 	public WebId getWebId(){
@@ -79,6 +101,10 @@ public class Node {
 	
 	public void setWebId(WebId webId){
 		this.webId = webId;
+	}
+	
+	public int getWebIdValue(){
+		return webId.getValue();
 	}
 	
 	public boolean equals(Node otherNode){
