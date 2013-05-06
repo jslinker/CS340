@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS nodes
 	inverse_surrogate_fold INTEGER,
 	FOREIGN KEY (fold) REFERENCES nodes(web_id),
 	FOREIGN KEY (surrogate_fold) REFERENCES nodes(web_id),
-	FOREIGN KEY (inverse_surrogate_fold) REFERENCES nodes(web_id),
+	FOREIGN KEY (inverse_surrogate_fold) REFERENCES nodes(web_id)
 );
 
 CREATE TABLE IF NOT EXISTS neighbors
