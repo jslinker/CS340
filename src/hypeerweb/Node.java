@@ -132,23 +132,14 @@ public class Node {
 	}
 	
 	public Node getFold() {
-		if(fold == null)
-			return NULL_NODE;
-		
 		return fold;
 	}
 	
 	public Node getSurrogateFold() {
-		if(surrogateFold == null)
-			return NULL_NODE;
-		
 		return surrogateFold;
 	}
 	
 	public Node getInverseSurrogateFold() {
-		if(inverseSurrogateFold == null)
-			return NULL_NODE;
-		
 		return inverseSurrogateFold;
 	}
 	
