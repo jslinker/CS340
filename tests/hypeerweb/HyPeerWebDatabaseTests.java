@@ -28,7 +28,7 @@ public class HyPeerWebDatabaseTests {
 		node.addUpPointer(up);
 		node.addDownPointer(down);
 		
-		HyPeerWebDatabase.initHyPeerWebDatabase("test_db");
+		HyPeerWebDatabase.initHyPeerWebDatabase("test_db2.sqlite");
 		db = HyPeerWebDatabase.getSingleton();
 	}
 	

@@ -1,8 +1,14 @@
 package hypeerweb;
 
 import java.io.File;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Singleton that creates easy access data in the connected database.
@@ -16,17 +22,23 @@ public class HyPeerWebDatabase {
 	public static final String DEFAULT_DATABASE_NAME = "HyPeerWeb.db";
 	private static final String SQLITE_DRIVER = "org.sqlite.JDBC";
 	private static final String SQLITE_DRIVER_URL_PREFIX = "jdbc:sqlite";
+	private static final String[] tableNames = {"nodes","neighbors","up_pointers","down_pointers"};
 	
 	private static HyPeerWebDatabase singleton = null;
 	
 	private Connection connection = null;
 	
+	public Connection getConnection() {
+		assert connection != null;
+		return this.connection;
+	}
+	
 	/**
 	 * Creates a HyPeerWebDatabase that connects to a sqlite database 
 	 * to load or save information.
 	 * @param dbName Valid database name.
-	 * @pre dbName is valid and located in the DATABASE_DIRECTORY
-	 * @post The database is connected and <code>connection</code> is not null.
+	 * @Precondition dbName is valid and located in the DATABASE_DIRECTORY
+	 * @Postcondition The database is connected and <code>connection</code> is not null.
 	 * Additionally, dbName is created if it did not exist 
 	 * and any necessary tables are created.
 	 * @author Craig Jacobson
@@ -38,7 +50,7 @@ public class HyPeerWebDatabase {
 			connection = DriverManager.getConnection(url);
 			connection.setAutoCommit(true);
 			
-			initHyPeerWebTables(connection);
+			initHyPeerWebTables();
 		}
 		catch(ClassNotFoundException e){
 			System.out.println(e);
@@ -48,22 +60,24 @@ public class HyPeerWebDatabase {
 		}
 	}
 	
-	private static final String CREATE_TABLE_NODES = "CREATE TABLE IF NOT EXISTS nodes("+
+	private static final String CREATE_TABLE_NODES = "CREATE TABLE IF NOT EXISTS " + tableNames[0] + "("+
 														"web_id INTEGER UNIQUE NOT NULL,"+
 														"height INTEGER NOT NULL,"+
 														"fold INTEGER,"+
 														"surrogate_fold INTEGER,"+
 														"inverse_surrogate_fold INTEGER);";
-	private static final String CREATE_TABLE_NEIGHBORS = "CREATE TABLE IF NOT EXISTS neighbors("+
+	
+	private static final String CREATE_TABLE_NEIGHBORS = "CREATE TABLE IF NOT EXISTS " + tableNames[1] + "("+
 															"node INTEGER NOT NULL,"+
 															"neighbor INTEGER NOT NULL,"+
 															"UNIQUE (node, neighbor));";
-	private static final String CREATE_TABLE_UP_POINTERS = "CREATE TABLE IF NOT EXISTS up_pointers("+
+	
+	private static final String CREATE_TABLE_UP_POINTERS = "CREATE TABLE IF NOT EXISTS " + tableNames[2] + "("+
 															"node INTEGER NOT NULL,"+
 															"edge_node INTEGER NOT NULL,"+
 															"UNIQUE (node, edge_node));";
 	
-	private static final String CREATE_TABLE_DOWN_POINTERS = "CREATE TABLE IF NOT EXISTS down_pointers("+
+	private static final String CREATE_TABLE_DOWN_POINTERS = "CREATE TABLE IF NOT EXISTS " + tableNames[3] + "("+
 																"node INTEGER NOT NULL,"+
 																"surrogate_neighbor INTEGER NOT NULL,"+
 																"UNIQUE (node, surrogate_neighbor));";
@@ -71,15 +85,14 @@ public class HyPeerWebDatabase {
 	/**
 	 * Ensures that the database has the proper tables.
 	 * @param con A valid non-null Connection object.
-	 * @pre <code>con</code> is non-null
-	 * @post The database connection <code>con</code>  contains the necessary tables.
+	 * @Precondition <code>con</code> is non-null
+	 * @Postcondition The database connection <code>con</code>  contains the necessary tables.
 	 * @author Craig Jacobson
 	 */
-	private void initHyPeerWebTables(Connection con){
-		assert con != null;
+	private void initHyPeerWebTables(){
 		
 		try{
-			Statement createTable = con.createStatement();
+			Statement createTable = getConnection().createStatement();
 			createTable.executeUpdate(CREATE_TABLE_NODES);
 			createTable.executeUpdate(CREATE_TABLE_NEIGHBORS);
 			createTable.executeUpdate(CREATE_TABLE_UP_POINTERS);
@@ -95,8 +108,8 @@ public class HyPeerWebDatabase {
 	 * Creates and loads a HyPeerWebDatabase. 
 	 * Should be one of the first things called when creating a HyPeerWeb.
 	 * @param dbName The name of the database. Must be valid, null, or empty.
-	 * @pre dbName = null OR |dbName| = 0 OR dbName is valid
-	 * @post 
+	 * @Precondition dbName = null OR |dbName| = 0 OR dbName is valid
+	 * @Postcondition 
 	 * IF dbName == null OR |dbName| = 0
 	 * new HyPeerWebDatabase(DEFAULT_DATABASE_NAME)
 	 * ELSE
@@ -117,9 +130,9 @@ public class HyPeerWebDatabase {
 	/**
 	 * Gets the single HyPeerWebDatabase.
 	 * @return The HyPeerWebDatabase singleton.
-	 * @pre <code>initHyPeerWebDatabase()</code> must have been called previously to ensure
+	 * @Precondition <code>initHyPeerWebDatabase()</code> must have been called previously to ensure
 	 * that result != null
-	 * @post result = singleton
+	 * @Postcondition result = singleton
 	 * @author Craig Jacobson
 	 */
 	public static HyPeerWebDatabase getSingleton(){
@@ -132,147 +145,189 @@ public class HyPeerWebDatabase {
 	 * The information is retrieved from the database.
 	 * @param webId The webId of the node whose information will be retrieved.
 	 * @return The SimplifiedNodeDomain corresponding to the webId.
-	 * @pre There exists a node in the database with the given webId.
-	 * @post result contains the webId, neighbors, upPointers, 
+	 * @Precondition There exists a node in the database with the given webId.
+	 * @Postcondition result contains the webId, neighbors, upPointers, 
 	 * downPointers, fold, surrogateFold, and inverse surrogate fold of the 
 	 * indicated node.
-	 * @author Craig Jacobson
+	 * @author Jason Robertson
 	 */
 	public SimplifiedNodeDomain getNode(int webId){
 		assert webId >= 0;
-		
+
 		SimplifiedNodeDomain result = null;
 		
-		int height = -1;
-		int fold = -1;
-		int surrogateFold = -1;
-		int inverseSurrogateFold = -1;
-		HashSet<Integer> neighbors = new HashSet<Integer>();
-		HashSet<Integer> upPointers = new HashSet<Integer>();
-		HashSet<Integer> downPointers = new HashSet<Integer>();
-		
-		try{
-			String sqlGetNodeInfo = "SELECT height, fold, surrogate_fold, inverse_surrogate_fold "+
-									"FROM nodes "+
-									"WHERE web_id = " + webId + ";";
-			String sqlGetNeighbors = "SELECT neighbor FROM neighbors "+
-										"WHERE node = " + webId + ";";
-			String sqlGetUpPointers = "SELECT edge_node FROM up_pointers "+
-										"WHERE node = " + webId + ";";
-			String sqlGetDownPointers = "SELECT surrogate_neighbor FROM down_pointers "+
-										"WHERE node = " + webId + ";";
+		try {
 			
-			Statement statement = connection.createStatement();
-			ResultSet queryResults = statement.executeQuery(sqlGetNodeInfo);
-			if(queryResults.next()){
-				height = queryResults.getInt(1);
-				fold = queryResults.getInt(2);
-				surrogateFold = queryResults.getInt(3);
-				inverseSurrogateFold = queryResults.getInt(4);
+			Statement stmt = getSingleton().getConnection().createStatement();
+			String sql = "SELECT * from nodes WHERE web_id = " + webId;
+			ResultSet rs = stmt.executeQuery(sql);
+
+			int web_id;
+			int height;
+			int fold;
+			int surrogate_fold;
+			int inverse_surrogate_fold;
+
+			if( ! rs.next()) {
+				return null;
 			}
-			queryResults.close();
 			
-			queryResults = statement.executeQuery(sqlGetNeighbors);
-			while(queryResults.next()){
-				neighbors.add(new Integer(queryResults.getInt(1)));
-			}
-			queryResults.close();
-			
-			queryResults = statement.executeQuery(sqlGetUpPointers);
-			while(queryResults.next()){
-				upPointers.add(new Integer(queryResults.getInt(1)));
-			}
-			queryResults.close();
-			
-			queryResults = statement.executeQuery(sqlGetDownPointers);
-			while(queryResults.next()){
-				downPointers.add(new Integer(queryResults.getInt(1)));
-			}
-			queryResults.close();
-			
-			result = new SimplifiedNodeDomain(webId, height, neighbors, upPointers, downPointers,
-												fold, surrogateFold, inverseSurrogateFold);
+			web_id = rs.getInt(1);
+			height = rs.getInt(2);
+			fold = rs.getInt(3);
+			surrogate_fold = rs.getInt(4);
+			inverse_surrogate_fold = rs.getInt(5);
+
+			HashSet<Integer> neighbors = findNearbyFriends(webId, tableNames[1]);
+			HashSet<Integer> upPointers = findNearbyFriends(webId, tableNames[2]); 
+			HashSet<Integer> downPointers = findNearbyFriends(webId, tableNames[3]); 
+
+			result = new SimplifiedNodeDomain(web_id, height, neighbors,
+					upPointers, downPointers, fold, surrogate_fold, inverse_surrogate_fold);
+
 		}
-		catch(SQLException e){
+		catch(SQLException e) {
+			System.out.println(e);
+		}
+
+		return result;
+	}
+	
+	/**
+	 * This method retrieves neighboring information of a given node.
+	 * @param webId The web id of the node the resulting data belongs to.
+	 * @param table The name of the table being searched. (neighbors, up_pointers, or down_pointers)
+	 * @return A set of web id values of the nearby friends
+	 * @author Jason Robertson
+	 */
+	private HashSet<Integer> findNearbyFriends(int webId, String table) {
+		HashSet<Integer> result = new HashSet<Integer>();
+
+		try {
+			Statement stmt = getSingleton().getConnection().createStatement();
+			String sql = "SELECT * from " + table + " WHERE node = " + webId;
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while(rs.next()) {
+				result.add(rs.getInt(2));
+			}
+		}
+		catch (SQLException e) {
+			System.out.println(e);
+		}
+
+		return result;
+	}
+
+
+	public List<Integer> getAllWebIds() {
+
+		List<Integer> result = new ArrayList<Integer>();
+		
+		try {
+
+			Statement stmt = getSingleton().getConnection().createStatement();
+			String sql = "SELECT * from nodes;";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while(rs.next()) {
+				result.add(rs.getInt(1));
+			}
+		}
+		catch(SQLException e) {
 			System.out.println(e);
 		}
 		
 		return result;
 	}
 	
-	
 	/**
-	 * Stores/updates the node and all of that nodes references.
-	 * @param node The node to be added to the database.
-	 * @pre node &ne; null AND node &ne; NULL_NODE AND all values in node are valid
-	 * @post The database contains the representation of the node.
-	 * @author Craig Jacobson
+	 * Stores the node and all of that nodes references.
+	 * @param node - The node being stored 
+	 * @author Jason Robertson
 	 */
 	public void storeNode(Node node){
-		assert (node != null && node != Node.NULL_NODE);
-		
-		SimplifiedNodeDomain simpleNode = node.constructSimplifiedNodeDomain();
-		
-		String sqlDeleteNode = "DELETE FROM nodes WHERE web_id = " + simpleNode.getWebId();
-		String sqlDeleteNeighbors = "DELETE FROM neighbors WHERE node = " + simpleNode.getWebId();
-		String sqlDeleteUpPointers = "DELETE FROM up_pointers WHERE node = " + simpleNode.getWebId();
-		String sqlDeleteDownPointers = "DELETE FROM down_pointers WHERE node = " + simpleNode.getWebId();
-		String sqlAddNode = "INSERT INTO nodes (web_id, height, fold, surrogate_fold, inverse_surrogate_fold) "+
-							"VALUES (?,?,?,?,?);";
-		String sqlAddNeighbors = "INSERT INTO neighbors (node, neighbor) VALUES (?,?);";
-		String sqlAddUpPointers = "INSERT INTO up_pointers (node, edge_node) VALUES (?,?);";
-		String sqlAddDownPointers = "INSERT INTO down_pointers (node, surrogate_neighbor) VALUES (?,?);";
-		
-		try{
-			Statement deleteStatement = connection.createStatement();
-			
-			PreparedStatement nodePreparedStatement = connection.prepareStatement(sqlAddNode);
-			nodePreparedStatement.setInt(1, simpleNode.getWebId());
-			nodePreparedStatement.setInt(2, simpleNode.getHeight());
-			nodePreparedStatement.setInt(3, simpleNode.getFold());
-			nodePreparedStatement.setInt(4, simpleNode.getSurrogateFold());
-			nodePreparedStatement.setInt(5, simpleNode.getInverseSurrogateFold());
-			nodePreparedStatement.addBatch();
-			
-			PreparedStatement neighborsPreparedStatement = connection.prepareStatement(sqlAddNeighbors);
-			HashSet<Integer> neighbors = simpleNode.getNeighbors();
-			for(Integer n: neighbors){
-				neighborsPreparedStatement.setInt(1, simpleNode.getWebId());
-				neighborsPreparedStatement.setInt(2, n);
-				neighborsPreparedStatement.addBatch();
+
+		try {
+			Statement stmt = getSingleton().getConnection().createStatement();
+
+			// Store General Info
+
+			String sql = String.format("INSERT INTO " + tableNames[0] +
+					"(web_id, height, fold, surrogate_fold, inverse_surrogate_fold) " +
+					"VALUES ('%d', '%d', '%d', '%d', '%d');",
+					node.getWebIdValue(),
+					node.getWebIdHeight(),
+					node.getFold().getWebIdValue(),
+					node.getSurrogateFold().getWebIdValue(),
+					node.getInverseSurrogateFold().getWebIdValue()
+					);
+
+			stmt.executeUpdate(sql);
+
+			// Store Neighbors
+
+			List<Node> neighbors = node.getNeighbors();
+			for(Node neighbor : neighbors) {
+				sql = String.format("INSERT INTO " + tableNames[1] +
+						"(node, neighbor) " +
+						"VALUES ('%d', '%d');",
+						node.getWebIdValue(), neighbor.getWebIdValue());
+
+				stmt.executeUpdate(sql);
 			}
-			
-			PreparedStatement upPointersPreparedStatement = connection.prepareStatement(sqlAddUpPointers);
-			HashSet<Integer> upPointers = simpleNode.getUpPointers();
-			for(Integer n: upPointers){
-				upPointersPreparedStatement.setInt(1, simpleNode.getWebId());
-				upPointersPreparedStatement.setInt(2, n);
-				upPointersPreparedStatement.addBatch();
+
+			// Store Up Pointers
+
+			List<Node> upPtrs = node.getUpPointers();
+			for(Node up : upPtrs) {
+				sql = String.format("INSERT INTO " + tableNames[2] +
+						"(node, edge_node) " +
+						"VALUES ('%d', '%d');",
+						node.getWebIdValue(), up.getWebIdValue());
+
+				stmt.executeUpdate(sql);
 			}
-			
-			PreparedStatement downPointersPreparedStatement = connection.prepareStatement(sqlAddDownPointers);
-			HashSet<Integer> downPointers = simpleNode.getDownPointers();
-			for(Integer n: downPointers){
-				downPointersPreparedStatement.setInt(1, simpleNode.getWebId());
-				downPointersPreparedStatement.setInt(2, n);
-				downPointersPreparedStatement.addBatch();
+
+			// Store Down Pointers
+
+			List<Node> downPtrs = node.getDownPointers();
+			for(Node down : downPtrs) {
+				sql = String.format("INSERT INTO " + tableNames[3] +
+						"(node, surrogate_neighbor) " +
+						"VALUES ('%d', '%d');",
+						node.getWebIdValue(), down.getWebIdValue());
+
+				stmt.executeUpdate(sql);
 			}
-			
-			connection.setAutoCommit(false);
-			deleteStatement.executeUpdate(sqlDeleteNode);
-			deleteStatement.executeUpdate(sqlDeleteNeighbors);
-			deleteStatement.executeUpdate(sqlDeleteUpPointers);
-			deleteStatement.executeUpdate(sqlDeleteDownPointers);
-			connection.commit();
-			nodePreparedStatement.executeBatch();
-			neighborsPreparedStatement.executeBatch();
-			upPointersPreparedStatement.executeBatch();
-			downPointersPreparedStatement.executeBatch();
-			connection.commit();
-			connection.setAutoCommit(true);
+
+			stmt.close();
 		}
-		catch(SQLException e){
-			System.out.println(e);
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * Removes all the data in the tables from the database. (The schema
+	 * skeleton is left behind, ready to start adding things to it again)
+	 * @author Jason Robertson
+	 */
+	public static void clear() {
+
+		try {
+			Statement stmt = getSingleton().getConnection().createStatement();
+			for(int i = 0; i < tableNames.length; i++) {
+
+				String sql = "delete from " + tableNames[i] + ";";
+				stmt.executeUpdate(sql);
+			}
+			stmt.close();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
+
 }

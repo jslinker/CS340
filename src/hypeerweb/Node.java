@@ -7,16 +7,25 @@ import java.util.Iterator;
 public class Node {
 	
 	private WebId webId = null;
+	
 	private ArrayList<Node> downPointers = null;
 	private ArrayList<Node> upPointers = null;
 	private ArrayList<Node> neighbors = null;
-	private Node fold = null;
-	private Node surrogateFold = null;
-	private Node inverseSurrogateFold = null;
 	
-	public static final Node NULL_NODE = new Node();
+	private Node fold = NULL_NODE;
+	private Node surrogateFold = NULL_NODE;
+	private Node inverseSurrogateFold = NULL_NODE;
 	
-	private final int DEFAULT_HEIGHT = 0;
+	public static final Node NULL_NODE = new Node() {
+		
+		@Override public SimplifiedNodeDomain constructSimplifiedNodeDomain() { return null; }
+		@Override public void addDownPointer(Node downPointer){ return; }
+		@Override public void addNeighbor(Node neighbor){ return; }
+		@Override public void addUpPointer(Node upPointer){ return; }
+		@Override public void removeDownPointer(Node downPointer){ return; }
+		@Override public void removeNeighbor(Node neighbor){ return; }
+		@Override public void removeUpPointer(Node upPointer){ return; }
+	};
 	
 	private Node(){
 		webId = WebId.NULL_WEB_ID;
@@ -27,38 +36,18 @@ public class Node {
 		assert(id >= 0);
 		webId = new WebId(id);
 		initializeLists();
-		initializeFolds();
 	}
 	
 	public Node(int id, int height){
 		assert(id >= 0 && height >= 0);
 		webId = new WebId(id, height);
 		initializeLists();
-		initializeFolds();
 	}
 	
 	private void initializeLists(){
 		downPointers = new ArrayList<Node>();
 		upPointers = new ArrayList<Node>();
 		neighbors = new ArrayList<Node>();
-	}
-	
-	private void initializeFolds(){
-		this.fold = NULL_NODE;
-		this.surrogateFold = NULL_NODE;
-		this.inverseSurrogateFold = NULL_NODE;
-	}
-	
-	public void addDownPointer(Node downPointer){
-		this.downPointers.add(downPointer);
-	}
-	
-	public void addNeighbor(Node neighbor){
-		this.neighbors.add(neighbor);
-	}
-	
-	public void addUpPointer(Node upPointer){
-		this.upPointers.add(upPointer);
 	}
 	
 	/**
@@ -85,10 +74,24 @@ public class Node {
 									    fold.getWebIdValue(), surrogateFold.getWebIdValue(), inverseSurrogateFold.getWebIdValue());
 	}
 	
-	public WebId getWebId(){
-		return webId;
+	//------------------
+	//  A D D E R S
+	//------------------
+	public void addDownPointer(Node downPointer){
+		this.downPointers.add(downPointer);
 	}
 	
+	public void addNeighbor(Node neighbor){
+		this.neighbors.add(neighbor);
+	}
+	
+	public void addUpPointer(Node upPointer){
+		this.upPointers.add(upPointer);
+	}
+	
+	//--------------------
+	//  R E M O V E R S
+	//--------------------	
 	public void removeDownPointer(Node downPointer){
 		this.downPointers.remove(downPointer);
 	}
@@ -101,6 +104,57 @@ public class Node {
 		this.upPointers.remove(upPointer);
 	}
 	
+	//------------------
+	//  G E T T E R S
+	//------------------
+	public WebId getWebId(){
+		return webId;
+	}
+	
+	public int getWebIdValue(){
+		return webId.getValue();
+	}
+	
+	public int getWebIdHeight(){
+		return webId.getHeight();
+	}
+	
+	public ArrayList<Node> getDownPointers() {
+		return downPointers;
+	}
+	
+	public ArrayList<Node> getUpPointers() {
+		return upPointers;
+	}
+	
+	public ArrayList<Node> getNeighbors() {
+		return neighbors;
+	}
+	
+	public Node getFold() {
+		if(fold == null)
+			return NULL_NODE;
+		
+		return fold;
+	}
+	
+	public Node getSurrogateFold() {
+		if(surrogateFold == null)
+			return NULL_NODE;
+		
+		return surrogateFold;
+	}
+	
+	public Node getInverseSurrogateFold() {
+		if(inverseSurrogateFold == null)
+			return NULL_NODE;
+		
+		return inverseSurrogateFold;
+	}
+	
+	//------------------
+	//  S E T T E R S
+	//------------------
 	public void setFold(Node fold){
 		this.fold = fold;
 	}
@@ -117,11 +171,44 @@ public class Node {
 		this.webId = webId;
 	}
 	
-	public int getWebIdValue(){
-		return webId.getValue();
+	@Override
+	public String toString() {
+		return "Node [webId=" + webId + ", downPointers=" + downPointers
+				+ ", upPointers=" + upPointers + ", neighbors=" + neighbors
+				+ ", fold=" + fold + ", surrogateFold=" + surrogateFold
+				+ ", inverseSurrogateFold=" + inverseSurrogateFold + "]";
 	}
-	
-	public boolean equals(Node otherNode){
-		return this.webId == otherNode.webId;
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((webId == null) ? 0 : webId.hashCode());
+		result = prime * result + ((downPointers == null) ? 0 : downPointers.hashCode());
+		result = prime * result + ((upPointers == null) ? 0 : upPointers.hashCode());
+		result = prime * result + ((fold == null) ? 0 : fold.hashCode());
+		result = prime * result + ((inverseSurrogateFold == null) ? 0 : inverseSurrogateFold.hashCode());
+		result = prime * result + ((neighbors == null) ? 0 : neighbors.hashCode());
+		result = prime * result + ((surrogateFold == null) ? 0 : surrogateFold.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		Node other = (Node) obj;
+		
+		boolean webId = this.webId == other.webId;
+		boolean down = this.downPointers == other.downPointers;
+		boolean up = this.upPointers == other.upPointers;
+		boolean fold = this.fold.equals(other.fold);
+		boolean isf = this.inverseSurrogateFold.equals(other.inverseSurrogateFold);
+		boolean neigh = this.neighbors.equals(other.neighbors);
+		boolean sf = this.surrogateFold.equals(other.surrogateFold);
+
+		return webId && down && up && fold && isf && neigh && sf;
 	}
 }

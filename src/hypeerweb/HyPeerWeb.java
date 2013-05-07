@@ -1,15 +1,15 @@
 package hypeerweb;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HyPeerWeb {
 	
 	private static HyPeerWeb singleton = null;
-	
-	private HashSet<Node> nodes = null;
+	private List<Node> nodes = null;
 	
 	private HyPeerWeb(){
-		this.nodes = new HashSet<Node>();
+		this.nodes = new ArrayList<Node>();
 	}
 	
 	public static HyPeerWeb getSingleton(){
@@ -24,7 +24,7 @@ public class HyPeerWeb {
 	}
 	
 	public void clear(){
-		
+		this.nodes.clear();
 	}
 	
 	public boolean contains(Node node){
@@ -32,15 +32,37 @@ public class HyPeerWeb {
 	}
 	
 	public HyPeerWebDatabase getHyPeerWebDatabase(){
-		return null;
+		return HyPeerWebDatabase.getSingleton();
 	}
 	
+	/**
+	 * This method is implemented as I understood it...It returns the node at the local index i,
+		which is between 0 and the number of nodes. In order to do this I had to switch the
+		implementation of our collection from a hash set to an array list.  
+	 * @param i The index of the node to be retrieved.
+	 * @return The node at index i.
+	 * @author Jason Robertson
+	 */
 	public Node getNode(int i){
-		return null;
+		
+		if(i >= 0 && i < size())
+			return this.nodes.get(i);
+		
+		return Node.NULL_NODE;
 	}
 	
+	/**
+	 * This is unfinished because the method I wanted to use returns a SimplifiedNodeDomain,
+	 * so we need to convert it somehow so we can add it to our collection of nodes in this class.
+	 */
 	public void reload(){
+		clear();
+		List<Integer> webIds = getHyPeerWebDatabase().getAllWebIds();
 		
+		for(Integer i : webIds) {
+			SimplifiedNodeDomain node = getHyPeerWebDatabase().getNode(i);
+			// addNode(node);
+		}
 	}
 	
 	public void reload(String dbName){
@@ -51,10 +73,25 @@ public class HyPeerWeb {
 		this.nodes.remove(node);
 	}
 	
+	/**
+	 * Clears the database, then adds all of the current nodes (including
+	 * references) back into the database.
+	 * @author Jason Robertson
+	 */
 	public void saveToDatabase(){
+		HyPeerWebDatabase.clear();
 		
+		System.out.println(nodes.size());
+		
+		for(Node n : nodes) {
+			HyPeerWebDatabase.getSingleton().storeNode(n);
+		}
 	}
 	
+	/**
+	 * Determines the size of this HyPeerWeb Segment
+	 * @return The number of nodes in this segment
+	 */
 	public int size(){
 		return this.nodes.size();
 	}
