@@ -136,7 +136,9 @@ public class HyPeerWebDatabase {
 	 * @author Craig Jacobson
 	 */
 	public static HyPeerWebDatabase getSingleton(){
-		assert singleton != null;
+		if(singleton == null)
+			initHyPeerWebDatabase("");
+			
 		return singleton;
 	}
 	

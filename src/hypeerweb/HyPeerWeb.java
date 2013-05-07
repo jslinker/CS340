@@ -48,11 +48,18 @@ public class HyPeerWeb {
 		if(i >= 0 && i < size())
 			return this.nodes.get(i);
 		
-		return Node.NULL_NODE;
+		return null;
 	}
 	
+	/**
+	 * Reloads the HyPeerWeb from the database using the default database name.
+	 * @Precondition None
+	 * @Postcondition All nodes are removed from the HyPeerWeb and the nodes in the
+	 * existing default database are loaded into the HyPeerWeb
+	 * @author Jason Robertson
+	 */
 	public void reload(){
-		
+		reload(HyPeerWebDatabase.DEFAULT_DATABASE_NAME);
 	}
 	
 	public void reload(String dbName){
@@ -70,8 +77,6 @@ public class HyPeerWeb {
 	 */
 	public void saveToDatabase(){
 		HyPeerWebDatabase.clear();
-		
-		System.out.println(nodes.size());
 		
 		for(Node n : nodes) {
 			HyPeerWebDatabase.getSingleton().storeNode(n);

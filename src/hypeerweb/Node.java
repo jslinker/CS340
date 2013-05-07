@@ -8,9 +8,9 @@ public class Node {
 	
 	private WebId webId = null;
 	
-	private ArrayList<Node> downPointers = null;
-	private ArrayList<Node> upPointers = null;
-	private ArrayList<Node> neighbors = null;
+	private ArrayList<Node> downPointers = new ArrayList<Node>();
+	private ArrayList<Node> upPointers = new ArrayList<Node>();
+	private ArrayList<Node> neighbors = new ArrayList<Node>();
 	
 	private Node fold = NULL_NODE;
 	private Node surrogateFold = NULL_NODE;
@@ -29,25 +29,16 @@ public class Node {
 	
 	private Node(){
 		webId = WebId.NULL_WEB_ID;
-		initializeLists();
 	}
 
 	public Node(int id){
 		assert(id >= 0);
 		webId = new WebId(id);
-		initializeLists();
 	}
 	
 	public Node(int id, int height){
 		assert(id >= 0 && height >= 0);
 		webId = new WebId(id, height);
-		initializeLists();
-	}
-	
-	private void initializeLists(){
-		downPointers = new ArrayList<Node>();
-		upPointers = new ArrayList<Node>();
-		neighbors = new ArrayList<Node>();
 	}
 	
 	/**
