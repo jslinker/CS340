@@ -1,5 +1,6 @@
 package hypeerweb;
 
+import java.io.File;
 import java.sql.*;
 
 /**
@@ -32,7 +33,7 @@ public class HyPeerWebDatabase {
 	private HyPeerWebDatabase(String dbName){
 		try{
 			Class.forName(SQLITE_DRIVER);
-			String url = SQLITE_DRIVER_URL_PREFIX + ":" + dbName;
+			String url = SQLITE_DRIVER_URL_PREFIX + ":" + DATABASE_DIRECTORY + dbName;
 			connection = DriverManager.getConnection(url);
 			connection.setAutoCommit(true);
 			
@@ -56,7 +57,7 @@ public class HyPeerWebDatabase {
 															"node INTEGER NOT NULL,"+
 															"neighbor INTEGER NOT NULL,"+
 															"UNIQUE (node, neighbor));";
-	private static final String CREATE_TABLE_UP_POINTERS = "CREATE TABLE IF NOT EXISTS up_pointers"+
+	private static final String CREATE_TABLE_UP_POINTERS = "CREATE TABLE IF NOT EXISTS up_pointers("+
 															"node INTEGER NOT NULL,"+
 															"edge_node INTEGER NOT NULL,"+
 															"UNIQUE (node, edge_node));";
@@ -76,13 +77,13 @@ public class HyPeerWebDatabase {
 	private void initHyPeerWebTables(Connection con){
 		assert con != null;
 		
-		String sql = CREATE_TABLE_NODES + CREATE_TABLE_NEIGHBORS + 
-						CREATE_TABLE_UP_POINTERS + CREATE_TABLE_DOWN_POINTERS;
-		
 		try{
-			Statement createAllTables = con.createStatement();
-			createAllTables.executeUpdate(sql);
-			createAllTables.close();
+			Statement createTable = con.createStatement();
+			createTable.executeUpdate(CREATE_TABLE_NODES);
+			createTable.executeUpdate(CREATE_TABLE_NEIGHBORS);
+			createTable.executeUpdate(CREATE_TABLE_UP_POINTERS);
+			createTable.executeUpdate(CREATE_TABLE_DOWN_POINTERS);
+			createTable.close();
 		}
 		catch(SQLException e){
 			System.out.println(e);
@@ -102,8 +103,12 @@ public class HyPeerWebDatabase {
 	 * @author Craig Jacobson
 	 */
 	public static void initHyPeerWebDatabase(String dbName){
-		if(dbName == null || dbName.length() == 0)
+		if(dbName == null || dbName.length() == 0){
+			File databaseDirectory = new File(DATABASE_DIRECTORY);
+			databaseDirectory.mkdirs();
+			
 			singleton = new HyPeerWebDatabase(DEFAULT_DATABASE_NAME);
+		}
 		else
 			singleton = new HyPeerWebDatabase(dbName);
 	}
