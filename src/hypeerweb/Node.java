@@ -27,18 +27,26 @@ public class Node {
 		assert(id >= 0);
 		webId = new WebId(id);
 		initializeLists();
+		initializeFolds();
 	}
 	
 	public Node(int id, int height){
 		assert(id >= 0 && height >= 0);
 		webId = new WebId(id, height);
 		initializeLists();
+		initializeFolds();
 	}
 	
 	private void initializeLists(){
 		downPointers = new ArrayList<Node>();
 		upPointers = new ArrayList<Node>();
 		neighbors = new ArrayList<Node>();
+	}
+	
+	private void initializeFolds(){
+		this.fold = NULL_NODE;
+		this.surrogateFold = NULL_NODE;
+		this.inverseSurrogateFold = NULL_NODE;
 	}
 	
 	public void addDownPointer(Node downPointer){

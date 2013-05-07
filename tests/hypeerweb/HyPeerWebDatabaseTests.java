@@ -50,4 +50,30 @@ public class HyPeerWebDatabaseTests {
 		iter = other.getDownPointers().iterator();
 		assertEquals(down.getWebId().getValue(), iter.next().intValue());
 	}
+	
+	@Test
+	public void testStoreAndGet(){
+		Node node1 = new Node(313, 20);
+		node1.setFold(new Node(314));
+		node1.setSurrogateFold(new Node(315));
+		node1.setInverseSurrogateFold(new Node(316));
+		node1.addNeighbor(new Node(312));
+		node1.addUpPointer(new Node(1));
+		node1.addDownPointer(new Node(33));
+		node1.addDownPointer(new Node(34));
+		
+		db.storeNode(node1);
+		SimplifiedNodeDomain result = db.getNode(313);
+		SimplifiedNodeDomain simpleNode1 = node1.constructSimplifiedNodeDomain();
+		System.out.println("from db: "+result);
+		System.out.println("from node: "+simpleNode1);
+		assertTrue(result.equals(simpleNode1));
+		
+		node1.setFold(new Node(3090));
+		node1.setSurrogateFold(Node.NULL_NODE);
+		db.storeNode(node1);
+		result = db.getNode(313);
+		simpleNode1 = node1.constructSimplifiedNodeDomain();
+		assertTrue(result.equals(simpleNode1));
+	}
 }
