@@ -112,10 +112,9 @@ public class HyPeerWebTests {
 	
 	@Test
 	public void testContains(){
-		
+
 		web.addNode(nodes[0]);
-		
-		assertTrue( web.contains(nodes[0]));
+		assertTrue(web.contains(nodes[0]));
 	}
 	
 	@Test

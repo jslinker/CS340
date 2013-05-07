@@ -251,8 +251,19 @@ public class HyPeerWebDatabase {
 	public void storeNode(Node node){
 
 		try {
+			
+			String sql_delete = "DELETE FROM " + tableNames[0] + " WHERE web_id = " + node.getWebIdValue();
+			String sql_upPtrs = "DELETE FROM " + tableNames[1] + " WHERE node = " + node.getWebIdValue();
+			String sql_downPtrs = "DELETE FROM " + tableNames[2] + " WHERE node = " + node.getWebIdValue();
+			String sql_neighbors = "DELETE FROM " + tableNames[3] + " WHERE node = " + node.getWebIdValue();
+			
 			Statement stmt = getSingleton().getConnection().createStatement();
-
+			
+			stmt.execute(sql_delete);
+			stmt.execute(sql_upPtrs);
+			stmt.execute(sql_downPtrs);
+			stmt.execute(sql_neighbors);					
+			
 			// Store General Info
 
 			String sql = String.format("INSERT INTO " + tableNames[0] +
