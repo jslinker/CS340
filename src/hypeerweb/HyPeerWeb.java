@@ -1,7 +1,9 @@
 package hypeerweb;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HyPeerWeb {
 	
@@ -62,10 +64,64 @@ public class HyPeerWeb {
 		reload(HyPeerWebDatabase.DEFAULT_DATABASE_NAME);
 	}
 	
+	/**
+	 * Rebuilds the HyPeerWeb from the database provided.
+	 * If the dbName is null then the results are loaded from the default database.
+	 * @param dbName The name of the database you want to load from
+	 * @Precondition None
+	 * @Postcondition All nodes are removed from the HyPeerWeb and the nodes in the provided
+	 * database are loaded into the HyPeerWeb along with their connections and pointers.
+	 * @author Jason Robertson
+	 */
 	public void reload(String dbName){
+
+		clear();
+		HyPeerWebDatabase.initHyPeerWebDatabase(dbName);
+
+		List<Integer> webIds = HyPeerWebDatabase.getSingleton().getAllWebIds();
+		List<Node> list = new ArrayList<Node>();
+		Map<Integer, SimplifiedNodeDomain> rawData = new HashMap<Integer, SimplifiedNodeDomain>();
 		
+		// First create all of the nodes without any connections.
+		for(Integer i : webIds) {
+			SimplifiedNodeDomain snd = HyPeerWebDatabase.getSingleton().getNode(i);
+			list.add(new Node(snd.getWebId(), snd.height)); 
+			
+			// Save the raw data in a map so we can access it later
+			rawData.put(snd.webId, snd);
+		}
+		
+		// Next we map out the nodes so we can find them while doing the linking
+		Map<Integer, Node> map = new HashMap<Integer, Node>();
+		for(Node n : list) {
+			map.put(n.getWebIdValue(), n);
+		}
+
+		// Now we can do the linking for each node
+		for(Node node : list) {
+			
+			SimplifiedNodeDomain data = rawData.get(node.getWebIdValue());
+			
+			for(Integer ptr : data.getDownPointers()) {
+				node.addDownPointer(map.get(ptr));
+			}
+			
+			for(Integer ptr : data.getUpPointers()) {
+				node.addUpPointer(map.get(ptr));
+			}
+			
+			for(Integer ptr : data.getNeighbors()) {
+				node.addNeighbor(map.get(ptr));
+			}
+			
+			node.setFold(map.get(data.getFold()));
+			node.setSurrogateFold(map.get(data.getSurrogateFold()));
+			node.setInverseSurrogateFold(map.get(data.getInverseSurrogateFold()));
+		}
+		
+		this.nodes = list;
 	}
-	
+
 	public void removeNode(Node node){
 		this.nodes.remove(node);
 	}
