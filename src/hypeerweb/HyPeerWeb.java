@@ -51,18 +51,8 @@ public class HyPeerWeb {
 		return Node.NULL_NODE;
 	}
 	
-	/**
-	 * This is unfinished because the method I wanted to use returns a SimplifiedNodeDomain,
-	 * so we need to convert it somehow so we can add it to our collection of nodes in this class.
-	 */
 	public void reload(){
-		clear();
-		List<Integer> webIds = getHyPeerWebDatabase().getAllWebIds();
 		
-		for(Integer i : webIds) {
-			SimplifiedNodeDomain node = getHyPeerWebDatabase().getNode(i);
-			// addNode(node);
-		}
 	}
 	
 	public void reload(String dbName){
