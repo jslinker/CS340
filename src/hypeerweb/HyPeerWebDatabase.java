@@ -221,7 +221,10 @@ public class HyPeerWebDatabase {
 		return result;
 	}
 
-
+	/**
+	 * Returns a list of all the web ids currently stored in the database.
+	 * @author Jason Robertson
+	 */
 	public List<Integer> getAllWebIds() {
 
 		List<Integer> result = new ArrayList<Integer>();

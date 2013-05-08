@@ -8,6 +8,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * JUnit Test cases for the HyPeerWeb class
+ * @author Jason Robertson
+ */
 public class HyPeerWebTests {
 	
 	private HyPeerWeb web;
@@ -125,11 +129,38 @@ public class HyPeerWebTests {
 	@Test
 	public void testReload(){
 		
+		web.addNode(nodes[0]);
+		web.addNode(nodes[1]);
+		web.addNode(nodes[2]);
+		assertEquals(3,web.size());
+		
+		web.clear();
+		assertEquals(0,web.size());
+		
+		web.saveToDatabase();
+		
+		web.reload();
+		assertEquals(3,web.size());
 	}
 	
 	@Test
 	public void testReloadWithName(){
 		
+		final String dbName = "testing.db";
+		HyPeerWebDatabase.initHyPeerWebDatabase(dbName);
+		
+		web.addNode(nodes[0]);
+		web.addNode(nodes[1]);
+		web.addNode(nodes[2]);
+		assertEquals(3,web.size());
+		
+		web.saveToDatabase();
+		
+		web.clear();
+		assertEquals(0,web.size());
+		
+		web.reload(dbName);
+		assertEquals(3,web.size());
 	}
 	
 	@Test
