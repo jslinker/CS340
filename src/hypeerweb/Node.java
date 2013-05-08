@@ -72,6 +72,22 @@ public class Node {
 		this.downPointers.add(downPointer);
 	}
 	
+	private boolean isValidSurrogateNeighbor(Node surrogate){
+		if((webId.getHeight() == surrogate.getWebIdHeight() + 1 && 
+		    webId.getValue() < surrogate.getWebIdValue() && checkBits(surrogate)) ||
+		    surrogate.equals(Node.NULL_NODE))
+			return true;
+		else
+			return false;
+	}
+	
+	private boolean checkBits(Node surrogate){
+		if((~(-1 << webId.getHeight()) & surrogate.getWebIdValue()) == ~(~(-1 << webId.getHeight()) & webId.getValue()))
+			return true;
+		else
+			return false;
+	}
+	
 	public void addNeighbor(Node neighbor){
 		this.neighbors.add(neighbor);
 	}
