@@ -12,9 +12,7 @@ import java.util.List;
 
 /**
  * Singleton that creates easy access data in the connected database.
- * 
  * @author Craig Jacobson
- *
  */
 public class HyPeerWebDatabase {
 
@@ -28,7 +26,7 @@ public class HyPeerWebDatabase {
 	
 	private Connection connection = null;
 	
-	public Connection getConnection() {
+	public Connection getConnection(){
 		assert connection != null;
 		return this.connection;
 	}
@@ -123,8 +121,9 @@ public class HyPeerWebDatabase {
 			
 			singleton = new HyPeerWebDatabase(DEFAULT_DATABASE_NAME);
 		}
-		else
+		else {
 			singleton = new HyPeerWebDatabase(dbName);
+		}
 	}
 	
 	/**
@@ -136,8 +135,9 @@ public class HyPeerWebDatabase {
 	 * @author Craig Jacobson
 	 */
 	public static HyPeerWebDatabase getSingleton(){
-		if(singleton == null)
+		if(singleton == null){
 			initHyPeerWebDatabase("");
+		}
 			
 		return singleton;
 	}
@@ -225,7 +225,7 @@ public class HyPeerWebDatabase {
 	 * Returns a list of all the web ids currently stored in the database.
 	 * @author Jason Robertson
 	 */
-	public List<Integer> getAllWebIds() {
+	public List<Integer> getAllWebIds(){
 
 		List<Integer> result = new ArrayList<Integer>();
 		
@@ -284,7 +284,7 @@ public class HyPeerWebDatabase {
 			// Store Neighbors
 
 			List<Node> neighbors = node.getNeighbors();
-			for(Node neighbor : neighbors) {
+			for(Node neighbor : neighbors){
 				sql = String.format("INSERT INTO " + tableNames[1] +
 						"(node, neighbor) " +
 						"VALUES ('%d', '%d');",
@@ -296,7 +296,7 @@ public class HyPeerWebDatabase {
 			// Store Up Pointers
 
 			List<Node> upPtrs = node.getUpPointers();
-			for(Node up : upPtrs) {
+			for(Node up : upPtrs){
 				sql = String.format("INSERT INTO " + tableNames[2] +
 						"(node, edge_node) " +
 						"VALUES ('%d', '%d');",
@@ -308,7 +308,7 @@ public class HyPeerWebDatabase {
 			// Store Down Pointers
 
 			List<Node> downPtrs = node.getDownPointers();
-			for(Node down : downPtrs) {
+			for(Node down : downPtrs){
 				sql = String.format("INSERT INTO " + tableNames[3] +
 						"(node, surrogate_neighbor) " +
 						"VALUES ('%d', '%d');",
@@ -319,7 +319,7 @@ public class HyPeerWebDatabase {
 
 			stmt.close();
 		}
-		catch (SQLException e) {
+		catch (SQLException e){
 			e.printStackTrace();
 		}
 
@@ -330,20 +330,19 @@ public class HyPeerWebDatabase {
 	 * skeleton is left behind, ready to start adding things to it again)
 	 * @author Jason Robertson
 	 */
-	public static void clear() {
+	public static void clear(){
 
 		try {
 			Statement stmt = getSingleton().getConnection().createStatement();
-			for(int i = 0; i < tableNames.length; i++) {
+			for(String table : tableNames){
 
-				String sql = "delete from " + tableNames[i] + ";";
+				String sql = "delete from " + table + ";";
 				stmt.executeUpdate(sql);
 			}
 			stmt.close();
 		}
-		catch (SQLException e) {
+		catch (SQLException e){
 			e.printStackTrace();
 		}
 	}
-
 }
