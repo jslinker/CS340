@@ -156,19 +156,31 @@ public class Node {
 	//  S E T T E R S
 	//------------------
 	public void setFold(Node fold){
-		this.fold = fold;
+		if(fold == null)
+			this.fold = Node.NULL_NODE;
+		else
+			this.fold = fold;
 	}
 	
 	public void setInverseSurrogateFold(Node inverseSurrogateFold){
-		this.inverseSurrogateFold = inverseSurrogateFold;
+		if(inverseSurrogateFold == null)
+			this.inverseSurrogateFold = Node.NULL_NODE;
+		else
+			this.inverseSurrogateFold = inverseSurrogateFold;
 	}
 	
 	public void setSurrogateFold(Node surrogateFold){
-		this.surrogateFold = surrogateFold;
+		if(surrogateFold == null)
+			this.surrogateFold = Node.NULL_NODE;
+		else
+			this.surrogateFold = surrogateFold;
 	}
 	
 	public void setWebId(WebId webId){
-		this.webId = webId;
+		if(webId == null)
+			this.webId = WebId.NULL_WEB_ID;
+		else
+			this.webId = webId;
 	}
 	
 	@Override
