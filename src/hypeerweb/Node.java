@@ -17,18 +17,23 @@ public class Node {
 	private Node inverseSurrogateFold = NULL_NODE;
 	
 	public static final Node NULL_NODE = new Node() {
-		
-		@Override public SimplifiedNodeDomain constructSimplifiedNodeDomain() { return null; }
 		@Override public void addDownPointer(Node downPointer){ return; }
 		@Override public void addNeighbor(Node neighbor){ return; }
 		@Override public void addUpPointer(Node upPointer){ return; }
 		@Override public void removeDownPointer(Node downPointer){ return; }
 		@Override public void removeNeighbor(Node neighbor){ return; }
 		@Override public void removeUpPointer(Node upPointer){ return; }
+		@Override public void setWebId(WebId webId){ return; }
+		@Override public void setFold(Node fold){ return; }
+		@Override public void setSurrogateFold(Node surrogateFold){ return; }
+		@Override public void setInverseSurrogateFold(Node inverseSurrogateFold){ return; }
 	};
 	
 	private Node(){
 		webId = WebId.NULL_WEB_ID;
+		fold = this;
+		surrogateFold = this;
+		inverseSurrogateFold = this;
 	}
 
 	public Node(int id){
@@ -193,7 +198,7 @@ public class Node {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		/*final int prime = 31;
 		int result = 1;
 		result = prime * result + ((webId == null) ? 0 : webId.hashCode());
 		result = prime * result + ((downPointers == null) ? 0 : downPointers.hashCode());
@@ -201,8 +206,8 @@ public class Node {
 		result = prime * result + ((fold == null) ? 0 : fold.hashCode());
 		result = prime * result + ((inverseSurrogateFold == null) ? 0 : inverseSurrogateFold.hashCode());
 		result = prime * result + ((neighbors == null) ? 0 : neighbors.hashCode());
-		result = prime * result + ((surrogateFold == null) ? 0 : surrogateFold.hashCode());
-		return result;
+		result = prime * result + ((surrogateFold == null) ? 0 : surrogateFold.hashCode());*/
+		return webId.hashCode();
 	}
 
 	@Override
