@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Jason Robertson
+ */
 public class HyPeerWeb {
 	
 	private static HyPeerWeb singleton = null;
@@ -15,7 +18,7 @@ public class HyPeerWeb {
 	}
 	
 	public static HyPeerWeb getSingleton(){
-		if(singleton == null) {
+		if(singleton == null){
 			singleton = new HyPeerWeb();
 		}
 		return singleton;
@@ -47,8 +50,9 @@ public class HyPeerWeb {
 	 */
 	public Node getNode(int i){
 		
-		if(i >= 0 && i < size())
+		if(i >= 0 && i < size()){
 			return this.nodes.get(i);
+		}
 		
 		return null;
 	}
@@ -83,7 +87,7 @@ public class HyPeerWeb {
 		Map<Integer, SimplifiedNodeDomain> rawData = new HashMap<Integer, SimplifiedNodeDomain>();
 		
 		// First create all of the nodes without any connections.
-		for(Integer i : webIds) {
+		for(Integer i : webIds){
 			SimplifiedNodeDomain snd = HyPeerWebDatabase.getSingleton().getNode(i);
 			list.add(new Node(snd.getWebId(), snd.height)); 
 			
@@ -93,24 +97,24 @@ public class HyPeerWeb {
 		
 		// Next we map out the nodes so we can find them while doing the linking
 		Map<Integer, Node> map = new HashMap<Integer, Node>();
-		for(Node n : list) {
+		for(Node n : list){
 			map.put(n.getWebIdValue(), n);
 		}
 
 		// Now we can do the linking for each node
-		for(Node node : list) {
+		for(Node node : list){
 			
 			SimplifiedNodeDomain data = rawData.get(node.getWebIdValue());
 			
-			for(Integer ptr : data.getDownPointers()) {
+			for(Integer ptr : data.getDownPointers()){
 				node.addDownPointer(map.get(ptr));
 			}
 			
-			for(Integer ptr : data.getUpPointers()) {
+			for(Integer ptr : data.getUpPointers()){
 				node.addUpPointer(map.get(ptr));
 			}
 			
-			for(Integer ptr : data.getNeighbors()) {
+			for(Integer ptr : data.getNeighbors()){
 				node.addNeighbor(map.get(ptr));
 			}
 			
@@ -139,7 +143,7 @@ public class HyPeerWeb {
 	public void saveToDatabase(){
 		HyPeerWebDatabase.clear();
 		
-		for(Node n : nodes) {
+		for(Node n : nodes){
 			HyPeerWebDatabase.getSingleton().storeNode(n);
 		}
 	}
