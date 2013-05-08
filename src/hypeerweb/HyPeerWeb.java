@@ -122,6 +122,11 @@ public class HyPeerWeb {
 		this.nodes = list;
 	}
 
+	/**
+	 * Removes a node from the HyPeerWeb. Note: This does not remove it from
+	 * the database...You have to call saveToDatabase afterwards for permanent changes.
+	 * @param node The node being removed from the HyPeerWeb
+	 */
 	public void removeNode(Node node){
 		this.nodes.remove(node);
 	}
