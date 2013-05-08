@@ -34,11 +34,13 @@ public class Node {
 	public Node(int id){
 		assert(id >= 0);
 		webId = new WebId(id);
+		fold = this;
 	}
 	
 	public Node(int id, int height){
 		assert(id >= 0 && height >= 0);
 		webId = new WebId(id, height);
+		fold = this;
 	}
 	
 	/**
@@ -200,13 +202,14 @@ public class Node {
 		Node other = (Node) obj;
 		
 		boolean webId = this.webId == other.webId;
+		/*
 		boolean down = this.downPointers == other.downPointers;
 		boolean up = this.upPointers == other.upPointers;
 		boolean fold = this.fold.equals(other.fold);
 		boolean isf = this.inverseSurrogateFold.equals(other.inverseSurrogateFold);
 		boolean neigh = this.neighbors.equals(other.neighbors);
 		boolean sf = this.surrogateFold.equals(other.surrogateFold);
-
-		return webId && down && up && fold && isf && neigh && sf;
+		*/
+		return webId;// && down && up && fold && isf && neigh && sf;
 	}
 }
