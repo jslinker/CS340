@@ -20,7 +20,6 @@ public class HyPeerWebTests {
 	@Before
 	public void setup() {
 		web = HyPeerWeb.getSingleton();
-		HyPeerWebDatabase.initHyPeerWebDatabase("test_db.sqlite");
 
 		nodes[0] = new Node(0,0);
 		nodes[1] = new Node(1,1);
@@ -134,10 +133,10 @@ public class HyPeerWebTests {
 		web.addNode(nodes[2]);
 		assertEquals(3,web.size());
 		
+		web.saveToDatabase();
+
 		web.clear();
 		assertEquals(0,web.size());
-		
-		web.saveToDatabase();
 		
 		web.reload();
 		assertEquals(3,web.size());
