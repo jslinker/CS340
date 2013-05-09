@@ -31,6 +31,11 @@ public class HyPeerWebDatabase {
 	
 	private Connection connection = null;
 	
+	
+	// Create SimplifiedNodeDomain is using this for node state right now,
+	// needs to be updated when the database is changed to include node state.
+	private final int DEFAULT_STATE = 0;
+	
 	public Connection getConnection(){
 		assert connection != null;
 		return this.connection;
@@ -190,7 +195,7 @@ public class HyPeerWebDatabase {
 			HashSet<Integer> downPointers = findNearbyFriends(webId, tableNames[3]); 
 
 			result = new SimplifiedNodeDomain(web_id, height, neighbors,
-					upPointers, downPointers, fold, surrogate_fold, inverse_surrogate_fold);
+					upPointers, downPointers, fold, surrogate_fold, inverse_surrogate_fold, DEFAULT_STATE);
 
 		}
 		catch(SQLException e) {

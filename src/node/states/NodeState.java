@@ -6,7 +6,6 @@ package node.states;
  */
 public abstract class NodeState {
 
-	
 	public static NodeState getNodeState(int id){
 		NodeState result = null;
 		switch(id){
@@ -21,4 +20,5 @@ public abstract class NodeState {
 	}
 	
 	public abstract String toString();
+	public abstract int getStateId();
 }

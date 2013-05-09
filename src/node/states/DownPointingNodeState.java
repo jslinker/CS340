@@ -19,4 +19,9 @@ public class DownPointingNodeState extends NodeState{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public int getStateId() {
+		return this.STATE_ID;
+	}
 }

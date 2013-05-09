@@ -4,6 +4,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import node.states.NodeState;
+import node.states.StandardNodeState;
+
+
 /**
  * Contains the information for a node needed for automatic testing. Do
  * <b><u>NOT</u></b> assume that the domain of this class is the domain of the
@@ -22,6 +26,7 @@ import java.util.Iterator;
  *      fold:                 int
  *      surrogateFold:        int
  *      inverseSurrogateFold: int
+ *      state:                int
  * </pre>
  * 
  * @author Scott Woodfield
@@ -36,8 +41,67 @@ public class SimplifiedNodeDomain {
     protected int fold;
     protected int surrogateFold;
     protected int inverseSurrogateFold;
+    protected int state;
 
     // Constructors
+    /**
+     * Default SimplifiedNodeDomain constructor. Implemented to make the
+     * compiler happy.
+     * 
+     * @pre <i>None</i>
+     * @post <pre>
+     * webId = -1 AND
+     *       neighbors = null AND<br>
+     *       upPointers = null AND<br>
+     *       downPointers = null AND<br>
+     *       fold = -1 AND<br>
+     *       surrogateFold = -1
+     *       inverseSurrogateFold = -1
+     *       state = StandardNode.STATE_ID;
+     * </pre>
+     */
+    protected SimplifiedNodeDomain() {
+        webId = -1;
+        height = -1;
+        this.neighbors = null;
+        this.upPointers = null;
+        this.downPointers = null;
+        fold = -1;
+        surrogateFold = -1;
+        inverseSurrogateFold = -1;
+        state = StandardNodeState.STATE_ID;
+    }
+
+    /**
+     * SimplifiedNodeDomain constructor; neighbors, upPointers, and downPointers
+     * are set to null. Usually followed soon after with the setting of the
+     * neighbors, upPointers, and downPointers.
+     * 
+     * @pre webId &ge; 0 AND<br>
+     *      fold &ge; 0 AND<br>
+     *      surrogateFold &ge; 0
+     * @post this.webId = webId AND<br>
+     *       this.height = height AND<br>
+     *       neighbors = null AND<br>
+     *       upPointers = null AND<br>
+     *       downPointers = null AND<br>
+     *       this.fold = fold AND<br>
+     *       this.surrogateFold = surrogateFold AND<br>
+     *       this.inverseSurrogateFold = inverseSurrogateFold AND<br>
+     *       this.state = state
+     */
+    public SimplifiedNodeDomain(int webId, int height, int fold, int surrogateFold, int inverseSurrogateFold, int state) {
+        this.webId = webId;
+        this.height = height;
+        this.neighbors = null;
+        this.upPointers = null;
+        this.downPointers = null;
+        this.fold = fold;
+        this.surrogateFold = surrogateFold;
+        this.inverseSurrogateFold = inverseSurrogateFold;
+        this.state = state;
+    }
+    
     /**
      * Initializes the domain from the connections of the node.
      * 
@@ -61,7 +125,8 @@ public class SimplifiedNodeDomain {
      *       this.downPointers = downPointers AND<br>
      *       this.fold = fold AND<br>
      *       this.surrogateFold = surrogateFold AND<br>
-     *       this.inverseSurrogateFold = inverseSurrogateFold
+     *       this.inverseSurrogateFold = inverseSurrogateFold AND<br>
+     *       this.state = state
      *       
      * In other words:<br>
      * 1. The simplifiedNodeDomains webId equals the webId passed in.
@@ -72,6 +137,7 @@ public class SimplifiedNodeDomain {
      * 5. The simplifiedNodeDomains fold equals the fold passed in.
      * 6. The simplifiedNodeDomains surrogateFold equals the surrogateFold passed in.
      * 7. The simplifiedNodeDomains inverseSurrogateFold equals the inverseSurrogateFold passed in.
+     * 8. The simplifiedNodeDomains state equals the state passed in.
      */
     public SimplifiedNodeDomain(int webId,
                                 int height,
@@ -80,7 +146,8 @@ public class SimplifiedNodeDomain {
                                 HashSet<Integer> downPointers,
                                 int fold, 
                                 int surrogateFold,
-                                int inverseSurrogateFold)
+                                int inverseSurrogateFold,
+                                int state)
     {
         assert neighbors != null && upPointers != null && downPointers != null;
         
@@ -92,6 +159,7 @@ public class SimplifiedNodeDomain {
         this.fold = fold;
         this.surrogateFold = surrogateFold;
         this.inverseSurrogateFold = inverseSurrogateFold;
+        this.state = state;
     }
 
     // Queries
@@ -109,6 +177,7 @@ public class SimplifiedNodeDomain {
      *         <b>Fold</b>                     ::= <b>LeadingCharacters</b> &quot;Fold:                 &quot; (Non-NegativeInteger | &quot;-1&quot;) &quot;\n&quot;
      *         <b>SurrogateFold</b>            ::= <b>LeadingCharacters</b> &quot;SurrogateFold:        &quot; (Non-NegativeInteger | &quot;-1&quot;) &quot;\n&quot;
      *         <b>InverseSurrogateFold</b>     ::= <b>LeadingCharacters</b> &quot;InverseSurrogateFold: &quot; (Non-NegativeInteger | &quot;-1&quot;) &quot;\n&quot;
+     *         <b>State</b>                    ::= <b>LeadingCharacters</b> &quot;State:                &quot; (&quote;0&quote; | &quote;1&quote; | &quote;2&quote; | &quote;3&quote; | &quote;4&quote; )
      *         <b>LeadingCharacters</b> ::= CHAR*
      * </pre>
      * 
@@ -163,6 +232,11 @@ public class SimplifiedNodeDomain {
         result.append(leadingCharacters);
         result.append("Inverse Surrogate Fold: ");
         result.append(inverseSurrogateFold);
+        result.append("\n");
+        
+        result.append(leadingCharacters);
+        result.append("State: ");
+        result.append(NodeState.getNodeState(state).toString());
         
         return result.toString();
     }
@@ -187,19 +261,19 @@ public class SimplifiedNodeDomain {
      *        the webIds, neighbors, downPointers, fold, surrogateFold, and inverseSurrogateFold of this and the otherSimplifiedNodeDomain are equal.
      */
     public boolean equals(Object otherSimplifiedNodeDomain) {
-        boolean result = otherSimplifiedNodeDomain != null
-                && otherSimplifiedNodeDomain instanceof SimplifiedNodeDomain;
+        boolean result = otherSimplifiedNodeDomain != null && otherSimplifiedNodeDomain instanceof SimplifiedNodeDomain;
 
         if (result) {
-            SimplifiedNodeDomain SimplifiedNodeDomain = (SimplifiedNodeDomain) otherSimplifiedNodeDomain;
-            result = webId == SimplifiedNodeDomain.webId &&
-                     height == SimplifiedNodeDomain.height &&
-                     setEquals(neighbors, SimplifiedNodeDomain.neighbors) &&
-                     setEquals(upPointers, SimplifiedNodeDomain.upPointers)    &&
-                     setEquals(downPointers, SimplifiedNodeDomain.downPointers) &&
-                     fold == SimplifiedNodeDomain.fold &&
-                     surrogateFold == SimplifiedNodeDomain.surrogateFold &&
-                     inverseSurrogateFold == SimplifiedNodeDomain.inverseSurrogateFold;
+            SimplifiedNodeDomain simplifiedNodeDomain = (SimplifiedNodeDomain) otherSimplifiedNodeDomain;
+            result = result && webId == simplifiedNodeDomain.webId;
+            result = result && height == simplifiedNodeDomain.height;
+            result = result && setEquals(neighbors, simplifiedNodeDomain.neighbors);
+            result = result && setEquals(upPointers, simplifiedNodeDomain.upPointers);
+            result = result && setEquals(downPointers, simplifiedNodeDomain.downPointers);
+            result = result && fold == simplifiedNodeDomain.fold;
+            result = result && surrogateFold == simplifiedNodeDomain.surrogateFold;
+            result = result && inverseSurrogateFold == simplifiedNodeDomain.inverseSurrogateFold;
+            result = result && state == simplifiedNodeDomain.state;
         }
 
         return result;
@@ -284,6 +358,16 @@ public class SimplifiedNodeDomain {
     public int getInverseSurrogateFold() {
         return inverseSurrogateFold;
     }
+    
+    /**
+     * Returns the <i>state</i>. Also known as the <i>state</i> getter.
+     * 
+     * @pre <i>None</i>
+     * @post result = state
+     */
+    public int getState(){
+        return state;
+    }
 
     /**
      * Determines whether there is an id in neighbors, upPointers, downPointers, fold, surrogateFold, or inverseSurrogateFold that is
@@ -359,15 +443,42 @@ public class SimplifiedNodeDomain {
     }
 
     // Commands
+    /**
+     * Sets the neighbors of this SimplifiedNodeDomain to the HashSet<Integer> representing the
+     * neighbors.
+     * 
+     * @pre neighbors &ne; null
+     * @post this.neighbors = neighbors
+     */
     public void setNeighbors(HashSet<Integer> neighbors) {
+        assert neighbors != null;
+        
         this.neighbors = neighbors;
     }
-    
+
+    /**
+     * Sets the upPointers of this SimplifiedNodeDomain to the HashSet<Integer> representing the
+     * upPointers.
+     * 
+     * @pre upPointers &ne; null
+     * @post this.upPointers = upPointers
+     */
     public void setUpPointers(HashSet<Integer> upPointers) {
+        assert upPointers != null;
+        
         this.upPointers = upPointers;
     }
-    
+
+    /**
+     * Sets the downPointers of this SimplifiedNodeDomain to the HashSet<Integer> representing the
+     * downPointers.
+     * 
+     * @pre downPointers &ne; null
+     * @post this.downPointers = downPointers
+     */
     public void setDownPointers(HashSet<Integer> downPointers) {
+        assert downPointers != null;
+        
         this.downPointers = downPointers;
     }
 

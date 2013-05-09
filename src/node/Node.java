@@ -4,6 +4,8 @@ package node;
 import java.util.TreeSet;
 import java.util.HashSet;
 
+import node.states.*;
+
 /**
  * @author Joseph
  */
@@ -12,6 +14,10 @@ public class Node implements Comparable<Node>{
 	private WebId webId = null;
 	
 	private Connections connections;
+	
+	private NodeState state;
+	
+	private final int DEFAULT_STATE = 0;
 	
 	public static final Node NULL_NODE = new Node(){
 		@Override public void addDownPointer(Node downPointer){ return; }
@@ -39,6 +45,7 @@ public class Node implements Comparable<Node>{
 		webId = new WebId(id);
 		connections = new Connections();
 		connections.setFold(this);
+		state = new StandardNodeState();
 	}
 	
 	public Node(int id, int height){
@@ -46,6 +53,7 @@ public class Node implements Comparable<Node>{
 		webId = new WebId(id, height);
 		connections = new Connections();
 		connections.setFold(this);
+		state = new StandardNodeState();
 	}
 	
 	/**
@@ -70,7 +78,7 @@ public class Node implements Comparable<Node>{
 		
 		return new SimplifiedNodeDomain(webId.getValue(), webId.getHeight(), neighborIds, upIds, downIds, 
 									    getFold().getWebIdValue(), getSurrogateFold().getWebIdValue(), 
-									    getInverseSurrogateFold().getWebIdValue());
+									    getInverseSurrogateFold().getWebIdValue(), state.getStateId());
 	}
 	
 	public void addNode(Node n){
@@ -131,6 +139,10 @@ public class Node implements Comparable<Node>{
 		connections.removeUpPointer(upPointer);
 	}
 	
+	public void setState(NodeState state){
+		this.state = state;
+	}
+	
 	//------------------
 	//  G E T T E R S
 	//------------------
@@ -168,6 +180,10 @@ public class Node implements Comparable<Node>{
 	
 	public Node getInverseSurrogateFold(){
 		return connections.getInverseSurrogateFold();
+	}
+	
+	public NodeState getState(){
+		return state;
 	}
 	
 	//------------------

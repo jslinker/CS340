@@ -20,4 +20,8 @@ public class CapNodeState extends NodeState{
 		return null;
 	}
 
+	@Override
+	public int getStateId() {
+		return this.STATE_ID;
+	}
 }
