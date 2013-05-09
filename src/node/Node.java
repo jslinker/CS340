@@ -73,7 +73,7 @@ public class Node implements Comparable<Node>{
 									    getInverseSurrogateFold().getWebIdValue());
 	}
 	
-	public void addNode(Node n){
+	public void addToHyPeerWeb(Node newNode){
 		
 	}
 	

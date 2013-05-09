@@ -45,7 +45,7 @@ public class HyPeerWeb {
 		}
 		else{
 			assert (nodes.contains(startNode));
-			startNode.addNode(newNode);
+			startNode.addToHyPeerWeb(newNode);
 		}
 	}
 	
