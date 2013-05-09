@@ -73,25 +73,32 @@ public class Node implements Comparable<Node>{
 									    getInverseSurrogateFold().getWebIdValue());
 	}
 	
-	private boolean isValidSurrogateNeighbor(Node surrogate){
-		if((webId.getHeight() == surrogate.getWebIdHeight() + 1 && 
-		    webId.getValue() < surrogate.getWebIdValue() && checkBits(surrogate)) ||
-		    surrogate.equals(Node.NULL_NODE)) {
-			
-			return true;
-		}
-		else {
-			return false;
-		}
+	public void addNode(Node n){
+		
 	}
 	
-	private boolean checkBits(Node surrogate){
-		if((~(-1 << webId.getHeight()) & surrogate.getWebIdValue()) == ~(~(-1 << webId.getHeight()) & webId.getValue())) {
-			return true;
-		}
-		else {
-			return false;
-		}
+	public Node findNodeZero(){
+		return null;
+	}
+	
+	public Node findInsertionPoint(){
+		return null;
+	}
+	
+	public Node findDeletionPoint(){
+		return null;
+	}
+	
+	public Node getParent(){
+		return null;
+	}
+	
+	public Node findNode(int webId){
+		return null;
+	}
+	
+	public void addChild(Node n){
+		
 	}
 	
 	//------------------

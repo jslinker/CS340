@@ -2,6 +2,13 @@ package node;
 
 import java.util.ArrayList;
 
+
+/**
+ * Holds connections for a single node.
+ * 
+ * @author Nathan Zabriskie
+ *
+ */
 public class Connections {
 	private ArrayList<Node> downPointers = new ArrayList<Node>();
 	private ArrayList<Node> upPointers = new ArrayList<Node>();
