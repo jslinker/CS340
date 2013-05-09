@@ -1,6 +1,6 @@
 package node;
 
-import java.util.ArrayList;
+import java.util.TreeSet;
 
 
 /**
@@ -10,9 +10,9 @@ import java.util.ArrayList;
  *
  */
 public class Connections {
-	private ArrayList<Node> downPointers = new ArrayList<Node>();
-	private ArrayList<Node> upPointers = new ArrayList<Node>();
-	private ArrayList<Node> neighbors = new ArrayList<Node>();
+	private TreeSet<Node> downPointers = new TreeSet<Node>();
+	private TreeSet<Node> upPointers = new TreeSet<Node>();
+	private TreeSet<Node> neighbors = new TreeSet<Node>();
 	
 	private Node fold = Node.NULL_NODE;
 	private Node surrogateFold = Node.NULL_NODE;
@@ -22,27 +22,27 @@ public class Connections {
 		
 	}
 
-	public ArrayList<Node> getDownPointers() {
+	public TreeSet<Node> getDownPointers() {
 		return downPointers;
 	}
 
-	public void setDownPointers(ArrayList<Node> downPointers) {
+	public void setDownPointers(TreeSet<Node> downPointers) {
 		this.downPointers = downPointers;
 	}
 
-	public ArrayList<Node> getUpPointers() {
+	public TreeSet<Node> getUpPointers() {
 		return upPointers;
 	}
 
-	public void setUpPointers(ArrayList<Node> upPointers) {
+	public void setUpPointers(TreeSet<Node> upPointers) {
 		this.upPointers = upPointers;
 	}
 
-	public ArrayList<Node> getNeighbors() {
+	public TreeSet<Node> getNeighbors() {
 		return neighbors;
 	}
 
-	public void setNeighbors(ArrayList<Node> neighbors) {
+	public void setNeighbors(TreeSet<Node> neighbors) {
 		this.neighbors = neighbors;
 	}
 

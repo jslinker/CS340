@@ -1,7 +1,7 @@
 package node;
 
 
-import java.util.ArrayList;
+import java.util.TreeSet;
 import java.util.HashSet;
 
 /**
@@ -146,15 +146,15 @@ public class Node implements Comparable<Node>{
 		return webId.getHeight();
 	}
 	
-	public ArrayList<Node> getDownPointers(){
+	public TreeSet<Node> getDownPointers(){
 		return connections.getDownPointers();
 	}
 	
-	public ArrayList<Node> getUpPointers(){
+	public TreeSet<Node> getUpPointers(){
 		return connections.getUpPointers();
 	}
 	
-	public ArrayList<Node> getNeighbors(){
+	public TreeSet<Node> getNeighbors(){
 		return connections.getNeighbors();
 	}
 	

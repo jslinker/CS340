@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import node.Node;
 import node.SimplifiedNodeDomain;
@@ -287,7 +288,7 @@ public class HyPeerWebDatabase {
 
 			// Store Neighbors
 
-			List<Node> neighbors = node.getNeighbors();
+			Set<Node> neighbors = node.getNeighbors();
 			for(Node neighbor : neighbors){
 				sql = String.format("INSERT INTO " + tableNames[1] +
 						"(node, neighbor) " +
@@ -299,7 +300,7 @@ public class HyPeerWebDatabase {
 
 			// Store Up Pointers
 
-			List<Node> upPtrs = node.getUpPointers();
+			Set<Node> upPtrs = node.getUpPointers();
 			for(Node up : upPtrs){
 				sql = String.format("INSERT INTO " + tableNames[2] +
 						"(node, edge_node) " +
@@ -311,7 +312,7 @@ public class HyPeerWebDatabase {
 
 			// Store Down Pointers
 
-			List<Node> downPtrs = node.getDownPointers();
+			Set<Node> downPtrs = node.getDownPointers();
 			for(Node down : downPtrs){
 				sql = String.format("INSERT INTO " + tableNames[3] +
 						"(node, surrogate_neighbor) " +
