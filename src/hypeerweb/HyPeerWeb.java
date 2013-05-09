@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import database.HyPeerWebDatabase;
+
+import node.Node;
+import node.SimplifiedNodeDomain;
+
 /**
  * @author Jason Robertson
  */
@@ -89,10 +94,10 @@ public class HyPeerWeb {
 		// First create all of the nodes without any connections.
 		for(Integer i : webIds){
 			SimplifiedNodeDomain snd = HyPeerWebDatabase.getSingleton().getNode(i);
-			list.add(new Node(snd.getWebId(), snd.height)); 
+			list.add(new Node(snd.getWebId(), snd.getHeight())); 
 			
 			// Save the raw data in a map so we can access it later
-			rawData.put(snd.webId, snd);
+			rawData.put(snd.getWebId(), snd);
 		}
 		
 		// Next we map out the nodes so we can find them while doing the linking

@@ -4,9 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import node.Node;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import database.HyPeerWebDatabase;
 
 /**
  * JUnit Test cases for the HyPeerWeb class

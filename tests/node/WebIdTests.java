@@ -1,6 +1,6 @@
-package hypeerweb;
+package node;
 
-import hypeerweb.WebId;
+import node.WebId;
 import junit.framework.TestCase;
 
 public class WebIdTests extends TestCase {

@@ -1,4 +1,5 @@
-package hypeerweb;
+package database;
+
 
 import java.io.File;
 import java.sql.Connection;
@@ -9,6 +10,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
+import node.Node;
+import node.SimplifiedNodeDomain;
 
 /**
  * Singleton that creates easy access data in the connected database.

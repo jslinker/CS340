@@ -1,9 +1,9 @@
 package providedtests.phase1;
 
-import hypeerweb.Node;
+import node.Node;
+import node.SimplifiedNodeDomain;
+import node.WebId;
 import hypeerweb.HyPeerWeb;
-import hypeerweb.SimplifiedNodeDomain;
-import hypeerweb.WebId;
 
 public class Exp {
 	public static HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();

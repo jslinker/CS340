@@ -1,4 +1,4 @@
-package hypeerweb;
+package node;
 
 /**
  * The id of a node in the HyPeerWeb.<br>

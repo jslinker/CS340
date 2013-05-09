@@ -1,5 +1,8 @@
-package hypeerweb;
+package node;
 
+import node.Node;
+import node.SimplifiedNodeDomain;
+import node.WebId;
 import junit.framework.TestCase;
 
 public class NodeTests extends TestCase{

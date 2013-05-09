@@ -1,11 +1,16 @@
-package hypeerweb;
+package database;
 
 import static org.junit.Assert.*;
 
 import java.util.Iterator;
 
+import node.Node;
+import node.SimplifiedNodeDomain;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import database.HyPeerWebDatabase;
 
 public class HyPeerWebDatabaseTests {
 	
