@@ -9,6 +9,7 @@ import database.HyPeerWebDatabase;
 
 import node.Node;
 import node.SimplifiedNodeDomain;
+import node.WebId;
 
 /**
  * @author Jason Robertson
@@ -27,6 +28,25 @@ public class HyPeerWeb {
 			singleton = new HyPeerWeb();
 		}
 		return singleton;
+	}
+	
+	/**
+	 * 
+	 * @param newNode The node to add to the HyPeerWeb.
+	 * @param startNode The node that represents the start point in the HyPeerWeb.
+	 */
+	public void addToHyPeerWeb(Node newNode, Node startNode){
+		assert (newNode != null && newNode != Node.NULL_NODE 
+				&& startNode != null);
+		
+		if(nodes.isEmpty()){
+			newNode.setFold(newNode);
+			newNode.setWebId(new WebId(0));
+		}
+		else{
+			assert (nodes.contains(startNode));
+			startNode.addNode(newNode);
+		}
 	}
 	
 	public void addNode(Node node){
