@@ -99,6 +99,17 @@ public class Connections {
 	public void removeUpPointer(Node upPointer){
 		this.upPointers.remove(upPointer);
 	}
+	
+	//--------------------
+	//  Q U E R I E S
+	//--------------------
+	
+	public boolean hasInverseSurrogateFold(){
+		if(inverseSurrogateFold == Node.NULL_NODE)
+			return false;
+		else
+			return true;
+	}
 
 	@Override
 	public int hashCode() {
