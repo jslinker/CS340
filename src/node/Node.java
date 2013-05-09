@@ -7,17 +7,11 @@ import java.util.HashSet;
 /**
  * @author Joseph
  */
-public class Node {
+public class Node implements Comparable<Node>{
 	
 	private WebId webId = null;
 	
-	private ArrayList<Node> downPointers = new ArrayList<Node>();
-	private ArrayList<Node> upPointers = new ArrayList<Node>();
-	private ArrayList<Node> neighbors = new ArrayList<Node>();
-	
-	private Node fold = NULL_NODE;
-	private Node surrogateFold = NULL_NODE;
-	private Node inverseSurrogateFold = NULL_NODE;
+	private Connections connections;
 	
 	public static final Node NULL_NODE = new Node(){
 		@Override public void addDownPointer(Node downPointer){ return; }
@@ -34,21 +28,24 @@ public class Node {
 	
 	private Node(){
 		webId = WebId.NULL_WEB_ID;
-		fold = this;
-		surrogateFold = this;
-		inverseSurrogateFold = this;
+		connections = new Connections();
+		connections.setFold(this);
+		connections.setSurrogateFold(this);
+		connections.setInverseSurrogateFold(this);
 	}
 
 	public Node(int id){
 		assert(id >= 0);
 		webId = new WebId(id);
-		fold = this;
+		connections = new Connections();
+		connections.setFold(this);
 	}
 	
 	public Node(int id, int height){
 		assert(id >= 0 && height >= 0);
 		webId = new WebId(id, height);
-		fold = this;
+		connections = new Connections();
+		connections.setFold(this);
 	}
 	
 	/**
@@ -57,29 +54,23 @@ public class Node {
 	 */
 	public SimplifiedNodeDomain constructSimplifiedNodeDomain(){
 		HashSet<Integer> neighborIds = new HashSet<Integer>();
-		for(Node n : neighbors) {
+		for(Node n : getNeighbors()) {
 			neighborIds.add(n.getWebIdValue());
 		}
 		
 		HashSet<Integer> upIds = new HashSet<Integer>();
-		for(Node n : upPointers){
+		for(Node n : getUpPointers()){
 			upIds.add(n.getWebIdValue());
 		}
 		
 		HashSet<Integer> downIds = new HashSet<Integer>();
-		for(Node n : downPointers){
+		for(Node n : getDownPointers()){
 			downIds.add(n.getWebIdValue());
 		}
 		
 		return new SimplifiedNodeDomain(webId.getValue(), webId.getHeight(), neighborIds, upIds, downIds, 
-									    fold.getWebIdValue(), surrogateFold.getWebIdValue(), inverseSurrogateFold.getWebIdValue());
-	}
-	
-	//------------------
-	//  A D D E R S
-	//------------------
-	public void addDownPointer(Node downPointer){
-		this.downPointers.add(downPointer);
+									    getFold().getWebIdValue(), getSurrogateFold().getWebIdValue(), 
+									    getInverseSurrogateFold().getWebIdValue());
 	}
 	
 	private boolean isValidSurrogateNeighbor(Node surrogate){
@@ -103,27 +94,34 @@ public class Node {
 		}
 	}
 	
+	//------------------
+	//  A D D E R S
+	//------------------
+	public void addDownPointer(Node downPointer){
+		connections.addDownPointer(downPointer);
+	}
+	
 	public void addNeighbor(Node neighbor){
-		this.neighbors.add(neighbor);
+		connections.addNeighbor(neighbor);
 	}
 	
 	public void addUpPointer(Node upPointer){
-		this.upPointers.add(upPointer);
+		connections.addUpPointer(upPointer);
 	}
 	
 	//--------------------
 	//  R E M O V E R S
 	//--------------------	
 	public void removeDownPointer(Node downPointer){
-		this.downPointers.remove(downPointer);
+		connections.removeDownPointer(downPointer);
 	}
 	
 	public void removeNeighbor(Node neighbor){
-		this.neighbors.remove(neighbor);
+		connections.removeNeighbor(neighbor);
 	}
 	
 	public void removeUpPointer(Node upPointer){
-		this.upPointers.remove(upPointer);
+		connections.removeUpPointer(upPointer);
 	}
 	
 	//------------------
@@ -142,27 +140,27 @@ public class Node {
 	}
 	
 	public ArrayList<Node> getDownPointers(){
-		return downPointers;
+		return connections.getDownPointers();
 	}
 	
 	public ArrayList<Node> getUpPointers(){
-		return upPointers;
+		return connections.getUpPointers();
 	}
 	
 	public ArrayList<Node> getNeighbors(){
-		return neighbors;
+		return connections.getNeighbors();
 	}
 	
 	public Node getFold(){
-		return fold;
+		return connections.getFold();
 	}
 	
 	public Node getSurrogateFold(){
-		return surrogateFold;
+		return connections.getSurrogateFold();
 	}
 	
 	public Node getInverseSurrogateFold(){
-		return inverseSurrogateFold;
+		return connections.getInverseSurrogateFold();
 	}
 	
 	//------------------
@@ -170,28 +168,28 @@ public class Node {
 	//------------------
 	public void setFold(Node fold){
 		if(fold == null) {
-			this.fold = Node.NULL_NODE;
+			connections.setFold(Node.NULL_NODE);
 		}
 		else {
-			this.fold = fold;
+			connections.setFold(fold);
 		}
 	}
 	
 	public void setInverseSurrogateFold(Node inverseSurrogateFold){
 		if(inverseSurrogateFold == null) {
-			this.inverseSurrogateFold = Node.NULL_NODE;
+			connections.setInverseSurrogateFold(Node.NULL_NODE);
 		}
 		else {
-			this.inverseSurrogateFold = inverseSurrogateFold;
+			connections.setInverseSurrogateFold(inverseSurrogateFold);
 		}
 	}
 	
 	public void setSurrogateFold(Node surrogateFold){
 		if(surrogateFold == null) {
-			this.surrogateFold = Node.NULL_NODE;
+			connections.setSurrogateFold(Node.NULL_NODE);
 		}
 		else {
-			this.surrogateFold = surrogateFold;
+			connections.setSurrogateFold(surrogateFold);
 		}
 	}
 	
@@ -206,10 +204,10 @@ public class Node {
 	
 	@Override
 	public String toString(){
-		return "Node [webId=" + webId + ", downPointers=" + downPointers
-				+ ", upPointers=" + upPointers + ", neighbors=" + neighbors
-				+ ", fold=" + fold + ", surrogateFold=" + surrogateFold
-				+ ", inverseSurrogateFold=" + inverseSurrogateFold + "]";
+		return "Node [webId=" + webId + ", downPointers=" + connections.getDownPointers()
+				+ ", upPointers=" + connections.getUpPointers() + ", neighbors=" + connections.getNeighbors()
+				+ ", fold=" + connections.getFold() + ", surrogateFold=" + connections.getSurrogateFold()
+				+ ", inverseSurrogateFold=" + connections.getInverseSurrogateFold() + "]";
 	}
 
 	@Override
@@ -253,5 +251,16 @@ public class Node {
 		boolean sf = this.surrogateFold.equals(other.surrogateFold);
 		*/
 		return webId;// && down && up && fold && isf && neigh && sf;
+	}
+
+	@Override
+	public int compareTo(Node other) {
+		if(getWebIdValue() > other.getWebIdValue()){
+			return 1;
+		} else if(getWebIdValue() < other.getWebIdValue()){
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 }
