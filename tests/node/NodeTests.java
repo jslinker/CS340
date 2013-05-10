@@ -1,5 +1,7 @@
 package node;
 
+import org.junit.Test;
+
 import node.Node;
 import node.SimplifiedNodeDomain;
 import node.WebId;
@@ -122,5 +124,26 @@ public class NodeTests extends TestCase{
 		System.out.println("Mine: "+node3.constructSimplifiedNodeDomain());
 		System.out.println("Expected: "+expected3);
 		assertTrue(node3.constructSimplifiedNodeDomain().equals(expected3));
+	}
+	
+	@Test
+	public void testAddToHyPeerWeb(){
+		Node node0 = new Node(0);
+		Node node1 = new Node(1);
+		Node node2 = new Node(2);
+		
+		node0.addChild(node1);
+		Node biggestNeighbor = node0.findInsertionPoint();
+		
+		assertEquals(node1, biggestNeighbor);
+		
+		/*
+		int websize = 3;
+		ExpectedResult expected1 = new ExpectedResult(websize, 2);
+		
+		System.out.println("\nActual:\n" + node2.constructSimplifiedNodeDomain());
+		System.out.println("\nExpected:\n" + expected1);
+		assertEquals(node2.constructSimplifiedNodeDomain(), expected1);
+		*/
 	}
 }

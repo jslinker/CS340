@@ -19,6 +19,8 @@ public class Connections {
 	private Node surrogateFold = Node.NULL_NODE;
 	private Node inverseSurrogateFold = Node.NULL_NODE;
 	
+	private Node biggestNeighbor = Node.NULL_NODE;
+	
 	public Connections(){
 		
 	}
@@ -57,6 +59,7 @@ public class Connections {
 
 	public void setUpperNeighbors(TreeSet<Node> upperNeighbors) {
 		this.upperNeighbors = upperNeighbors;
+		biggestNeighbor = upperNeighbors.last();
 	}
 
 	public Node getFold() {
@@ -83,6 +86,13 @@ public class Connections {
 		this.inverseSurrogateFold = inverseSurrogateFold;
 	}
 	
+	public Node getBiggestNeighbor() {
+		return biggestNeighbor;
+	}
+	
+	public void setBiggestNeighbor(Node biggestNeighbor) {
+		this.biggestNeighbor = biggestNeighbor;
+	}
 	//--------------------
 	//  A D D E R S
 	//--------------------		
@@ -96,6 +106,9 @@ public class Connections {
 	
 	public void addUpperNeighbor(Node upperNeighbor){
 		this.upperNeighbors.add(upperNeighbor);
+		if(upperNeighbor.getWebIdValue() > biggestNeighbor.getWebIdValue()){
+			biggestNeighbor = upperNeighbor;
+		}
 	}
 	
 	public void addUpPointer(Node upPointer){

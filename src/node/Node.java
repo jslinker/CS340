@@ -91,15 +91,26 @@ public class Node implements Comparable<Node>{
 	 */
 	public void addToHyPeerWeb(Node newNode){
 		assert (newNode != null && newNode != NULL_NODE);
+		//findInsertionPoint().addChild(newNode);
 		findInsertionPoint().addChild(newNode);
+	}
+	
+	private Node findBiggestNeighbor(){
+		if(getBiggestNeighbor().equals(Node.NULL_NODE)){
+			return this;
+		} else{
+			return getBiggestNeighbor().findBiggestNeighbor();
+		}
 	}
 	
 	public Node findNodeZero(){
 		return null;
 	}
 	
-	public Node findInsertionPoint(){
-		return null;
+	protected Node findInsertionPoint(){
+		Node biggestNeighbor = findBiggestNeighbor();
+		//biggestNeighbor.squeeze();
+		return biggestNeighbor;
 	}
 	
 	public Node findDeletionPoint(){
@@ -273,6 +284,10 @@ public class Node implements Comparable<Node>{
 		return connections;
 	}
 	
+	public Node getBiggestNeighbor(){
+		return connections.getBiggestNeighbor();
+	}
+	
 	//------------------
 	//  S E T T E R S
 	//------------------
@@ -310,6 +325,10 @@ public class Node implements Comparable<Node>{
 		else {
 			this.webId = webId;
 		}
+	}
+	
+	public void setBiggestNeighbor(Node biggestNeighbor){
+		connections.setBiggestNeighbor(biggestNeighbor);
 	}
 	
 	/**
