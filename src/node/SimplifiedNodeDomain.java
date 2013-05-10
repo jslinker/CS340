@@ -273,7 +273,7 @@ public class SimplifiedNodeDomain {
             result = result && fold == simplifiedNodeDomain.fold;
             result = result && surrogateFold == simplifiedNodeDomain.surrogateFold;
             result = result && inverseSurrogateFold == simplifiedNodeDomain.inverseSurrogateFold;
-            result = result && state == simplifiedNodeDomain.state;
+            //result = result && state == simplifiedNodeDomain.state;
         }
 
         return result;

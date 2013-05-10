@@ -12,7 +12,8 @@ import java.util.TreeSet;
 public class Connections {
 	private TreeSet<Node> downPointers = new TreeSet<Node>();
 	private TreeSet<Node> upPointers = new TreeSet<Node>();
-	private TreeSet<Node> neighbors = new TreeSet<Node>();
+	private TreeSet<Node> lowerNeighbors = new TreeSet<Node>();
+	private TreeSet<Node> upperNeighbors = new TreeSet<Node>();
 	
 	private Node fold = Node.NULL_NODE;
 	private Node surrogateFold = Node.NULL_NODE;
@@ -21,6 +22,10 @@ public class Connections {
 	public Connections(){
 		
 	}
+	
+	//--------------------
+	//  GETTERS AND SETTERS
+	//--------------------
 
 	public TreeSet<Node> getDownPointers() {
 		return downPointers;
@@ -37,13 +42,21 @@ public class Connections {
 	public void setUpPointers(TreeSet<Node> upPointers) {
 		this.upPointers = upPointers;
 	}
-
-	public TreeSet<Node> getNeighbors() {
-		return neighbors;
+	
+	public TreeSet<Node> getLowerNeighbors() {
+		return lowerNeighbors;
 	}
 
-	public void setNeighbors(TreeSet<Node> neighbors) {
-		this.neighbors = neighbors;
+	public void setLowerNeighbors(TreeSet<Node> lowerNeighbors) {
+		this.lowerNeighbors = lowerNeighbors;
+	}
+
+	public TreeSet<Node> getUpperNeighbors() {
+		return upperNeighbors;
+	}
+
+	public void setUpperNeighbors(TreeSet<Node> upperNeighbors) {
+		this.upperNeighbors = upperNeighbors;
 	}
 
 	public Node getFold() {
@@ -77,8 +90,12 @@ public class Connections {
 		this.downPointers.add(downPointer);
 	}
 	
-	public void addNeighbor(Node neighbor){
-		this.neighbors.add(neighbor);
+	public void addLowerNeighbor(Node lowerNeighbor){
+		this.lowerNeighbors.add(lowerNeighbor);
+	}
+	
+	public void addUpperNeighbor(Node upperNeighbor){
+		this.upperNeighbors.add(upperNeighbor);
 	}
 	
 	public void addUpPointer(Node upPointer){
@@ -92,8 +109,12 @@ public class Connections {
 		this.downPointers.remove(downPointer);
 	}
 	
-	public void removeNeighbor(Node neighbor){
-		this.neighbors.remove(neighbor);
+	public void removeLowerNeighbor(Node lowerNeighbor){
+		this.lowerNeighbors.remove(lowerNeighbor);
+	}
+	
+	public void removeUpperNeighbor(Node upperNeighbor){
+		this.upperNeighbors.remove(upperNeighbor);
 	}
 	
 	public void removeUpPointer(Node upPointer){
@@ -122,8 +143,8 @@ public class Connections {
 				* result
 				+ ((inverseSurrogateFold == null) ? 0 : inverseSurrogateFold
 						.hashCode());
-		result = prime * result
-				+ ((neighbors == null) ? 0 : neighbors.hashCode());
+		//result = prime * result
+				//+ ((neighbors == null) ? 0 : neighbors.hashCode());
 		result = prime * result
 				+ ((surrogateFold == null) ? 0 : surrogateFold.hashCode());
 		result = prime * result
@@ -155,11 +176,11 @@ public class Connections {
 				return false;
 		} else if (!inverseSurrogateFold.equals(other.inverseSurrogateFold))
 			return false;
-		if (neighbors == null) {
+		/*if (neighbors == null) {
 			if (other.neighbors != null)
 				return false;
 		} else if (!neighbors.equals(other.neighbors))
-			return false;
+			return false;*/
 		if (surrogateFold == null) {
 			if (other.surrogateFold != null)
 				return false;

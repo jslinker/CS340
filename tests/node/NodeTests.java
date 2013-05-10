@@ -5,6 +5,11 @@ import node.SimplifiedNodeDomain;
 import node.WebId;
 import junit.framework.TestCase;
 
+/**
+ * Tests the Node class.
+ * @author Craig Jacobson
+ *
+ */
 public class NodeTests extends TestCase{
 	
 	public NodeTests(String name){
@@ -89,5 +94,33 @@ public class NodeTests extends TestCase{
 	
 	public void testAddAndRemove(){
 		
+	}
+	
+	public void testAddChild(){
+		//start with a simple test
+		Node node0 = new Node(0);
+		Node node1 = new Node(1);
+		node0.addChild(node1);
+		
+		int webSize = 2;
+		ExpectedResult expected0 = new ExpectedResult(webSize, 0);
+		ExpectedResult expected1 = new ExpectedResult(webSize, 1);
+		assertTrue(node0.constructSimplifiedNodeDomain().equals(expected0));
+		assertTrue(node1.constructSimplifiedNodeDomain().equals(expected1));
+		
+		Node node2 = new Node(2);
+		node0.addChild(node2);
+		webSize++;
+		ExpectedResult expected2 = new ExpectedResult(webSize, 2);
+		assertTrue(node2.constructSimplifiedNodeDomain().equals(expected2));
+		
+		Node node3 = new Node(3);
+		node2.addChild(node3);
+		webSize++;
+		ExpectedResult expected3 = new ExpectedResult(webSize, 3);
+		
+		System.out.println("Mine: "+node3.constructSimplifiedNodeDomain());
+		System.out.println("Expected: "+expected3);
+		assertTrue(node3.constructSimplifiedNodeDomain().equals(expected3));
 	}
 }

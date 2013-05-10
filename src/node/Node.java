@@ -1,6 +1,7 @@
 package node;
 
 
+import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.HashSet;
 
@@ -14,7 +15,7 @@ public class Node implements Comparable<Node>{
 	private WebId webId = null;
 	private int height = -1;
 	private Connections connections;
-	private NodeState state;
+	private NodeState state = new StandardNodeState();
 	
 	private final int DEFAULT_STATE = 0;
 	
@@ -77,13 +78,20 @@ public class Node implements Comparable<Node>{
 			downIds.add(n.getWebIdValue());
 		}
 		
-		return new SimplifiedNodeDomain(webId.getValue(), webId.getHeight(), neighborIds, upIds, downIds, 
+		return new SimplifiedNodeDomain(webId.getValue(), this.getHeight(), neighborIds, upIds, downIds, 
 									    getFold().getWebIdValue(), getSurrogateFold().getWebIdValue(), 
 									    getInverseSurrogateFold().getWebIdValue(), state.getStateId());
 	}
 	
+	/**
+	 * Adds the node to the HyPeerWeb.
+	 * @param newNode The new Node to add to the HyPeerWeb.
+	 * @pre newNode is not null AND newNode is not NULL_NODE
+	 * @post newNode is properly connected to the HyPeerWeb
+	 */
 	public void addToHyPeerWeb(Node newNode){
-		
+		assert (newNode != null && newNode != NULL_NODE);
+		findInsertionPoint().addChild(newNode);
 	}
 	
 	public Node findNodeZero(){
@@ -116,33 +124,54 @@ public class Node implements Comparable<Node>{
 	 */
 	public void addChild(Node child){
 		this.height++;
-		addNeighbor(child);
 		
 		Connections childConnections = new Connections();
-		//TODO set the child node's neighbors and downPointers, it won't have any up pointers
-		//TODO update this node's neighbors and upPointers, this node shouldn't have down pointers
+		child.setConnections(childConnections);
+		
+		//set child node's lower neighbors
+		TreeSet<Node> upPointers = connections.getUpPointers();
+		childConnections.setLowerNeighbors(upPointers);
+		connections.setUpPointers(new TreeSet<Node>());
+		//notify child node's lower neighbors
+		Iterator<Node> childsLowerNeighbors = upPointers.iterator();
+		while(childsLowerNeighbors.hasNext()){
+			Node lowerNeighbor = childsLowerNeighbors.next();
+			lowerNeighbor.removeDownPointer(this);
+			lowerNeighbor.addNeighbor(child);
+		}
+		
+		//set child node's surrogate neighbors
+		Iterator<Node> childsSurrogateNeighbors = connections.getUpperNeighbors().iterator();
+		while(childsSurrogateNeighbors.hasNext()){
+			Node surrogateNeighbor = childsSurrogateNeighbors.next();
+			childConnections.addDownPointer(surrogateNeighbor);
+			surrogateNeighbor.addUpPointer(child);
+		}
 		
 		//set all of the folds
 		if(connections.hasInverseSurrogateFold()){
-			childConnections.setFold(connections.getInverseSurrogateFold());
-			connections.setInverseSurrogateFold(NULL_NODE);
+			Node childFold = connections.getInverseSurrogateFold();
+			child.setFold(childFold);
+			childFold.setFold(child);
+			childFold.setSurrogateFold(NULL_NODE);
+			this.setInverseSurrogateFold(NULL_NODE);
 		}
 		else{
-			childConnections.setFold(connections.getFold());
-			connections.setSurrogateFold(connections.getFold());
-			connections.setFold(NULL_NODE);
+			child.setFold(this.getFold());
+			if(this.getWebIdValue() == 0 && this.getHeight() == 1){
+				this.setFold(child);
+			}
+			else{
+				this.setSurrogateFold(this.getFold());
+				this.setFold(Node.NULL_NODE);
+			}
 		}
 		
-		child.setConnections(childConnections);
-		child.notifyConnections();
-	}
-	
-	/**
-	 * Notifies every node in the connections object that this is their new neighbor.
-	 * @pre The connections object is set.
-	 * @post All references have been notified of this object's existence.
-	 */
-	private void notifyConnections(){
+		//add child's first neighbor
+		childConnections.addLowerNeighbor(this);
+		//add child as neighbor last
+		connections.addUpperNeighbor(child);
+		
 		
 	}
 	
@@ -154,7 +183,12 @@ public class Node implements Comparable<Node>{
 	}
 	
 	public void addNeighbor(Node neighbor){
-		connections.addNeighbor(neighbor);
+		if(neighbor.getWebIdValue() > this.getWebIdValue()){
+			connections.addUpperNeighbor(neighbor);
+		}
+		else{
+			connections.addLowerNeighbor(neighbor);
+		}
 	}
 	
 	public void addUpPointer(Node upPointer){
@@ -169,7 +203,12 @@ public class Node implements Comparable<Node>{
 	}
 	
 	public void removeNeighbor(Node neighbor){
-		connections.removeNeighbor(neighbor);
+		if(neighbor.getWebIdValue() > this.getWebIdValue()){
+			connections.removeUpperNeighbor(neighbor);
+		}
+		else{
+			connections.removeLowerNeighbor(neighbor);
+		}
 	}
 	
 	public void removeUpPointer(Node upPointer){
@@ -185,6 +224,10 @@ public class Node implements Comparable<Node>{
 	//------------------
 	public WebId getWebId(){
 		return webId;
+	}
+	
+	public int getHeight(){
+		return height;
 	}
 	
 	public int getWebIdValue(){
@@ -204,7 +247,10 @@ public class Node implements Comparable<Node>{
 	}
 	
 	public TreeSet<Node> getNeighbors(){
-		return connections.getNeighbors();
+		TreeSet<Node> result = new TreeSet<Node>();
+		result.addAll(connections.getLowerNeighbors());
+		result.addAll(connections.getUpperNeighbors());
+		return result;
 	}
 	
 	public Node getFold(){
@@ -280,7 +326,7 @@ public class Node implements Comparable<Node>{
 	@Override
 	public String toString(){
 		return "Node [webId=" + webId + ", downPointers=" + connections.getDownPointers()
-				+ ", upPointers=" + connections.getUpPointers() + ", neighbors=" + connections.getNeighbors()
+				+ ", upPointers=" + connections.getUpPointers() + ", neighbors=" + this.getNeighbors()
 				+ ", fold=" + connections.getFold() + ", surrogateFold=" + connections.getSurrogateFold()
 				+ ", inverseSurrogateFold=" + connections.getInverseSurrogateFold() + "]";
 	}
