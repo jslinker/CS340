@@ -31,9 +31,11 @@ public class HyPeerWeb {
 	}
 	
 	/**
-	 * 
+	 * Adds a new node to the HyPeerWeb.
 	 * @param newNode The node to add to the HyPeerWeb.
 	 * @param startNode The node that represents the start point in the HyPeerWeb.
+	 * @pre newNode is not null/NULL_NODE; startNode is not null and is in nodes
+	 * @post newNode is in nodes and is connected to the HyPeerWeb
 	 */
 	public void addToHyPeerWeb(Node newNode, Node startNode){
 		assert (newNode != null && newNode != Node.NULL_NODE 
@@ -47,6 +49,7 @@ public class HyPeerWeb {
 			assert (nodes.contains(startNode));
 			startNode.addToHyPeerWeb(newNode);
 		}
+		nodes.add(newNode);
 	}
 	
 	public void addNode(Node node){
@@ -179,5 +182,13 @@ public class HyPeerWeb {
 	 */
 	public int size(){
 		return this.nodes.size();
+	}
+	
+	/**
+	 * This method is being called from the GUI.
+	 * @author Jason Robertson
+	 */
+	public void close() {
+		
 	}
 }

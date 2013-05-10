@@ -5,18 +5,16 @@ import hypeerweb.HyPeerWeb;
 import node.Node;
 import node.SimplifiedNodeDomain;
 import node.WebId;
-import providedtests.phase2.ExpectedResult;
+import node.ExpectedResult;
 
 public class Exp {
     public static HyPeerWeb hypeerweb = null;
     private static final int PHASE_1_TEST_COUNT = 66;
     private static final int PHASE_2_TEST_COUNT = 10912;
     private static int errorCount = 0;
-    
-    private static final String DEFAULT_TEST_DB = "test2.db"; 
 
     public static void main(String[] args) {
-        HyPeerWebDatabase.initHyPeerWebDatabase(DEFAULT_TEST_DB);
+        HyPeerWebDatabase.initHyPeerWebDatabase();
         HyPeerWebDatabase.getSingleton().clear();
         hypeerweb = HyPeerWeb.getSingleton();
         testPhase1();

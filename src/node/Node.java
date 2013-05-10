@@ -12,9 +12,8 @@ import node.states.*;
 public class Node implements Comparable<Node>{
 	
 	private WebId webId = null;
-	
+	private int height = -1;
 	private Connections connections;
-	
 	private NodeState state;
 	
 	private final int DEFAULT_STATE = 0;
@@ -46,6 +45,7 @@ public class Node implements Comparable<Node>{
 		connections = new Connections();
 		connections.setFold(this);
 		state = new StandardNodeState();
+		this.height = webId.getHeight();
 	}
 	
 	public Node(int id, int height){
@@ -54,10 +54,11 @@ public class Node implements Comparable<Node>{
 		connections = new Connections();
 		connections.setFold(this);
 		state = new StandardNodeState();
+		this.height = webId.getHeight();
 	}
 	
 	/**
-	 * 
+	 * Constructs a SimplifiedNodeDomain object from the attributes of this Node.
 	 * @return The created SimplifiedNodeDomain object.
 	 */
 	public SimplifiedNodeDomain constructSimplifiedNodeDomain(){
@@ -105,7 +106,43 @@ public class Node implements Comparable<Node>{
 		return null;
 	}
 	
-	public void addChild(Node n){
+	/**
+	 * Adds the given node to the HyPeerWeb.
+	 * @param child The child node of this node.
+	 * @pre The child node has the appropriate webId (webId = N + 1) and the child node is a
+	 * child of this node.
+	 * @post The child node is connected to the HyPeerWeb, all connections are set, 
+	 * this node's height is correct.
+	 */
+	public void addChild(Node child){
+		this.height++;
+		addNeighbor(child);
+		
+		Connections childConnections = new Connections();
+		//TODO set the child node's neighbors and downPointers, it won't have any up pointers
+		//TODO update this node's neighbors and upPointers, this node shouldn't have down pointers
+		
+		//set all of the folds
+		if(connections.hasInverseSurrogateFold()){
+			childConnections.setFold(connections.getInverseSurrogateFold());
+			connections.setInverseSurrogateFold(NULL_NODE);
+		}
+		else{
+			childConnections.setFold(connections.getFold());
+			connections.setSurrogateFold(connections.getFold());
+			connections.setFold(NULL_NODE);
+		}
+		
+		child.setConnections(childConnections);
+		child.notifyConnections();
+	}
+	
+	/**
+	 * Notifies every node in the connections object that this is their new neighbor.
+	 * @pre The connections object is set.
+	 * @post All references have been notified of this object's existence.
+	 */
+	private void notifyConnections(){
 		
 	}
 	
@@ -186,6 +223,10 @@ public class Node implements Comparable<Node>{
 		return state;
 	}
 	
+	public Connections getConnections(){
+		return connections;
+	}
+	
 	//------------------
 	//  S E T T E R S
 	//------------------
@@ -223,6 +264,17 @@ public class Node implements Comparable<Node>{
 		else {
 			this.webId = webId;
 		}
+	}
+	
+	/**
+	 * Sets this nodes connections. Should only need to be called by the addChild method.
+	 * @param connections This nodes new connections.
+	 * @pre connections is not null
+	 * @post this.connections = connections
+	 */
+	private void setConnections(Connections connections){
+		assert connections != null;
+		this.connections = connections;
 	}
 	
 	@Override
