@@ -1,6 +1,6 @@
 package hypeerweb.broadcast;
 
-import hypeerweb.Node;
+import node.Node;
 
 /**
  * Used to send a message from a source node to a target node.

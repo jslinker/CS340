@@ -1,7 +1,7 @@
 
-import hypeerweb.Node;
 import hypeerweb.broadcast.Parameters;
 import hypeerweb.broadcast.SendVisitor;
+import node.Node;
 
 /**
  * Sends a message from the start node (the first node to receive this visitor) the indicated target node.

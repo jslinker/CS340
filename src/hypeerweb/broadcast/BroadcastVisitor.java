@@ -1,6 +1,6 @@
 package hypeerweb.broadcast;
 
-import hypeerweb.Node;
+import node.Node;
 
 /**
  * Broadcasts a message from a source node to all nodes in the HyPeerWeb.

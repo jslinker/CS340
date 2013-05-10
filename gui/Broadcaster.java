@@ -1,6 +1,6 @@
-import hypeerweb.Node;
 import hypeerweb.broadcast.BroadcastVisitor;
 import hypeerweb.broadcast.Parameters;
+import node.Node;
 
 /**
  * Broadcasts a message from the start node (the first node to receive this visitor) to all other nodes in the HyPeerWeb.
