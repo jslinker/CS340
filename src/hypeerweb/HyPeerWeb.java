@@ -183,4 +183,12 @@ public class HyPeerWeb {
 	public int size(){
 		return this.nodes.size();
 	}
+	
+	/**
+	 * This method is being called from the GUI.
+	 * @author Jason Robertson
+	 */
+	public void close() {
+		
+	}
 }
