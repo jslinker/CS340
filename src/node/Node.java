@@ -111,10 +111,62 @@ public class Node implements Comparable<Node>{
 	
 	protected Node findInsertionPoint(){
 		Node biggestNeighbor = findBiggestNeighbor();
-		//biggestNeighbor.squeeze();
-		return biggestNeighbor;
+		Node insertionPoint = biggestNeighbor.squeeze();
+		return insertionPoint;
 	}
 	
+	private Node squeeze() {
+	
+		Node upperBound = NULL_NODE;
+		Node lowerBound = NULL_NODE;
+		
+		if(this.hasDownPointers()) {
+			
+			upperBound = this.getLowestDownPointer();
+		}
+		
+		else {
+			return this;
+		}
+		
+		if(upperBound.hasUpPointers()) {
+			
+			lowerBound = upperBound.getHighestUpPointer();
+		}
+		
+		else {
+			return upperBound;
+		}
+		
+		return lowerBound.squeeze();
+	}
+	
+	private boolean hasUpPointers() {
+		if(getUpPointers().isEmpty()){
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean hasDownPointers() {
+		if(getDownPointers().isEmpty()){
+			return false;
+		}
+		return true;
+	}
+	
+	private Node getLowestDownPointer() {
+		// Assuming sorted order - ascending
+		assert ! getDownPointers().isEmpty();
+		return getDownPointers().first();
+	}
+	
+	private Node getHighestUpPointer() {
+		// Assuming sorted order - ascending
+		assert ! getUpPointers().isEmpty();
+		return getUpPointers().last();
+	}
+
 	public Node findDeletionPoint(){
 		return null;
 	}
