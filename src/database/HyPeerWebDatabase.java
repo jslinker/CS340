@@ -1,6 +1,5 @@
 package database;
 
-
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -113,7 +112,14 @@ public class HyPeerWebDatabase {
 	}
 	
 	/**
-	 * Creates and loads a HyPeerWebDatabase. 
+	 * Creates or loads the default HyPeerWebDatabase.
+	 */
+	public static void initHyPeerWebDatabase(){
+		initHyPeerWebDatabase(null);
+	}
+	
+	/**
+	 * Creates or loads a HyPeerWebDatabase. 
 	 * Should be one of the first things called when creating a HyPeerWeb.
 	 * @param dbName The name of the database. Must be valid, null, or empty.
 	 * @Precondition dbName = null OR |dbName| = 0 OR dbName is valid

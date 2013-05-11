@@ -3,10 +3,11 @@ package node;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
-import org.junit.Test;
 import node.Node;
 import node.SimplifiedNodeDomain;
+import node.ExpectedResult;
 import node.WebId;
+import static utilities.BitManipulation.*;
 import junit.framework.TestCase;
 
 /**
@@ -227,7 +228,7 @@ public class NodeTests extends TestCase{
 		
 		//add the nodes to their respective parents
 		for(int i = 1; i < numberOfNodes; i++){
-			nodes.get(calculateSurrogate(i)).addChild(nodes.get(i));
+			nodes.get(calculateSurrogateWebId(i)).addChild(nodes.get(i));
 			
 			//after each addition, exhaustively test all of the nodes in the web
 			for(int j = i; j >= 0; j--){
@@ -237,21 +238,21 @@ public class NodeTests extends TestCase{
 	}
 	
 	/**
-	 * Adds 500 to 1000 (inclusive) nodes (by adding to the parent node directly) to the web and 
+	 * Adds 65537 to 131072 (inclusive) nodes (by adding to the parent node directly) to the web and 
 	 * exhaustively tests each and every node after each insertion.
 	 */
 	public void testAddChildRandomLarge(){
 		//create the nodes
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		Random generator = new Random();
-		int numberOfNodes = generator.nextInt(500)+501;
+		int numberOfNodes = generator.nextInt(65536)+65537;
 		for(int i = 0; i < numberOfNodes; i++){
 			nodes.add(new Node(i));
 		}
 		
 		//add the nodes to their respective parents
 		for(int i = 1; i < numberOfNodes; i++){
-			nodes.get(calculateSurrogate(i)).addChild(nodes.get(i));
+			nodes.get(calculateSurrogateWebId(i)).addChild(nodes.get(i));
 			
 			//test a random node
 			int randomNode = generator.nextInt(i);
@@ -259,32 +260,6 @@ public class NodeTests extends TestCase{
 		}
 	}
 	
-	/**
-	 * Finds the surrogate for a given webId. A surrogate is defined here as the number 
-	 * who's bit representation has a zero where the id's leading 1 bit is, for example:
-	 * if the id is three the bit representation is 11 so the surrogate is 01.
-	 * @param id The id to find a surrogate of.
-	 * @return The id's surrogate.
-	 * @pre An integer greater than or equal to one.
-	 * @post result = id's surrogate
-	 */
-	private int calculateSurrogate(int id){
-		int temp = id;
-		int digitsToLeadingOneBit = 0;
-		while(temp > 0){
-			digitsToLeadingOneBit++;
-			temp >>>= 1;
-		}
-		
-		int highestOneBitMask = 1;
-		for(; digitsToLeadingOneBit > 1; digitsToLeadingOneBit--){
-			highestOneBitMask <<= 1;
-		}
-		
-		return (id^highestOneBitMask);
-	}
-	
-	@Test
 	public void testAddToHyPeerWeb(){
 		Node node0 = new Node(0);
 		Node node1 = new Node(1);

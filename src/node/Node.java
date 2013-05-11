@@ -4,8 +4,8 @@ package node;
 import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.HashSet;
-
 import node.states.*;
+import static utilities.BitManipulation.*;
 
 /**
  * @author Joseph
@@ -91,8 +91,10 @@ public class Node implements Comparable<Node>{
 	 */
 	public void addToHyPeerWeb(Node newNode){
 		assert (newNode != null && newNode != NULL_NODE);
-		//findInsertionPoint().addChild(newNode);
-		findInsertionPoint().addChild(newNode);
+		Node insertionPoint = findInsertionPoint();
+		int childWebId = calculateChildWebId(insertionPoint.getWebIdValue(), insertionPoint.getHeight());
+		newNode.setWebId(new WebId(childWebId));
+		insertionPoint.addChild(newNode);
 	}
 	
 	private Node findBiggestNeighbor(){
