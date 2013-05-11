@@ -1,5 +1,9 @@
 package node;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Random;
+
 import node.Node;
 import node.SimplifiedNodeDomain;
 import node.WebId;
@@ -96,31 +100,187 @@ public class NodeTests extends TestCase{
 		
 	}
 	
-	public void testAddChild(){
-		//start with a simple test
+	/**
+	 * Tests adding a few child nodes.
+	 */
+	public void testAddChildSimple(){
 		Node node0 = new Node(0);
+		int webSize = 1;
+		assertTrue(isNodeDomainCorrect(node0, webSize));
+		
 		Node node1 = new Node(1);
 		node0.addChild(node1);
-		
-		int webSize = 2;
-		ExpectedResult expected0 = new ExpectedResult(webSize, 0);
-		ExpectedResult expected1 = new ExpectedResult(webSize, 1);
-		assertTrue(node0.constructSimplifiedNodeDomain().equals(expected0));
-		assertTrue(node1.constructSimplifiedNodeDomain().equals(expected1));
+		webSize++;
+		assertTrue(isNodeDomainCorrect(node0, webSize));
+		assertTrue(isNodeDomainCorrect(node1, webSize));
 		
 		Node node2 = new Node(2);
 		node0.addChild(node2);
 		webSize++;
-		ExpectedResult expected2 = new ExpectedResult(webSize, 2);
-		assertTrue(node2.constructSimplifiedNodeDomain().equals(expected2));
+		assertTrue(isNodeDomainCorrect(node0, webSize));
+		assertTrue(isNodeDomainCorrect(node1, webSize));
+		assertTrue(isNodeDomainCorrect(node2, webSize));
 		
 		Node node3 = new Node(3);
-		node2.addChild(node3);
+		node1.addChild(node3);
 		webSize++;
-		ExpectedResult expected3 = new ExpectedResult(webSize, 3);
+		assertTrue(isNodeDomainCorrect(node0, webSize));
+		assertTrue(isNodeDomainCorrect(node1, webSize));
+		assertTrue(isNodeDomainCorrect(node2, webSize));
+		assertTrue(isNodeDomainCorrect(node3, webSize));
+	}
+	
+	/**
+	 * Tests a node's domain and prints out descriptive error messages.
+	 * @param node The node to be tested for validity.
+	 * @param webSize The size of the web the node is in.
+	 * @return True if the node's domain is correct; false otherwise.
+	 */
+	private boolean isNodeDomainCorrect(Node node, int webSize){
+		SimplifiedNodeDomain simpleNode = node.constructSimplifiedNodeDomain();
+		ExpectedResult expectedNode = new ExpectedResult(webSize, node.getWebIdValue());
 		
-		System.out.println("Mine: "+node3.constructSimplifiedNodeDomain());
-		System.out.println("Expected: "+expected3);
-		assertTrue(node3.constructSimplifiedNodeDomain().equals(expected3));
+		boolean result = true;
+		
+		if(simpleNode.getHeight() != expectedNode.getHeight()){
+			result = false;
+			System.err.println("Actual height: " + simpleNode.getHeight() + "\n" +
+								"Expected height: " + expectedNode.getHeight());
+		}
+		
+		if(simpleNode.getFold() != expectedNode.getFold()){
+			result = false;
+			System.err.println("Actual fold: " + simpleNode.getFold() + "\n" +
+								"Expected fold: " + expectedNode.getFold());
+		}
+		if(simpleNode.getSurrogateFold() != expectedNode.getSurrogateFold()){
+			result = false;
+			System.err.println("Actual surrogate fold: " + simpleNode.getSurrogateFold() + "\n" +
+								"Expected surrogate fold: " + expectedNode.getSurrogateFold());
+		}
+		if(simpleNode.getInverseSurrogateFold() != expectedNode.getInverseSurrogateFold()){
+			result = false;
+			System.err.println("Actual inverse surrogate fold: " + simpleNode.getInverseSurrogateFold() + "\n" +
+								"Expected inverse surrogate fold: " + expectedNode.getInverseSurrogateFold());
+		}
+		
+		if(simpleNode.getNeighbors().size() != expectedNode.getNeighbors().size()){
+			result = false;
+			System.err.println("Actual number of neighbors: " + simpleNode.getNeighbors().size() + "\n" +
+								"Expected number of neighbors: " + expectedNode.getNeighbors().size());
+		}
+		else{
+			HashSet<Integer> expectedNeighbors = expectedNode.getNeighbors();
+			for(Integer neighbor: simpleNode.getNeighbors()){
+				if(!expectedNeighbors.contains(neighbor)){
+					result = false;
+					System.err.println("Actual neighbor not found in expected neighbor list: " + neighbor);
+				}
+			}
+		}
+		
+		if(simpleNode.getDownPointers().size() != expectedNode.getDownPointers().size()){
+			result = false;
+			System.err.println("Actual number of down pointers: " + simpleNode.getDownPointers().size() + "\n" +
+								"Expected number of down pointers: " + expectedNode.getDownPointers().size());
+		}
+		else{
+			HashSet<Integer> expectedDownPointers = expectedNode.getDownPointers();
+			for(Integer downPointer: simpleNode.getDownPointers()){
+				if(!expectedDownPointers.contains(downPointer)){
+					result = false;
+					System.err.println("Actual down pointer not found in expected down pointer list: " + downPointer);
+				}
+			}
+		}
+		
+		if(simpleNode.getUpPointers().size() != expectedNode.getUpPointers().size()){
+			result = false;
+			System.err.println("Actual number of up pointers: " + simpleNode.getUpPointers().size() + "\n" +
+								"Expected number of up pointers: " + expectedNode.getUpPointers().size());
+		}
+		else{
+			HashSet<Integer> expectedUpPointers = expectedNode.getUpPointers();
+			for(Integer upPointer: simpleNode.getUpPointers()){
+				if(!expectedUpPointers.contains(upPointer)){
+					result = false;
+					System.err.println("Actual up pointer not found in expected up pointer list: " + upPointer);
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Adds 19 to 37 (inclusive) nodes (by adding to the parent node directly) to the web and 
+	 * exhaustively tests each and every node after each insertion.
+	 */
+	public void testAddChildRandomExhaustive(){
+		//create the nodes
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		Random generator = new Random();
+		int numberOfNodes = generator.nextInt(37-19)+20;
+		for(int i = 0; i < numberOfNodes; i++){
+			nodes.add(new Node(i));
+		}
+		
+		//add the nodes to their respective parents
+		for(int i = 1; i < numberOfNodes; i++){
+			nodes.get(calculateSurrogate(i)).addChild(nodes.get(i));
+			
+			//after each addition, exhaustively test all of the nodes in the web
+			for(int j = i; j >= 0; j--){
+				assertTrue(isNodeDomainCorrect(nodes.get(j), i+1));
+			}
+		}
+	}
+	
+	/**
+	 * Adds 500 to 1000 (inclusive) nodes (by adding to the parent node directly) to the web and 
+	 * exhaustively tests each and every node after each insertion.
+	 */
+	public void testAddChildRandomLarge(){
+		//create the nodes
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		Random generator = new Random();
+		int numberOfNodes = generator.nextInt(500)+501;
+		for(int i = 0; i < numberOfNodes; i++){
+			nodes.add(new Node(i));
+		}
+		
+		//add the nodes to their respective parents
+		for(int i = 1; i < numberOfNodes; i++){
+			nodes.get(calculateSurrogate(i)).addChild(nodes.get(i));
+			
+			//test a random node
+			int randomNode = generator.nextInt(i);
+			assertTrue(isNodeDomainCorrect(nodes.get(randomNode), i+1));
+		}
+	}
+	
+	/**
+	 * Finds the surrogate for a given webId. A surrogate is defined here as the number 
+	 * who's bit representation has a zero where the id's leading 1 bit is, for example:
+	 * if the id is three the bit representation is 11 so the surrogate is 01.
+	 * @param id The id to find a surrogate of.
+	 * @return The id's surrogate.
+	 * @pre An integer greater than or equal to one.
+	 * @post result = id's surrogate
+	 */
+	private int calculateSurrogate(int id){
+		int temp = id;
+		int digitsToLeadingOneBit = 0;
+		while(temp > 0){
+			digitsToLeadingOneBit++;
+			temp >>>= 1;
+		}
+		
+		int highestOneBitMask = 1;
+		for(; digitsToLeadingOneBit > 1; digitsToLeadingOneBit--){
+			highestOneBitMask <<= 1;
+		}
+		
+		return (id^highestOneBitMask);
 	}
 }

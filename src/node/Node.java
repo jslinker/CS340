@@ -149,21 +149,25 @@ public class Node implements Comparable<Node>{
 		}
 		
 		//set all of the folds
+		Node childsNewFold = null;
 		if(connections.hasInverseSurrogateFold()){
-			Node childFold = connections.getInverseSurrogateFold();
-			child.setFold(childFold);
-			childFold.setFold(child);
-			childFold.setSurrogateFold(NULL_NODE);
+			childsNewFold = this.getInverseSurrogateFold();
+			child.setFold(childsNewFold);
+			childsNewFold.setFold(child);
+			childsNewFold.setSurrogateFold(NULL_NODE);
 			this.setInverseSurrogateFold(NULL_NODE);
 		}
 		else{
-			child.setFold(this.getFold());
+			childsNewFold = this.getFold();
+			child.setFold(childsNewFold);
+			childsNewFold.setFold(child);
 			if(this.getWebIdValue() == 0 && this.getHeight() == 1){
 				this.setFold(child);
 			}
 			else{
-				this.setSurrogateFold(this.getFold());
+				this.setSurrogateFold(childsNewFold);
 				this.setFold(Node.NULL_NODE);
+				childsNewFold.setInverseSurrogateFold(this);
 			}
 		}
 		
