@@ -238,14 +238,14 @@ public class NodeTests extends TestCase{
 	}
 	
 	/**
-	 * Adds 65537 to 131072 (inclusive) nodes (by adding to the parent node directly) to the web and 
+	 * Adds 2049 to 4096 (inclusive) nodes (by adding to the parent node directly) to the web and 
 	 * exhaustively tests each and every node after each insertion.
 	 */
 	public void testAddChildRandomLarge(){
 		//create the nodes
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		Random generator = new Random();
-		int numberOfNodes = generator.nextInt(65536)+65537;
+		int numberOfNodes = generator.nextInt(2048)+2049;
 		for(int i = 0; i < numberOfNodes; i++){
 			nodes.add(new Node(i));
 		}
@@ -257,6 +257,35 @@ public class NodeTests extends TestCase{
 			//test a random node
 			int randomNode = generator.nextInt(i);
 			assertTrue(isNodeDomainCorrect(nodes.get(randomNode), i+1));
+		}
+	}
+	
+	/**
+	 * Randomly creates a HyPeerWeb of size between 101 and 200, inclusive.
+	 * Then finds the insertion point by randomly selecting a node and calling 
+	 * {@code findInsertionPoint}.
+	 */
+	public void testFindInsertionPointRandom(){
+		//create the nodes
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		Random generator = new Random();
+		int numberOfNodes = generator.nextInt(100)+101;
+		for(int i = 0; i < numberOfNodes; i++){
+			nodes.add(new Node(i));
+		}
+		
+		//add the nodes one by one testing for the insertion point after each addition
+		for(int i = 1; i < numberOfNodes; i++){
+			nodes.get(calculateSurrogateWebId(i)).addChild(nodes.get(i));
+			
+			//test findInsertionPoint on a random node
+			int randomNode = generator.nextInt(i);
+			Node insertionPoint = nodes.get(randomNode).findInsertionPoint();
+			Node expectedInsertionPoint = nodes.get(calculateInsertionPointWebId(i));
+			assertTrue("\nExpected: " + expectedInsertionPoint.getWebIdValue() + "\n" +
+						"Actual: " + insertionPoint.getWebIdValue() + "\n" +
+						"Deletion Point: " + i, 
+						insertionPoint.getWebIdValue() == expectedInsertionPoint.getWebIdValue());
 		}
 	}
 	
