@@ -15,7 +15,7 @@ public class Exp {
 
     public static void main(String[] args) {
         HyPeerWebDatabase.initHyPeerWebDatabase(null);
-        HyPeerWebDatabase.getSingleton().clear();
+        HyPeerWebDatabase.clear();
         hypeerweb = HyPeerWeb.getSingleton();
         testPhase1();
         testPhase2();

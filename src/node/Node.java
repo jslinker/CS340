@@ -1,6 +1,7 @@
 package node;
 
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.HashSet;
@@ -402,23 +403,11 @@ public class Node implements Comparable<Node>{
 	
 	@Override
 	public String toString(){
-		return "Node [webId=" + webId + ", downPointers=" + connections.getDownPointers()
-				+ ", upPointers=" + connections.getUpPointers() + ", neighbors=" + this.getNeighbors()
-				+ ", fold=" + connections.getFold() + ", surrogateFold=" + connections.getSurrogateFold()
-				+ ", inverseSurrogateFold=" + connections.getInverseSurrogateFold() + "]";
+		return "Node [webId=" + webId + "]";
 	}
 
 	@Override
 	public int hashCode(){
-		/*final int prime = 31;
-		int result = 1;
-		result = prime * result + ((webId == null) ? 0 : webId.hashCode());
-		result = prime * result + ((downPointers == null) ? 0 : downPointers.hashCode());
-		result = prime * result + ((upPointers == null) ? 0 : upPointers.hashCode());
-		result = prime * result + ((fold == null) ? 0 : fold.hashCode());
-		result = prime * result + ((inverseSurrogateFold == null) ? 0 : inverseSurrogateFold.hashCode());
-		result = prime * result + ((neighbors == null) ? 0 : neighbors.hashCode());
-		result = prime * result + ((surrogateFold == null) ? 0 : surrogateFold.hashCode());*/
 		return webId.hashCode();
 	}
 
@@ -439,16 +428,7 @@ public class Node implements Comparable<Node>{
 		
 		Node other = (Node) obj;
 		
-		boolean webId = this.webId == other.webId;
-		/*
-		boolean down = this.downPointers == other.downPointers;
-		boolean up = this.upPointers == other.upPointers;
-		boolean fold = this.fold.equals(other.fold);
-		boolean isf = this.inverseSurrogateFold.equals(other.inverseSurrogateFold);
-		boolean neigh = this.neighbors.equals(other.neighbors);
-		boolean sf = this.surrogateFold.equals(other.surrogateFold);
-		*/
-		return webId;// && down && up && fold && isf && neigh && sf;
+		return this.webId == other.webId;
 	}
 
 	@Override
