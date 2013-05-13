@@ -30,14 +30,15 @@ public class BitManipulation{
 	 * @param parentWebId The webId of the parent node.
 	 * @param parentHeight The height of the parent node (one less than that of the child node).
 	 * @return The webId of the child node.
-	 * @pre parentWebId >= 0, parentHeight >= 0
+	 * @pre parentWebId >= 0, parentHeight >= 0, parentWebId <= 0x3FFFFFFF, parentHeight <= 30
 	 * @post result = child's webId
 	 */
 	public static int calculateChildWebId(int parentWebId, int parentHeight){
-		assert (parentWebId >= 0 && parentHeight >= 0);
+		assert (parentWebId >= 0 && parentWebId <= (0x3FFFFFFF) 
+				&& parentHeight >= 0 && parentHeight <=30);
 		int highestOneBitMask = 1;
 		for(; parentHeight > 0; parentHeight--){
-			parentHeight <<= 1;
+			highestOneBitMask <<= 1;
 		}
 		
 		return (parentWebId^highestOneBitMask);
@@ -45,7 +46,7 @@ public class BitManipulation{
 	
 	/**
 	 * Calculates the WebId of the insertion point from the WebId of the last node in the
-	 * HyPeerWeb.
+	 * HyPeerWeb, also known as the deletion point.
 	 * @param lastNodeWebId The WebId of the last node in the HyPeerWeb.
 	 * @return The WebId of the insertion point.
 	 * @pre lastNodeWebId >= 0
