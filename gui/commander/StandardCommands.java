@@ -1,5 +1,7 @@
 package commander;
 
+import hypeerweb.HyPeerWeb;
+
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -9,8 +11,12 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import printer.DebugPrinter;
+
+import mapper.NodeListing;
 import newWindows.BroadcastWindow;
 import newWindows.SendWindow;
+import node.Node;
 import Main.GUI;
 /**
  * Standard Commands are a basic set of commands that are needed to test a HyPeerWeb.
@@ -144,6 +150,27 @@ public class StandardCommands extends JPanel
 	 * Inserts a Node into the HyPeerWeb
 	 */
 	public void insertButtonPressed()	{
+		NodeListing listing = main.getHyPeerWebDebugger().getMapper().getNodeListing();
+		if(listing.listSize() > listing.MAX_NUMBER_OF_NODES) {
+			// print an error in debug status
+		} else {
+			int insertIndex = listing.getSelectedIndex();
+			HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();
+			Node startNode = hypeerweb.getNode(insertIndex);
+			Node newNode = new Node(10,10);
+			if(startNode != null) {
+				hypeerweb.addToHyPeerWeb(newNode, startNode);
+				listing.increaseListSize();
+			} else if (insertIndex == 0 && hypeerweb.size() == 0) {
+				hypeerweb.addNode(newNode);
+				listing.increaseListSize();
+			} else {
+				DebugPrinter tracePanel = main.getHyPeerWebDebugger().getTracePanel();
+				tracePanel.println("No valid node was selected for insertion.");
+			}
+		}
+		
+		
 		//TODO Phase 5 -- Add functionality for inserting a node.
 		//I. Get the size of the "nodeListing" component.
 		//II. If the size is greater than or equal to the max number of nodes allowed in a NodeListing
@@ -161,6 +188,21 @@ public class StandardCommands extends JPanel
 	 *  Removes a node from the HyPeerWeb
 	 */
 	public void removeButtonPressed() {
+		NodeListing listing = main.getHyPeerWebDebugger().getMapper().getNodeListing();
+		if(listing.listSize() == 1) {
+			// print an error in debug status
+		} else {
+			int insertIndex = listing.getSelectedIndex();
+			HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();
+			Node startNode = hypeerweb.getNode(insertIndex);
+			if(startNode != null) {
+				hypeerweb.removeNode(startNode);
+				listing.decreaseListSize();
+			} else {
+				DebugPrinter tracePanel = main.getHyPeerWebDebugger().getTracePanel();
+				tracePanel.println("No valid node was selected for deletion.");
+			}
+		}
 		//TODO Phase 5 -- Add functionality for removing a node.
 		//I. Get the size of the "nodeListing" component.
 		//II. If the size equals 1, print an error in the the "debugStatus" component.
