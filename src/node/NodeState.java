@@ -1,7 +1,6 @@
 package node;
 
 import utilities.BitManipulation;
-import static java.lang.System.out;
 
 /**
  * 

@@ -1,16 +1,12 @@
 package node;
 
+import static utilities.BitManipulation.calculateInsertionPointWebId;
+import static utilities.BitManipulation.calculateSurrogateWebId;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
-import org.junit.Ignore;
-
-import node.Node;
-import node.SimplifiedNodeDomain;
-import node.ExpectedResult;
-import node.WebId;
-import static utilities.BitManipulation.*;
 import junit.framework.TestCase;
 
 /**

@@ -1,14 +1,8 @@
 package hypeerweb;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
 import java.util.Random;
 
 import junit.framework.TestCase;
-
 import node.ExpectedResult;
 import node.Node;
 import node.NodeTests;
@@ -27,12 +21,12 @@ import database.HyPeerWebDatabase;
 public class HyPeerWebTests extends TestCase{
 	
 	private HyPeerWeb web = HyPeerWeb.getSingleton();
-	Node nodes[] = new Node[8];
+	private Node nodes[] = new Node[8];
 	
 	@Before
-	public void setup() {
+	public void setUp() {
 		web = HyPeerWeb.getSingleton();
-
+		
 		nodes[0] = new Node(0,0);
 		nodes[1] = new Node(1,1);
 		nodes[2] = new Node(2,2);
@@ -139,10 +133,11 @@ public class HyPeerWebTests extends TestCase{
 	@Test
 	public void testReload(){
 		
-		web.addNode(nodes[0]);
-		web.addNode(nodes[1]);
-		web.addNode(nodes[2]);
-		assertEquals(3,web.size());
+		for(Node n : nodes) {
+			web.addNode(n);
+		}
+		
+		assertEquals(nodes.length,web.size());
 		
 		web.saveToDatabase();
 
@@ -150,7 +145,7 @@ public class HyPeerWebTests extends TestCase{
 		assertEquals(0,web.size());
 		
 		web.reload();
-		assertEquals(3,web.size());
+		assertEquals(nodes.length,web.size());
 	}
 	
 	@Test
@@ -159,10 +154,11 @@ public class HyPeerWebTests extends TestCase{
 		final String dbName = "testing.db";
 		HyPeerWebDatabase.initHyPeerWebDatabase(dbName);
 		
-		web.addNode(nodes[0]);
-		web.addNode(nodes[1]);
-		web.addNode(nodes[2]);
-		assertEquals(3,web.size());
+		for(Node n : nodes) {
+			web.addNode(n);
+		}
+		
+		assertEquals(nodes.length,web.size());
 		
 		web.saveToDatabase();
 		
@@ -170,7 +166,7 @@ public class HyPeerWebTests extends TestCase{
 		assertEquals(0,web.size());
 		
 		web.reload(dbName);
-		assertEquals(3,web.size());
+		assertEquals(nodes.length,web.size());
 	}
 	
 	@Test
@@ -196,6 +192,7 @@ public class HyPeerWebTests extends TestCase{
 		assertEquals(3, web.getHyPeerWebDatabase().getSingleton().getAllWebIds().size());
 	}
 	
+	@Test
 	public void testAddToHyPeerWeb(){
 		HyPeerWeb web = HyPeerWeb.getSingleton();
 		web.clear();
@@ -227,6 +224,7 @@ public class HyPeerWebTests extends TestCase{
 		}
 	}
 	
+	@Test
 	public void testAddToHyPeerWebExp(){
 		HyPeerWeb web = HyPeerWeb.getSingleton();
         web.clear();

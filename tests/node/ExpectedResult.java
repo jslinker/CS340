@@ -2,7 +2,6 @@ package node;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import node.SimplifiedNodeDomain;
 
 /**
  * Given integer values for the hyPeerWebSize and the webId we can compute integer values

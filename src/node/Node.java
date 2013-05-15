@@ -1,13 +1,11 @@
 package node;
 
 
-import java.util.Arrays;
+import static utilities.BitManipulation.calculateChildWebId;
+
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.HashSet;
-import static java.lang.System.out;
-import static utilities.BitManipulation.*;
 
 /**
  * @author Joseph

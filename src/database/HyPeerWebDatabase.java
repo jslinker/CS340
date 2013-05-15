@@ -30,11 +30,6 @@ public class HyPeerWebDatabase {
 	
 	private Connection connection = null;
 	
-	
-	// Create SimplifiedNodeDomain is using this for node state right now,
-	// needs to be updated when the database is changed to include node state.
-	private final int DEFAULT_STATE = 0;
-	
 	public Connection getConnection(){
 		assert connection != null;
 		return this.connection;
@@ -72,7 +67,8 @@ public class HyPeerWebDatabase {
 														"height INTEGER NOT NULL,"+
 														"fold INTEGER,"+
 														"surrogate_fold INTEGER,"+
-														"inverse_surrogate_fold INTEGER);";
+														"inverse_surrogate_fold INTEGER,"+
+														"state INTEGER);";
 	
 	private static final String CREATE_TABLE_NEIGHBORS = "CREATE TABLE IF NOT EXISTS " + tableNames[1] + "("+
 															"node INTEGER NOT NULL,"+
@@ -165,7 +161,7 @@ public class HyPeerWebDatabase {
 	 * @return The SimplifiedNodeDomain corresponding to the webId.
 	 * @Precondition There exists a node in the database with the given webId.
 	 * @Postcondition result contains the webId, neighbors, upPointers, 
-	 * downPointers, fold, surrogateFold, and inverse surrogate fold of the 
+	 * downPointers, fold, surrogateFold, and inverse surrogate fold and state of the 
 	 * indicated node.
 	 * @author Jason Robertson
 	 */
@@ -185,6 +181,7 @@ public class HyPeerWebDatabase {
 			int fold;
 			int surrogate_fold;
 			int inverse_surrogate_fold;
+			int state;
 
 			if( ! rs.next()) {
 				return null;
@@ -195,13 +192,14 @@ public class HyPeerWebDatabase {
 			fold = rs.getInt(3);
 			surrogate_fold = rs.getInt(4);
 			inverse_surrogate_fold = rs.getInt(5);
+			state = rs.getInt(6);
 
 			HashSet<Integer> neighbors = findNearbyFriends(webId, tableNames[1]);
 			HashSet<Integer> upPointers = findNearbyFriends(webId, tableNames[2]); 
 			HashSet<Integer> downPointers = findNearbyFriends(webId, tableNames[3]); 
 
 			result = new SimplifiedNodeDomain(web_id, height, neighbors,
-					upPointers, downPointers, fold, surrogate_fold, inverse_surrogate_fold, DEFAULT_STATE);
+					upPointers, downPointers, fold, surrogate_fold, inverse_surrogate_fold, state);
 
 		}
 		catch(SQLException e) {
@@ -286,13 +284,14 @@ public class HyPeerWebDatabase {
 			// Store General Info
 
 			String sql = String.format("INSERT INTO " + tableNames[0] +
-					"(web_id, height, fold, surrogate_fold, inverse_surrogate_fold) " +
-					"VALUES ('%d', '%d', '%d', '%d', '%d');",
+					"(web_id, height, fold, surrogate_fold, inverse_surrogate_fold, state) " +
+					"VALUES ('%d', '%d', '%d', '%d', '%d', '%d');",
 					node.getWebIdValue(),
 					node.getWebIdHeight(),
 					node.getFold().getWebIdValue(),
 					node.getSurrogateFold().getWebIdValue(),
-					node.getInverseSurrogateFold().getWebIdValue()
+					node.getInverseSurrogateFold().getWebIdValue(),
+					node.getState().STATE_ID
 					);
 
 			stmt.executeUpdate(sql);
