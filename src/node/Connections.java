@@ -94,7 +94,7 @@ public class Connections {
 	
 	public Node getBiggestNeighbor(){
 		if(upperNeighbors.size() > 0){
-			return upperNeighbors.get(upPointers.lastKey());
+			return upperNeighbors.get(upperNeighbors.lastKey());
 		}
 		else{
 			return Node.NULL_NODE;
