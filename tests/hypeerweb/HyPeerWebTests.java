@@ -265,7 +265,7 @@ public class HyPeerWebTests extends TestCase{
                     expectedResult = new ExpectedResult(size, i);
 
                     if (!simplifiedNodeDomain.equals(expectedResult)) {
-                    	System.out.println("Error damn it");
+                    	System.out.println("Error");
                     }
                 }
             }
