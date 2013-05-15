@@ -3,6 +3,7 @@ package node;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.HashSet;
 import static java.lang.System.out;
@@ -73,17 +74,17 @@ public class Node implements Comparable<Node>{
 	 */
 	public SimplifiedNodeDomain constructSimplifiedNodeDomain(){
 		HashSet<Integer> neighborIds = new HashSet<Integer>();
-		for(Node n : getNeighbors()) {
+		for(Node n : getNeighbors().values()) {
 			neighborIds.add(n.getWebIdValue());
 		}
 		
 		HashSet<Integer> upIds = new HashSet<Integer>();
-		for(Node n : getUpPointers()){
+		for(Node n : getUpPointers().values()){
 			upIds.add(n.getWebIdValue());
 		}
 		
 		HashSet<Integer> downIds = new HashSet<Integer>();
-		for(Node n : getDownPointers()){
+		for(Node n : getDownPointers().values()){
 			downIds.add(n.getWebIdValue());
 		}
 		
@@ -175,11 +176,11 @@ public class Node implements Comparable<Node>{
 		child.setConnections(childConnections);
 		
 		//set child node's lower neighbors
-		TreeSet<Node> upPointers = connections.getUpPointers();
+		TreeMap<Integer,Node> upPointers = connections.getUpPointers();
 		childConnections.setLowerNeighbors(upPointers);
-		connections.setUpPointers(new TreeSet<Node>());
+		connections.setUpPointers(new TreeMap<Integer,Node>());
 		//notify child node's lower neighbors
-		Iterator<Node> childsLowerNeighbors = upPointers.iterator();
+		Iterator<Node> childsLowerNeighbors = upPointers.values().iterator();
 		while(childsLowerNeighbors.hasNext()){
 			Node lowerNeighbor = childsLowerNeighbors.next();
 			lowerNeighbor.removeDownPointer(this);
@@ -187,7 +188,7 @@ public class Node implements Comparable<Node>{
 		}
 		
 		//set child node's surrogate neighbors
-		Iterator<Node> childsSurrogateNeighbors = connections.getUpperNeighbors().iterator();
+		Iterator<Node> childsSurrogateNeighbors = connections.getUpperNeighbors().values().iterator();
 		while(childsSurrogateNeighbors.hasNext()){
 			Node surrogateNeighbor = childsSurrogateNeighbors.next();
 			child.addDownPointer(surrogateNeighbor);
@@ -301,18 +302,18 @@ public class Node implements Comparable<Node>{
 		return webId.getHeight();
 	}
 	
-	public TreeSet<Node> getDownPointers(){
+	public TreeMap<Integer,Node> getDownPointers(){
 		return connections.getDownPointers();
 	}
 	
-	public TreeSet<Node> getUpPointers(){
+	public TreeMap<Integer,Node> getUpPointers(){
 		return connections.getUpPointers();
 	}
 	
-	public TreeSet<Node> getNeighbors(){
-		TreeSet<Node> result = new TreeSet<Node>();
-		result.addAll(connections.getLowerNeighbors());
-		result.addAll(connections.getUpperNeighbors());
+	public TreeMap<Integer,Node> getNeighbors(){
+		TreeMap<Integer,Node> result = new TreeMap<Integer,Node>();
+		result.putAll(connections.getLowerNeighbors());
+		result.putAll(connections.getUpperNeighbors());
 		return result;
 	}
 	
