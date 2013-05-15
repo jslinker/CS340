@@ -38,18 +38,16 @@ public class HyPeerWeb {
 	 * @post newNode is in nodes and is connected to the HyPeerWeb
 	 */
 	public void addToHyPeerWeb(Node newNode, Node startNode){
-		assert (newNode != null && newNode != Node.NULL_NODE 
-				&& startNode != null);
+		assert (newNode != null && newNode != Node.NULL_NODE);
 		
 		if(nodes.isEmpty()){
-			newNode.setFold(newNode);
-			newNode.setWebId(new WebId(0));
+			Node.NULL_NODE.addChild(newNode);
 		}
 		else{
 			assert (nodes.contains(startNode));
 			startNode.addToHyPeerWeb(newNode);
 		}
-		nodes.add(newNode);
+		this.addNode(newNode);
 	}
 	
 	public void addNode(Node node){
@@ -58,6 +56,7 @@ public class HyPeerWeb {
 	
 	public void clear(){
 		this.nodes.clear();
+		assert (nodes.isEmpty());
 	}
 	
 	public boolean contains(Node node){

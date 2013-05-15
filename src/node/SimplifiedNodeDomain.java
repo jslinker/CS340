@@ -4,9 +4,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import node.states.NodeState;
-import node.states.StandardNodeState;
-
 
 /**
  * Contains the information for a node needed for automatic testing. Do
@@ -69,7 +66,7 @@ public class SimplifiedNodeDomain {
         fold = -1;
         surrogateFold = -1;
         inverseSurrogateFold = -1;
-        state = StandardNodeState.STATE_ID;
+        state = NodeState.STANDARD.STATE_ID;
     }
 
     /**

@@ -19,10 +19,7 @@ public class Connections {
 	private Node surrogateFold = Node.NULL_NODE;
 	private Node inverseSurrogateFold = Node.NULL_NODE;
 	
-	private Node biggestNeighbor = Node.NULL_NODE;
-	
 	public Connections(){
-		
 	}
 	
 	//--------------------
@@ -59,11 +56,10 @@ public class Connections {
 
 	public void setUpperNeighbors(TreeSet<Node> upperNeighbors) {
 		this.upperNeighbors = upperNeighbors;
-		biggestNeighbor = upperNeighbors.last();
 	}
 
 	public Node getFold() {
-		return fold;
+		return this.fold;
 	}
 
 	public void setFold(Node fold) {
@@ -82,17 +78,28 @@ public class Connections {
 		return inverseSurrogateFold;
 	}
 
-	public void setInverseSurrogateFold(Node inverseSurrogateFold) {
+	public void setInverseSurrogateFold(Node inverseSurrogateFold){
 		this.inverseSurrogateFold = inverseSurrogateFold;
 	}
 	
-	public Node getBiggestNeighbor() {
-		return biggestNeighbor;
+	public Node getLargestUpPointer(){
+		if(upPointers.size() > 0){
+			return upPointers.last();
+		}
+		else{
+			return Node.NULL_NODE;
+		}
 	}
 	
-	public void setBiggestNeighbor(Node biggestNeighbor) {
-		this.biggestNeighbor = biggestNeighbor;
+	public Node getBiggestNeighbor(){
+		if(upperNeighbors.size() > 0){
+			return upperNeighbors.last();
+		}
+		else{
+			return Node.NULL_NODE;
+		}
 	}
+	
 	//--------------------
 	//  A D D E R S
 	//--------------------		
@@ -106,9 +113,6 @@ public class Connections {
 	
 	public void addUpperNeighbor(Node upperNeighbor){
 		this.upperNeighbors.add(upperNeighbor);
-		if(upperNeighbor.getWebIdValue() > biggestNeighbor.getWebIdValue()){
-			biggestNeighbor = upperNeighbor;
-		}
 	}
 	
 	public void addUpPointer(Node upPointer){
@@ -205,5 +209,27 @@ public class Connections {
 		} else if (!upPointers.equals(other.upPointers))
 			return false;
 		return true;
+	}
+
+	public int getUpPointerCount() {
+		return upPointers.size();
+	}
+	
+	public int getDownPointerCount() {
+		return downPointers.size();
+	}
+
+	public Node getSmallestDownPointer() {
+		return downPointers.first();
+	}
+
+	public Node getSmallestChildlessNeighbor() {
+		Node result = Node.NULL_NODE;
+		for(Node ln: lowerNeighbors){
+			if(ln.getConnections().getUpPointerCount() > 0){
+				return ln;
+			}
+		}
+		return result;
 	}
 }

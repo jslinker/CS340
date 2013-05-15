@@ -3,6 +3,9 @@ package node;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
+
+import org.junit.Ignore;
+
 import node.Node;
 import node.SimplifiedNodeDomain;
 import node.ExpectedResult;
@@ -137,7 +140,7 @@ public class NodeTests extends TestCase{
 	 * @param webSize The size of the web the node is in.
 	 * @return True if the node's domain is correct; false otherwise.
 	 */
-	private boolean isNodeDomainCorrect(Node node, int webSize){
+	public static boolean isNodeDomainCorrect(Node node, int webSize){
 		SimplifiedNodeDomain simpleNode = node.constructSimplifiedNodeDomain();
 		ExpectedResult expectedNode = new ExpectedResult(webSize, node.getWebIdValue());
 		
@@ -225,6 +228,11 @@ public class NodeTests extends TestCase{
 		for(int i = 0; i < numberOfNodes; i++){
 			nodes.add(new Node(i));
 		}
+		SimplifiedNodeDomain simpleNode = nodes.get(0).constructSimplifiedNodeDomain();
+		ExpectedResult expectedNode = new ExpectedResult(1, 0);
+		assertTrue("\nActual: " + simpleNode + "\n" +
+					"Expected: " + expectedNode,
+					simpleNode.equals(expectedNode));
 		
 		//add the nodes to their respective parents
 		for(int i = 1; i < numberOfNodes; i++){
@@ -232,7 +240,13 @@ public class NodeTests extends TestCase{
 			
 			//after each addition, exhaustively test all of the nodes in the web
 			for(int j = i; j >= 0; j--){
-				assertTrue(isNodeDomainCorrect(nodes.get(j), i+1));
+				simpleNode = nodes.get(j).constructSimplifiedNodeDomain();
+				expectedNode = new ExpectedResult(i+1, j);
+				//assertTrue(isNodeDomainCorrect(nodes.get(j), i+1));
+				assertTrue("\nSize of web: " + (i+1) + "\n" +
+							"Actual: " + simpleNode + "\n" +
+							"Expected: " + expectedNode,
+							simpleNode.equals(expectedNode));
 			}
 		}
 	}
@@ -265,47 +279,85 @@ public class NodeTests extends TestCase{
 	 * Then finds the insertion point by randomly selecting a node and calling 
 	 * {@code findInsertionPoint}.
 	 */
-	public void testFindInsertionPointRandom(){
+	public void testFindInsertionPointExhaustive(){
 		//create the nodes
 		ArrayList<Node> nodes = new ArrayList<Node>();
-		Random generator = new Random();
-		int numberOfNodes = generator.nextInt(100)+101;
+		int numberOfNodes = 200;
 		for(int i = 0; i < numberOfNodes; i++){
 			nodes.add(new Node(i));
 		}
 		
 		//add the nodes one by one testing for the insertion point after each addition
 		for(int i = 1; i < numberOfNodes; i++){
-			nodes.get(calculateSurrogateWebId(i)).addChild(nodes.get(i));
 			
-			//test findInsertionPoint on a random node
-			int randomNode = generator.nextInt(i);
-			Node insertionPoint = nodes.get(randomNode).findInsertionPoint();
-			Node expectedInsertionPoint = nodes.get(calculateInsertionPointWebId(i));
-			assertTrue("\nExpected: " + expectedInsertionPoint.getWebIdValue() + "\n" +
-						"Actual: " + insertionPoint.getWebIdValue() + "\n" +
-						"Deletion Point: " + i, 
-						insertionPoint.getWebIdValue() == expectedInsertionPoint.getWebIdValue());
+			Node expectedInsertionPoint = nodes.get(calculateInsertionPointWebId(i-1));
+			Node insertionPoint = Node.NULL_NODE;
+			//test findInsertionPoint on each node
+			for(int j = 0; j < i; j++){
+				insertionPoint = nodes.get(j).findInsertionPoint();
+				assertTrue("\nExpected: " + expectedInsertionPoint.getWebIdValue() + "\n" +
+							"Actual: " + insertionPoint.getWebIdValue() + "\n" +
+							"Deletion Point: " + (i-1), 
+							insertionPoint == expectedInsertionPoint);
+			}
+			
+			insertionPoint.addChild(nodes.get(i));
+			assertTrue(isNodeDomainCorrect(nodes.get(i), i+1));
 		}
 	}
 	
 	public void testAddToHyPeerWeb(){
-		Node node0 = new Node(0);
-		Node node1 = new Node(1);
-		Node node2 = new Node(2);
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		Random generator = new Random();
+		int numberOfNodes = 200;
+		for(int i = 0; i < numberOfNodes; i++){
+			nodes.add(new Node(generator.nextInt(10000)));
+		}
 		
-		node0.addChild(node1);
-		Node biggestNeighbor = node0.findInsertionPoint();
+		Node.NULL_NODE.addChild(nodes.get(0));
 		
-		assertEquals(node1, biggestNeighbor);
+		for(int i = 1; i < nodes.size(); i++){
+			//insert next node using addToHyPeerWeb called on a randomly selected node
+			Node newNode = nodes.get(i);
+			int randomStartNodeWebId = generator.nextInt(i);
+			Node startNode = nodes.get(randomStartNodeWebId);
+			startNode.addToHyPeerWeb(newNode);
+			for(int j = 0; j <= i; j++){
+				assertTrue(isNodeDomainCorrect(nodes.get(j), i+1));
+			}
+		}
+	}
+	
+	/**
+	 * Tests the findLargest() method which should return either the cap node or an edge node.
+	 */
+	public void testFindLargestExhaustive(){
+		//create the nodes
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		int numberOfNodes = 200;
+		for(int i = 0; i < numberOfNodes; i++){
+			nodes.add(new Node(i));
+		}
 		
-		/*
-		int websize = 3;
-		ExpectedResult expected1 = new ExpectedResult(websize, 2);
-		
-		System.out.println("\nActual:\n" + node2.constructSimplifiedNodeDomain());
-		System.out.println("\nExpected:\n" + expected1);
-		assertEquals(node2.constructSimplifiedNodeDomain(), expected1);
-		*/
+		for(int i = 1; i < numberOfNodes; i++){
+			//add the nodes to their respective parents
+			nodes.get(calculateSurrogateWebId(i)).addChild(nodes.get(i));
+			
+			//test post conditions of the findLargest() method
+			//Node largest = nodes.get(generator.nextInt(i)).findLargest();
+			for(int j = 0; j <= i; j++){
+				Node largest = nodes.get(j).findLargest();
+				
+				assertTrue("\nActual largest webId: " + largest.getWebIdValue() + "\n" + 
+							"Last webId in web: " + i + "\n" +
+							"Start node webId: " + j + "\n" +
+							"Cap Node? " + (largest.getFold().getWebIdValue() == 0) + "\n" + 
+							"|DownPointers| = " + largest.getDownPointers().size(), 
+							(largest.getFold().getWebIdValue() == 0 || 
+							largest.getDownPointers().size() > 0) &&
+							(largest.getState() == NodeState.DOWN_POINTING ||
+							largest.getState() == NodeState.CAP));
+			}
+		}
 	}
 }

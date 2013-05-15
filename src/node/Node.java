@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.HashSet;
 import node.states.*;
+import static java.lang.System.out;
 import static utilities.BitManipulation.*;
 
 /**
@@ -16,9 +17,7 @@ public class Node implements Comparable<Node>{
 	private WebId webId = null;
 	private int height = -1;
 	private Connections connections;
-	private NodeState state = new StandardNodeState();
-	
-	private final int DEFAULT_STATE = 0;
+	private NodeState state = NodeState.STANDARD;
 	
 	public static final Node NULL_NODE = new Node(){
 		@Override public void addDownPointer(Node downPointer){ return; }
@@ -31,6 +30,15 @@ public class Node implements Comparable<Node>{
 		@Override public void setFold(Node fold){ return; }
 		@Override public void setSurrogateFold(Node surrogateFold){ return; }
 		@Override public void setInverseSurrogateFold(Node inverseSurrogateFold){ return; }
+		@Override public void addChild(Node child){
+			child.setWebId(new WebId(0));
+			child.setConnections(new Connections());
+			child.setFold(child);
+			child.setState(NodeState.CAP);
+		}
+		@Override public Node findNode(int webId){
+			return this;
+		}
 	};
 	
 	private Node(){
@@ -45,17 +53,18 @@ public class Node implements Comparable<Node>{
 		assert(id >= 0);
 		webId = new WebId(id);
 		connections = new Connections();
-		connections.setFold(this);
-		state = new StandardNodeState();
+		this.setFold(this);
 		this.height = webId.getHeight();
+		if(id == 0){
+			setState(NodeState.CAP);
+		}
 	}
 	
 	public Node(int id, int height){
 		assert(id >= 0 && height >= 0);
 		webId = new WebId(id, height);
 		connections = new Connections();
-		connections.setFold(this);
-		state = new StandardNodeState();
+		this.setFold(this);
 		this.height = webId.getHeight();
 	}
 	
@@ -81,7 +90,7 @@ public class Node implements Comparable<Node>{
 		
 		return new SimplifiedNodeDomain(webId.getValue(), this.getHeight(), neighborIds, upIds, downIds, 
 									    getFold().getWebIdValue(), getSurrogateFold().getWebIdValue(), 
-									    getInverseSurrogateFold().getWebIdValue(), state.getStateId());
+									    getInverseSurrogateFold().getWebIdValue(), state.STATE_ID);
 	}
 	
 	/**
@@ -93,89 +102,61 @@ public class Node implements Comparable<Node>{
 	public void addToHyPeerWeb(Node newNode){
 		assert (newNode != null && newNode != NULL_NODE);
 		Node insertionPoint = findInsertionPoint();
+		//System.out.println("this: "+this.getWebIdValue() + " " + this.getHeight());
 		int childWebId = calculateChildWebId(insertionPoint.getWebIdValue(), insertionPoint.getHeight());
+		//System.out.println(""+childWebId);
 		newNode.setWebId(new WebId(childWebId));
 		insertionPoint.addChild(newNode);
 	}
 	
-	private Node findBiggestNeighbor(){
-		if(getBiggestNeighbor().equals(Node.NULL_NODE)){
-			return this;
-		} else{
-			return getBiggestNeighbor().findBiggestNeighbor();
-		}
-	}
-	
-	public Node findNodeZero(){
-		return null;
-	}
-	
-	protected Node findInsertionPoint(){
-		Node biggestNeighbor = findBiggestNeighbor();
-		Node insertionPoint = biggestNeighbor.squeeze();
-		return insertionPoint;
-	}
-	
-	private Node squeeze() {
-	
-		Node upperBound = NULL_NODE;
-		Node lowerBound = NULL_NODE;
-		
-		if(this.hasDownPointers()) {
-			
-			upperBound = this.getLowestDownPointer();
-		}
-		
-		else {
-			return this;
-		}
-		
-		if(upperBound.hasUpPointers()) {
-			
-			lowerBound = upperBound.getHighestUpPointer();
-		}
-		
-		else {
-			return upperBound;
-		}
-		
-		return lowerBound.squeeze();
-	}
-	
-	private boolean hasUpPointers() {
-		if(getUpPointers().isEmpty()){
-			return false;
-		}
-		return true;
-	}
-	
-	private boolean hasDownPointers() {
-		if(getDownPointers().isEmpty()){
-			return false;
-		}
-		return true;
-	}
-	
-	private Node getLowestDownPointer() {
-		// Assuming sorted order - ascending
-		assert ! getDownPointers().isEmpty();
-		return getDownPointers().first();
-	}
-	
-	private Node getHighestUpPointer() {
-		// Assuming sorted order - ascending
-		assert ! getUpPointers().isEmpty();
-		return getUpPointers().last();
+	public Node findInsertionPoint(){
+		Node largest = this.findLargest();
+		return largest.getState().squeeze(largest, Node.NULL_NODE);
 	}
 
 	public Node findDeletionPoint(){
 		return null;
 	}
 	
-	public Node getParent(){
-		return null;
+	/**
+	 * This is a greedy algorithm and only guarantees finding the largest node if the
+	 * HyPeerWeb is also a HyperCube; otherwise this algorithm only guarantees finding an edge node.
+	 * @return
+	 * @pre This node is connected to the HyPeerWeb.
+	 * @post Either the cap node (if it exists); otherwise an edge node.
+	 */
+	public Node findLargest(){
+		Node largest = this;
+		if(this.getFold().getWebIdValue() > largest.getWebIdValue()){
+			largest = this.getFold();
+		}
+		if(this.getInverseSurrogateFold().getWebIdValue() > largest.getWebIdValue()){
+			largest = this.getInverseSurrogateFold();
+		}
+		if(this.getSurrogateFold().getWebIdValue() > largest.getWebIdValue()){
+			largest = this.getSurrogateFold();
+		}
+		if(this.connections.getBiggestNeighbor().getWebIdValue() > largest.getWebIdValue()){
+			largest = this.connections.getBiggestNeighbor();
+		}
+		if(this.connections.getLargestUpPointer().getWebIdValue() > largest.getWebIdValue()){
+			largest = this.connections.getLargestUpPointer();
+		}
+		
+		if(largest == this){
+			return largest;
+		}
+		else{
+			return largest.findLargest();
+		}
 	}
 	
+	/**
+	 * Finds the node with the given webId.
+	 * @param webId The webId of the node to be found.
+	 * @pre The node with the given webId exists and is connected to the HyPeerWeb.
+	 * @post result = Node with given webId
+	 */
 	public Node findNode(int webId){
 		return null;
 	}
@@ -210,7 +191,7 @@ public class Node implements Comparable<Node>{
 		Iterator<Node> childsSurrogateNeighbors = connections.getUpperNeighbors().iterator();
 		while(childsSurrogateNeighbors.hasNext()){
 			Node surrogateNeighbor = childsSurrogateNeighbors.next();
-			childConnections.addDownPointer(surrogateNeighbor);
+			child.addDownPointer(surrogateNeighbor);
 			surrogateNeighbor.addUpPointer(child);
 		}
 		
@@ -238,11 +219,12 @@ public class Node implements Comparable<Node>{
 		}
 		
 		//add child's first neighbor
-		childConnections.addLowerNeighbor(this);
+		child.addNeighbor(this);
 		//add child as neighbor last
-		connections.addUpperNeighbor(child);
+		this.addNeighbor(child);
 		
-		
+		NodeState.setNodeState(child);
+		NodeState.setNodeState(this);
 	}
 	
 	//------------------
@@ -250,6 +232,9 @@ public class Node implements Comparable<Node>{
 	//------------------
 	public void addDownPointer(Node downPointer){
 		connections.addDownPointer(downPointer);
+		if(connections.getDownPointerCount() > 0){
+			NodeState.setNodeState(this);
+		}
 	}
 	
 	public void addNeighbor(Node neighbor){
@@ -263,6 +248,9 @@ public class Node implements Comparable<Node>{
 	
 	public void addUpPointer(Node upPointer){
 		connections.addUpPointer(upPointer);
+		if(connections.getUpPointerCount() > 0){
+			NodeState.setNodeState(this);
+		}
 	}
 	
 	//--------------------
@@ -270,6 +258,9 @@ public class Node implements Comparable<Node>{
 	//--------------------	
 	public void removeDownPointer(Node downPointer){
 		connections.removeDownPointer(downPointer);
+		if(connections.getDownPointerCount() == 0){
+			NodeState.setNodeState(this);
+		}
 	}
 	
 	public void removeNeighbor(Node neighbor){
@@ -283,6 +274,9 @@ public class Node implements Comparable<Node>{
 	
 	public void removeUpPointer(Node upPointer){
 		connections.removeUpPointer(upPointer);
+		if(connections.getUpPointerCount() == 0){
+			NodeState.setNodeState(this);
+		}
 	}
 	
 	public void setState(NodeState state){
@@ -343,10 +337,6 @@ public class Node implements Comparable<Node>{
 		return connections;
 	}
 	
-	public Node getBiggestNeighbor(){
-		return connections.getBiggestNeighbor();
-	}
-	
 	//------------------
 	//  S E T T E R S
 	//------------------
@@ -357,6 +347,8 @@ public class Node implements Comparable<Node>{
 		else {
 			connections.setFold(fold);
 		}
+		
+		NodeState.setNodeState(this);
 	}
 	
 	public void setInverseSurrogateFold(Node inverseSurrogateFold){
@@ -377,21 +369,20 @@ public class Node implements Comparable<Node>{
 		}
 	}
 	
-	public void setWebId(WebId webId){
+	public void setWebId(WebId newWebId){
 		if(webId == null) {
 			this.webId = WebId.NULL_WEB_ID;
 		}
 		else {
-			this.webId = webId;
+			this.webId = newWebId;
 		}
-	}
-	
-	public void setBiggestNeighbor(Node biggestNeighbor){
-		connections.setBiggestNeighbor(biggestNeighbor);
+		this.height = this.getWebIdHeight();
+		
+		NodeState.setNodeState(this);
 	}
 	
 	/**
-	 * Sets this nodes connections. Should only need to be called by the addChild method.
+	 * Sets this nodes connections. Should only need to be called by the {@code addChild} method.
 	 * @param connections This nodes new connections.
 	 * @pre connections is not null
 	 * @post this.connections = connections
@@ -403,7 +394,7 @@ public class Node implements Comparable<Node>{
 	
 	@Override
 	public String toString(){
-		return "Node [webId=" + webId + "]";
+		return "Node [webId=" + webId.getValue() + "]";
 	}
 
 	@Override

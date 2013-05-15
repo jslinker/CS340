@@ -2,15 +2,7 @@ package node;
 
 import java.util.HashSet;
 import java.util.Iterator;
-
 import node.SimplifiedNodeDomain;
-import node.states.DownPointingNodeState;
-import node.states.CapNodeState;
-import node.states.StandardNodeState;
-import node.states.TerminalNodeState;
-import node.states.UpPointingNodeState;
-
-
 
 /**
  * Given integer values for the hyPeerWebSize and the webId we can compute integer values
@@ -271,18 +263,18 @@ public class ExpectedResult extends SimplifiedNodeDomain {
      * webId = hyPeerWebSize - 1 AND hyPeerWebSize = cubeSize &rArr; result = HypercubeCapState.STATE_ID
      */
     private int expectedState() {
-        int result = StandardNodeState.STATE_ID;
+        int result = NodeState.STANDARD.STATE_ID;
         
         if(webId == 0 && height == 0) {
-            result = CapNodeState.STATE_ID;
-        } else if (webId > lastIdOfEmbeddedHyperCube && everyNeighborIsSmallerThan(webId)) {
-            result = TerminalNodeState.STATE_ID;
-        } else if(downPointers.size() > 0) {
-            result = DownPointingNodeState.STATE_ID;
+            result = NodeState.CAP.STATE_ID;
+        } /*else if (webId > lastIdOfEmbeddedHyperCube && everyNeighborIsSmallerThan(webId)) {
+            //result = NodeState.TERMINAL.STATE_ID;
+        }*/ else if(downPointers.size() > 0) {
+            result = NodeState.DOWN_POINTING.STATE_ID;
         } else if(upPointers.size() > 0) {
-            result = UpPointingNodeState.STATE_ID;
-        } else if (webId == hyPeerWebSize-1) {
-            result = CapNodeState.STATE_ID;
+            result = NodeState.UP_POINTING.STATE_ID;
+        } else if (webId == hyPeerWebSize-1 && utilities.BitManipulation.isCapNodeWebId(webId)) {
+            result = NodeState.CAP.STATE_ID;
         }
         return result;
     }

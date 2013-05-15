@@ -880,12 +880,12 @@ public class Exp {
             
             for (int startNodeId = 0; startNodeId < size - 1; startNodeId++) {
                 createHyPeerWebWith(size - 1);
-                
                 Node node = new Node(0);
                 Node startNode = hypeerweb.getNode(startNodeId);
                 hypeerweb.addToHyPeerWeb(node, startNode);
                 
                 for (int i = 0; i < size; i++) {
+                	
                     Node nodei = hypeerweb.getNode(i);
                     simplifiedNodeDomain = nodei.constructSimplifiedNodeDomain();
                     expectedResult = new ExpectedResult(size, i);
@@ -934,5 +934,5 @@ public class Exp {
     }
     
     private static final int HYPEERWEB_SIZE = 32;
-    private static final boolean VERBOSE = false;
+    private static final boolean VERBOSE = true;
 }

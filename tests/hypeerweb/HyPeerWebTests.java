@@ -4,7 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Random;
+
+import junit.framework.TestCase;
+
+import node.ExpectedResult;
 import node.Node;
+import node.NodeTests;
+import node.SimplifiedNodeDomain;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,9 +24,9 @@ import database.HyPeerWebDatabase;
  * JUnit Test cases for the HyPeerWeb class
  * @author Jason Robertson
  */
-public class HyPeerWebTests {
+public class HyPeerWebTests extends TestCase{
 	
-	private HyPeerWeb web;
+	private HyPeerWeb web = HyPeerWeb.getSingleton();
 	Node nodes[] = new Node[8];
 	
 	@Before
@@ -70,7 +78,6 @@ public class HyPeerWebTests {
 	@After
 	public void tearDown() {
 		web.clear();
-		web = null;
 	}
 	
 	@Test
@@ -187,5 +194,83 @@ public class HyPeerWebTests {
 		web.saveToDatabase();
 		
 		assertEquals(3, web.getHyPeerWebDatabase().getSingleton().getAllWebIds().size());
+	}
+	
+	public void testAddToHyPeerWeb(){
+		HyPeerWeb web = HyPeerWeb.getSingleton();
+		web.clear();
+		
+		Random generator = new Random();
+		int numberOfNodes = generator.nextInt(300)+231;
+		
+		Node startNode = null;
+		Node newNode = null;
+		for(int i = 0; i < numberOfNodes; i++){
+			newNode = new Node(generator.nextInt(10000));
+			
+			if(i == 0){
+				startNode = Node.NULL_NODE;
+			}
+			else{
+				startNode = web.getNode(generator.nextInt(i));
+			}
+			
+			web.addToHyPeerWeb(newNode, startNode);
+			
+			assertTrue("\nExpected WebId: " + i + "\n"+
+						"Actual: " + web.getNode(i).getWebIdValue(), 
+						web.getNode(i).getWebIdValue() == i);
+			
+			for(int j = 0; j <= i; j++){
+				assertTrue(NodeTests.isNodeDomainCorrect(web.getNode(j), i+1));
+			}
+		}
+	}
+	
+	public void testAddToHyPeerWebExp(){
+		HyPeerWeb web = HyPeerWeb.getSingleton();
+        web.clear();
+        
+        final int HYPEERWEB_SIZE = 32;
+        
+        for (int size = 1; size <= HYPEERWEB_SIZE; size++) {
+            web.clear();
+            Node node0 = new Node(0);
+            web.addToHyPeerWeb(node0, null);
+            Node firstNode = web.getNode(0);
+            SimplifiedNodeDomain simplifiedNodeDomain = firstNode.constructSimplifiedNodeDomain();
+            ExpectedResult expectedResult = new ExpectedResult(1, 0);
+
+            if (!simplifiedNodeDomain.equals(expectedResult)) {
+                System.out.println("Size: "+size+"\nActual Node: "+simplifiedNodeDomain.toString()+"\n"+
+                					"Expected Node: "+expectedResult.toString());
+            }
+            
+            for (int startNodeId = 0; startNodeId < size - 1; startNodeId++) {
+                web.clear();
+                Node nodeZero = new Node(0);
+                web.addToHyPeerWeb(nodeZero, null);
+
+                for (int i = 1; i < size-1; i++) {
+                    Node node = new Node(0);
+                    web.addToHyPeerWeb(node, nodeZero);
+                }
+                
+                Node node = new Node(0);
+                Node startNode = web.getNode(startNodeId);
+                web.addToHyPeerWeb(node, startNode);
+                
+                for (int i = 0; i < size; i++) {
+                	
+                    Node nodei = web.getNode(i);
+                    simplifiedNodeDomain = nodei.constructSimplifiedNodeDomain();
+                    expectedResult = new ExpectedResult(size, i);
+
+                    if (!simplifiedNodeDomain.equals(expectedResult)) {
+                    	System.out.println("Error damn it");
+                    }
+                }
+            }
+        }
 	}
 }
