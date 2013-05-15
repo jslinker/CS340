@@ -4,9 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
-import java.util.Random;
 
-import node.ExpectedResult;
 import node.Node;
 import node.NodeState;
 import node.SimplifiedNodeDomain;
