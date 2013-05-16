@@ -1,16 +1,16 @@
 package database;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
 import node.Node;
+import node.NodeState;
 import node.SimplifiedNodeDomain;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import database.HyPeerWebDatabase;
 
 public class HyPeerWebDatabaseTests {
 	
@@ -32,11 +32,11 @@ public class HyPeerWebDatabaseTests {
 		node.addNeighbor(neighbor);
 		node.addUpPointer(up);
 		node.addDownPointer(down);
-		
+
 		HyPeerWebDatabase.initHyPeerWebDatabase("test_db2.sqlite");
 		db = HyPeerWebDatabase.getSingleton();
 	}
-	
+
 	/**
 	 * Simple case that inserts a node into the database, retrieves it, and checks
 	 * that the retrieved values match what should have been put in.
@@ -45,40 +45,59 @@ public class HyPeerWebDatabaseTests {
 	public void testAddRetrieve(){
 		db.storeNode(node);
 		other = db.getNode(TEST_ID);
-		
+
 		Iterator<Integer> iter = other.getNeighbors().iterator();
 		assertEquals(neighbor.getWebId().getValue(), iter.next().intValue());
-		
+
 		iter = other.getUpPointers().iterator();
 		assertEquals(up.getWebId().getValue(), iter.next().intValue());
-		
+
 		iter = other.getDownPointers().iterator();
 		assertEquals(down.getWebId().getValue(), iter.next().intValue());
 	}
-	
+
 	@Test
 	public void testStoreAndGet(){
-		Node node1 = new Node(313, 20);
-		node1.setFold(new Node(314));
-		node1.setSurrogateFold(new Node(315));
-		node1.setInverseSurrogateFold(new Node(316));
-		node1.addNeighbor(new Node(312));
-		node1.addUpPointer(new Node(1));
-		node1.addDownPointer(new Node(33));
-		node1.addDownPointer(new Node(34));
+
+		// Build a node with random data
+		Node node1 = new Node(10);
+
+		node1.setFold(new Node(47));
+		node1.setSurrogateFold(new Node(25));
+		node1.setInverseSurrogateFold(new Node(89));
 		
+		node1.addNeighbor(new Node(747));
+		node1.addNeighbor(new Node(343));
+		
+		node1.addUpPointer(Node.NULL_NODE);
+		node1.addDownPointer(new Node(17));
+
+		// Store the node
 		db.storeNode(node1);
-		SimplifiedNodeDomain result = db.getNode(313);
-		SimplifiedNodeDomain simpleNode1 = node1.constructSimplifiedNodeDomain();
-		System.out.println("from db: "+result);
-		System.out.println("from node: "+simpleNode1);
-		assertTrue(result.equals(simpleNode1));
-		
+
+		// Retrieve the node
+		SimplifiedNodeDomain result = db.getNode(node1.getWebIdValue());
+
+		// Expect to get this node back
+		SimplifiedNodeDomain confirm = node1.constructSimplifiedNodeDomain();
+
+//		System.out.println("from db: "+ result);
+//		System.out.println("from node: "+ confirm);
+
+		assertTrue(result.equals(confirm));
+
+		// Change some information
 		node1.setFold(new Node(3090));
 		node1.setSurrogateFold(Node.NULL_NODE);
+		node1.setState(NodeState.CAP);
+
+		// Store the node again...it should update the node already in the database
 		db.storeNode(node1);
-		result = db.getNode(313);
-		simpleNode1 = node1.constructSimplifiedNodeDomain();
-		assertTrue(result.equals(simpleNode1));
+
+		// Confirm changes took place
+		result = db.getNode(node1.getWebIdValue());
+		confirm = node1.constructSimplifiedNodeDomain();
+		assertTrue(result.equals(confirm));
+
 	}
 }

@@ -5,11 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import database.HyPeerWebDatabase;
-
 import node.Node;
 import node.SimplifiedNodeDomain;
-import node.WebId;
+import database.HyPeerWebDatabase;
 
 /**
  * @author Jason Robertson
@@ -68,20 +66,16 @@ public class HyPeerWeb {
 	}
 	
 	/**
-	 * This method is implemented as I understood it...It returns the node at the local index i,
-		which is between 0 and the number of nodes. In order to do this I had to switch the
-		implementation of our collection from a hash set to an array list.  
-	 * @param i The index of the node to be retrieved.
-	 * @return The node at index i.
+	 * Returns the node of the provided webId.
+	 * @param webId The webId of the Node you want to get.
 	 * @author Jason Robertson
 	 */
-	public Node getNode(int i){
+	public Node getNode(int webId){
+
+		assert nodes.size() > 0;
 		
-		if(i >= 0 && i < size()){
-			return this.nodes.get(i);
-		}
-		
-		return null;
+		Node result = nodes.get(0).findNode(webId);
+		return result;
 	}
 	
 	/**

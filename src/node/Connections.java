@@ -1,6 +1,6 @@
 package node;
 
-import java.util.TreeSet;
+import java.util.TreeMap;
 
 
 /**
@@ -10,10 +10,10 @@ import java.util.TreeSet;
  *
  */
 public class Connections {
-	private TreeSet<Node> downPointers = new TreeSet<Node>();
-	private TreeSet<Node> upPointers = new TreeSet<Node>();
-	private TreeSet<Node> lowerNeighbors = new TreeSet<Node>();
-	private TreeSet<Node> upperNeighbors = new TreeSet<Node>();
+	private TreeMap<Integer,Node> downPointers = new TreeMap<Integer,Node>();
+	private TreeMap<Integer,Node> upPointers = new TreeMap<Integer,Node>();
+	private TreeMap<Integer,Node> lowerNeighbors = new TreeMap<Integer,Node>();
+	private TreeMap<Integer,Node> upperNeighbors = new TreeMap<Integer,Node>();
 	
 	private Node fold = Node.NULL_NODE;
 	private Node surrogateFold = Node.NULL_NODE;
@@ -26,35 +26,35 @@ public class Connections {
 	//  GETTERS AND SETTERS
 	//--------------------
 
-	public TreeSet<Node> getDownPointers() {
+	public TreeMap<Integer,Node> getDownPointers() {
 		return downPointers;
 	}
 
-	public void setDownPointers(TreeSet<Node> downPointers) {
+	public void setDownPointers(TreeMap<Integer,Node> downPointers) {
 		this.downPointers = downPointers;
 	}
 
-	public TreeSet<Node> getUpPointers() {
+	public TreeMap<Integer,Node> getUpPointers() {
 		return upPointers;
 	}
 
-	public void setUpPointers(TreeSet<Node> upPointers) {
+	public void setUpPointers(TreeMap<Integer,Node> upPointers) {
 		this.upPointers = upPointers;
 	}
 	
-	public TreeSet<Node> getLowerNeighbors() {
+	public TreeMap<Integer,Node> getLowerNeighbors() {
 		return lowerNeighbors;
 	}
 
-	public void setLowerNeighbors(TreeSet<Node> lowerNeighbors) {
+	public void setLowerNeighbors(TreeMap<Integer,Node> lowerNeighbors) {
 		this.lowerNeighbors = lowerNeighbors;
 	}
 
-	public TreeSet<Node> getUpperNeighbors() {
+	public TreeMap<Integer,Node> getUpperNeighbors() {
 		return upperNeighbors;
 	}
 
-	public void setUpperNeighbors(TreeSet<Node> upperNeighbors) {
+	public void setUpperNeighbors(TreeMap<Integer,Node> upperNeighbors) {
 		this.upperNeighbors = upperNeighbors;
 	}
 
@@ -84,7 +84,7 @@ public class Connections {
 	
 	public Node getLargestUpPointer(){
 		if(upPointers.size() > 0){
-			return upPointers.last();
+			return upPointers.get(upPointers.lastKey());
 		}
 		else{
 			return Node.NULL_NODE;
@@ -93,7 +93,7 @@ public class Connections {
 	
 	public Node getBiggestNeighbor(){
 		if(upperNeighbors.size() > 0){
-			return upperNeighbors.last();
+			return upperNeighbors.get(upperNeighbors.lastKey());
 		}
 		else{
 			return Node.NULL_NODE;
@@ -104,38 +104,38 @@ public class Connections {
 	//  A D D E R S
 	//--------------------		
 	public void addDownPointer(Node downPointer){
-		this.downPointers.add(downPointer);
+		this.downPointers.put(downPointer.getWebIdValue(), downPointer);
 	}
 	
 	public void addLowerNeighbor(Node lowerNeighbor){
-		this.lowerNeighbors.add(lowerNeighbor);
+		this.lowerNeighbors.put(lowerNeighbor.getWebIdValue(), lowerNeighbor);
 	}
 	
 	public void addUpperNeighbor(Node upperNeighbor){
-		this.upperNeighbors.add(upperNeighbor);
+		this.upperNeighbors.put(upperNeighbor.getWebIdValue(), upperNeighbor);
 	}
 	
 	public void addUpPointer(Node upPointer){
-		this.upPointers.add(upPointer);
+		this.upPointers.put(upPointer.getWebIdValue(), upPointer);
 	}
 	
 	//--------------------
 	//  R E M O V E R S
 	//--------------------	
 	public void removeDownPointer(Node downPointer){
-		this.downPointers.remove(downPointer);
+		this.downPointers.remove(downPointer.getWebIdValue());
 	}
 	
 	public void removeLowerNeighbor(Node lowerNeighbor){
-		this.lowerNeighbors.remove(lowerNeighbor);
+		this.lowerNeighbors.remove(lowerNeighbor.getWebIdValue());
 	}
 	
 	public void removeUpperNeighbor(Node upperNeighbor){
-		this.upperNeighbors.remove(upperNeighbor);
+		this.upperNeighbors.remove(upperNeighbor.getWebIdValue());
 	}
 	
 	public void removeUpPointer(Node upPointer){
-		this.upPointers.remove(upPointer);
+		this.upPointers.remove(upPointer.getWebIdValue());
 	}
 	
 	//--------------------
@@ -220,12 +220,12 @@ public class Connections {
 	}
 
 	public Node getSmallestDownPointer() {
-		return downPointers.first();
+		return downPointers.get(downPointers.firstKey());
 	}
 
 	public Node getSmallestChildlessNeighbor() {
 		Node result = Node.NULL_NODE;
-		for(Node ln: lowerNeighbors){
+		for(Node ln: lowerNeighbors.values()){
 			if(ln.getConnections().getUpPointerCount() > 0){
 				return ln;
 			}

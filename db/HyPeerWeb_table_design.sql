@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS nodes
 	fold INTEGER,
 	surrogate_fold INTEGER,
 	inverse_surrogate_fold INTEGER,
+	state INTEGER,
 	FOREIGN KEY (fold) REFERENCES nodes(web_id),
 	FOREIGN KEY (surrogate_fold) REFERENCES nodes(web_id),
 	FOREIGN KEY (inverse_surrogate_fold) REFERENCES nodes(web_id)
