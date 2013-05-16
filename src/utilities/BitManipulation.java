@@ -131,4 +131,50 @@ public class BitManipulation{
 		
 		return highestOneBitMask;
 	}
+	
+	/**
+	 * Calculates a bit mask for the lowest "1" bit in the number given.
+	 * @param number The number to create a bit mask with.
+	 * @return The lowest one bit mask.
+	 * @pre number >= 0
+	 * @post result = lowestOneBitMask
+	 */
+	public static int calculateLowestOneBitMask(int number){
+		assert (number >= 0);
+		
+		if(number == 0){
+			return number;
+		}
+		
+		int lowestOneBitMask = 1;
+		int difference = number^lowestOneBitMask;
+		while(difference > number){
+			lowestOneBitMask <<= 1;
+			difference = number^lowestOneBitMask;
+		}
+		
+		return lowestOneBitMask;
+	}
+	
+	/**
+	 * Calculates the next jump to make in the HyPeerWeb.
+	 * @param currentWebId The webId of the node you are currently at.
+	 * @param destinationWebId The webId of the node you want to get to.
+	 * @return The next jump in the web that needs to be made.
+	 * @pre Both inputs are non-negative integers.
+	 * @post The webId of the next node to jump to.
+	 */
+	public static int calculateNextJumpWebId(int currentWebId, int destinationWebId){
+		assert (currentWebId >=0 && destinationWebId >= 0);
+		
+		int bitMask = 0;
+		int bitwiseDifference = currentWebId^destinationWebId;
+		if(currentWebId > destinationWebId){
+			bitMask = calculateHighestOneBitMask(bitwiseDifference);
+		}
+		else{
+			bitMask = calculateLowestOneBitMask(bitwiseDifference);
+		}
+		return (currentWebId^bitMask);
+	}
 }

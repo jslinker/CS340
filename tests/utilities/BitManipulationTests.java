@@ -220,4 +220,66 @@ public class BitManipulationTests extends TestCase{
 			assertTrue(true);
 		}
 	}
+	
+	public void testCalculateLowestOneBitMask(){
+		assertTrue(calculateLowestOneBitMask(0)==0);
+		assertTrue(calculateLowestOneBitMask(1)==1);
+		assertTrue(calculateLowestOneBitMask(2)==2);
+		assertTrue(calculateLowestOneBitMask(3)==1);
+		assertTrue(calculateLowestOneBitMask(4)==4);
+		assertTrue(calculateLowestOneBitMask(8)==8);
+		assertTrue(calculateLowestOneBitMask(4460380)==4);
+		assertTrue(calculateLowestOneBitMask(131372)==4);
+		assertTrue(calculateLowestOneBitMask(131072)==131072);
+	}
+	
+	public void testCalculateNextJumpWebId(){
+		//first test
+		int currentWebId = 2464;
+		int destinationWebId = 2464;
+		assertTrue(calculateNextJumpWebId(currentWebId, destinationWebId) == currentWebId);
+		
+		//second test, destination is greater than start
+		currentWebId = 862;
+		destinationWebId = 3189;
+		currentWebId = calculateNextJumpWebId(currentWebId, destinationWebId);
+		assertTrue(currentWebId == 863);
+		
+		currentWebId = calculateNextJumpWebId(currentWebId, destinationWebId);
+		assertTrue(currentWebId == 861);
+		
+		currentWebId = calculateNextJumpWebId(currentWebId, destinationWebId);
+		assertTrue(currentWebId == 853);
+		
+		currentWebId = calculateNextJumpWebId(currentWebId, destinationWebId);
+		assertTrue(currentWebId == 885);
+		
+		currentWebId = calculateNextJumpWebId(currentWebId, destinationWebId);
+		assertTrue(currentWebId == 629);
+		
+		currentWebId = calculateNextJumpWebId(currentWebId, destinationWebId);
+		assertTrue(currentWebId == 117);
+		
+		currentWebId = calculateNextJumpWebId(currentWebId, destinationWebId);
+		assertTrue(currentWebId == 1141);
+		
+		currentWebId = calculateNextJumpWebId(currentWebId, destinationWebId);
+		assertTrue(currentWebId == 3189);
+		
+		currentWebId = calculateNextJumpWebId(currentWebId, destinationWebId);
+		assertTrue(currentWebId == 3189);
+		
+		//third test, destination is less than start
+		currentWebId = 8;
+		destinationWebId = 6;
+		
+		currentWebId = calculateNextJumpWebId(currentWebId, destinationWebId);
+		assertTrue(currentWebId == 0);
+		
+		currentWebId = calculateNextJumpWebId(currentWebId, destinationWebId);
+		assertTrue(currentWebId == 2);
+		
+		currentWebId = calculateNextJumpWebId(currentWebId, destinationWebId);
+		assertTrue(currentWebId == 6);
+	}
 }
