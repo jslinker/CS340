@@ -2,6 +2,7 @@ package node;
 
 import static utilities.BitManipulation.calculateInsertionPointWebId;
 import static utilities.BitManipulation.calculateSurrogateWebId;
+import hypeerweb.HyPeerWeb;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -300,6 +301,38 @@ public class NodeTests extends TestCase{
 			insertionPoint.addChild(nodes.get(i));
 			assertTrue(isNodeDomainCorrect(nodes.get(i), i+1));
 		}
+	}
+
+	/**
+	 * Randomly creates a HyPeerWeb of size between 1 and 20000, inclusive.
+	 * Then tests the {@code findDeletionPoint} from 100 randomly selected nodes within the web.
+	 */
+	public void testFindDeletionPoint(){
+
+		// This test should pass as soon as these are done:
+		// TODO: Implement Node.FindDeletionPoint()
+		// TODO: Implement Node.FindNode()
+		
+		HyPeerWeb web = HyPeerWeb.getSingleton();
+		web.clear();
+
+		// Generate a random size for the web
+		Random random = new Random();
+		int webSize = random.nextInt(20000) + 1;
+		int expectedDeletionPoint = webSize - 1;
+		
+		// Fill the web with nodes
+		for(int i = 0; i < webSize; i++) {
+			web.addToHyPeerWeb(new Node(i), web.getNode(0));
+		}
+		
+		// Test findDeletionPoint on 100 random nodes in the web
+		for(int i = 0; i < 100; i++) {
+			int randomNode = random.nextInt(webSize);
+			Node deletionPoint = web.getNode(randomNode).findDeletionPoint();
+			assertEquals(deletionPoint.getWebIdValue(), expectedDeletionPoint);
+		}
+		
 	}
 	
 	public void testAddToHyPeerWeb(){
