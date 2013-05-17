@@ -97,8 +97,49 @@ public class NodeTests extends TestCase{
 		assertTrue(simple6.getDownPointers().contains(new Integer(1)));
 	}
 	
-	public void testAddAndRemove(){
+	public void testFindNode(){
+		Node node1 = new Node(0,3);
+		Node node2 = new Node(1,3);
+		Node node3 = new Node(2,3);
+		Node node4 = new Node(3,3);
+		Node node5 = new Node(4,3);
+		Node node6 = new Node(5,3);
+		Node node7 = new Node(6,3);
+		Node node8 = new Node(7,3);
 		
+		node1.addNeighbor(node2);
+		node1.addNeighbor(node3);
+		node1.addNeighbor(node5);
+		node2.addNeighbor(node4);
+		node2.addNeighbor(node6);
+		node2.addNeighbor(node1);
+		node3.addNeighbor(node4);
+		node3.addNeighbor(node7);
+		node3.addNeighbor(node1);
+		node4.addNeighbor(node8);
+		node4.addNeighbor(node2);
+		node4.addNeighbor(node3);
+		node5.addNeighbor(node6);
+		node5.addNeighbor(node7);
+		node5.addNeighbor(node1);
+		node6.addNeighbor(node8);
+		node6.addNeighbor(node5);
+		node6.addNeighbor(node2);
+		node7.addNeighbor(node8);
+		node7.addNeighbor(node3);
+		node7.addNeighbor(node5);
+		node8.addNeighbor(node7);
+		node8.addNeighbor(node6);
+		node8.addNeighbor(node4);
+		
+		assertTrue(node1.findNode(0) == node1);
+		assertTrue(node1.findNode(1) == node2);
+		assertTrue(node1.findNode(2) == node3);
+		assertTrue(node1.findNode(3) == node4);
+		assertTrue(node1.findNode(4) == node5);
+		assertTrue(node1.findNode(5) == node6);
+		assertTrue(node1.findNode(6) == node7);
+		assertTrue(node1.findNode(7) == node8);
 	}
 	
 	/**

@@ -100,6 +100,40 @@ public class Connections {
 		}
 	}
 	
+	public Node getNextClosestNeighbor(int myWebId, int webId){
+		assert(myWebId != webId);
+		
+		Node nextClosest = null;
+		TreeMap<Integer,Node> nodes;
+		if(myWebId < webId) {
+			nodes = upperNeighbors;
+		} else if (myWebId > webId) {
+			nodes = lowerNeighbors;
+		}
+		
+		int bitsToFlip = myWebId ^ webId;
+		
+		int mask = 1;
+		for(int bitIndex = 0; bitIndex < 32; bitIndex++){
+			if((bitsToFlip & mask) == 0){
+				mask <<= 1;
+		    	continue;
+		    }
+			
+			int masker = (((int)1) << bitIndex);
+			int nextWebId = myWebId ^ masker;
+			nextClosest = upperNeighbors.get(nextWebId);
+			
+			if (nextClosest != null) {
+				break;
+			}
+			
+			mask <<= 1;
+		}
+
+		return nextClosest;
+	}
+	
 	//--------------------
 	//  A D D E R S
 	//--------------------		

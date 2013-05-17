@@ -155,7 +155,12 @@ public class Node implements Comparable<Node>{
 	 * @post result = Node with given webId
 	 */
 	public Node findNode(int webId){
-		return null;
+		if (webId == this.webId.getValue()) {
+			return this;
+		}
+		
+		Node closest = this.connections.getNextClosestNeighbor(this.webId.getValue(), webId);
+		return closest.findNode(webId);
 	}
 	
 	/**
