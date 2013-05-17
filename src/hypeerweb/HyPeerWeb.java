@@ -72,7 +72,9 @@ public class HyPeerWeb {
 	 */
 	public Node getNode(int webId){
 
-		assert nodes.size() > 0;
+		if(nodes.size() == 0) {
+			return Node.NULL_NODE;
+		}
 		
 		Node result = nodes.get(0).findNode(webId);
 		return result;

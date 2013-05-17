@@ -352,7 +352,6 @@ public class NodeTests extends TestCase{
 
 		// This test should pass as soon as these are done:
 		// TODO: Implement Node.FindDeletionPoint()
-		// TODO: Implement Node.FindNode()
 		
 		HyPeerWeb web = HyPeerWeb.getSingleton();
 		web.clear();

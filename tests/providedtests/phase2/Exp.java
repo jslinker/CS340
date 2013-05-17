@@ -679,7 +679,7 @@ public class Exp {
             errorCount++;
         }
         Node node = hypeerweb.getNode(0);
-        if (node != null) {
+        if (node != Node.NULL_NODE) {
             System.err.println("When opening an empty database, 'temp.db', it should be empty");
             error = true;
             errorCount++;
