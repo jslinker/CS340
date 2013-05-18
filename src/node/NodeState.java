@@ -98,7 +98,9 @@ public enum NodeState{
 	
 	public static NodeState getNodeState(int id){
 		for(NodeState state: NodeState.values()){
-			if(state.STATE_ID == id) return state;
+			if(state.STATE_ID == id){
+				return state;
+			}
 		}
 		throw new IllegalArgumentException();
 	}

@@ -223,25 +223,31 @@ public class Connections {
 		} else if (!fold.equals(other.fold))
 			return false;
 		if (inverseSurrogateFold == null) {
-			if (other.inverseSurrogateFold != null)
+			if (other.inverseSurrogateFold != null){
 				return false;
-		} else if (!inverseSurrogateFold.equals(other.inverseSurrogateFold))
+			}
+		} else if (!inverseSurrogateFold.equals(other.inverseSurrogateFold)){
 			return false;
+		}
 		/*if (neighbors == null) {
 			if (other.neighbors != null)
 				return false;
 		} else if (!neighbors.equals(other.neighbors))
 			return false;*/
 		if (surrogateFold == null) {
-			if (other.surrogateFold != null)
+			if (other.surrogateFold != null){
 				return false;
-		} else if (!surrogateFold.equals(other.surrogateFold))
+			}
+		} else if (!surrogateFold.equals(other.surrogateFold)){
 			return false;
+		}
 		if (upPointers == null) {
-			if (other.upPointers != null)
+			if (other.upPointers != null){
 				return false;
-		} else if (!upPointers.equals(other.upPointers))
+			}
+		} else if (!upPointers.equals(other.upPointers)){
 			return false;
+		}
 		return true;
 	}
 
