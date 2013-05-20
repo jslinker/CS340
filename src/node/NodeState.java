@@ -15,9 +15,9 @@ public enum NodeState{
 		}
 
 		@Override
-		public Node squeeze(Node lowerBound, Node upperBound) {
+		public Pair<Node> squeeze(Pair<Node> pair) {
 			throw new IllegalArgumentException("How did you get here? You can't call squeeze on a " +
-												"Standard Node!");
+					"Standard Node!");
 		}
 	},
 	
@@ -28,23 +28,21 @@ public enum NodeState{
 		}
 
 		@Override
-		public Node squeeze(Node lowerBound, Node upperBound) {
-			if(BitManipulation.calculateChildWebId(upperBound.getWebIdValue()-1, 
-													upperBound.getHeight()) == lowerBound.getWebIdValue()){
-				return upperBound;
+		public Pair<Node> squeeze(Pair<Node> pair) {
+			if(BitManipulation.calculateChildWebId(pair.getUpperBound().getWebIdValue()-1, 
+					pair.getUpperBound().getHeight()) == pair.getLowerBound().getWebIdValue()){
+				return pair;
 			}
 			else{
-				
-				Node largestUpPointer = upperBound.getConnections().getLargestUpPointer();
-				if(largestUpPointer.getWebIdValue() > lowerBound.getWebIdValue()){
-					lowerBound = largestUpPointer;
-					return lowerBound.getState().squeeze(lowerBound, upperBound);
+				Node largestUpPointer = pair.getUpperBound().getConnections().getLargestUpPointer();
+				if(largestUpPointer.getWebIdValue() > pair.getLowerBound().getWebIdValue()){
+					pair.setLowerBound(largestUpPointer);
+					return pair.getLowerBound().getState().squeeze(pair);
 				}
 				else{
-					upperBound = upperBound.getConnections().getSmallestChildlessNeighbor();
-					return upperBound.getState().squeeze(lowerBound, upperBound);
+					pair.setUpperBound(pair.getUpperBound().getConnections().getSmallestChildlessNeighbor());
+					return pair.getUpperBound().getState().squeeze(pair);
 				}
-				
 			}
 		}
 	},
@@ -56,12 +54,12 @@ public enum NodeState{
 		}
 
 		@Override
-		public Node squeeze(Node lowerBound, Node upperBound) {
-			Node smallestDownPointer = lowerBound.getConnections().getSmallestDownPointer();
-			if(smallestDownPointer.getWebIdValue() < upperBound.getWebIdValue() || upperBound == Node.NULL_NODE){
-				upperBound = smallestDownPointer;
+		public Pair<Node> squeeze(Pair<Node> pair) {
+			Node smallestDownPointer = pair.getLowerBound().getConnections().getSmallestDownPointer();
+			if(smallestDownPointer.getWebIdValue() < pair.getUpperBound().getWebIdValue() || pair.getUpperBound() == Node.NULL_NODE){
+				pair.setUpperBound(smallestDownPointer);
 			}
-			return upperBound.getState().squeeze(lowerBound, upperBound);
+			return pair.getUpperBound().getState().squeeze(pair);
 		}
 	},
 	
@@ -72,8 +70,9 @@ public enum NodeState{
 		}
 
 		@Override
-		public Node squeeze(Node lowerBound, Node upperBound) {
-			return lowerBound.getFold();
+		public Pair<Node> squeeze(Pair<Node> pair){
+			pair.setUpperBound(pair.getLowerBound().getFold());
+			return pair;
 		}
 	},
 	
@@ -84,7 +83,7 @@ public enum NodeState{
 		}
 
 		@Override
-		public Node squeeze(Node lowerBound, Node upperBound) {
+		public Pair<Node> squeeze(Pair<Node> pair) {
 			throw new IllegalArgumentException("How did you get here? You can't call squeeze on a " +
 					"Terminal Node!");
 		}
@@ -120,6 +119,6 @@ public enum NodeState{
 		}
 	}
 	
-	public abstract Node squeeze(Node lowerBound, Node upperBound);
+	public abstract Pair<Node> squeeze(Pair<Node> pair);
 	public abstract String toString();
 }

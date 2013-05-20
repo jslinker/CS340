@@ -116,14 +116,33 @@ public class Node implements Comparable<Node>{
 		// TODO: Implement
 	}
 	
+	/**
+	 * Finds the insertion point.
+	 * @return The insertion point.
+	 */
 	public Node findInsertionPoint(){
-		Node largest = this.findLargest();
-		return largest.getState().squeeze(largest, Node.NULL_NODE);
+		return findLowerBoundUpperBoundPair().getUpperBound();
 	}
 
+	/**
+	 * Finds the deletion point.
+	 * @return The deletion point.
+	 */
 	public Node findDeletionPoint(){
-		// TODO: Implement
-		return null;
+		return findLowerBoundUpperBoundPair().getLowerBound();
+	}
+	
+	/**
+	 * Using the greedy algorithm and the squeeze algorithm, finds both
+	 * the insertion point and deletion point.
+	 * @return The Pair that contains the lower bound (deletion point) and the upper bound
+	 * (insertion point).
+	 */
+	public Pair<Node> findLowerBoundUpperBoundPair(){
+		Node largest = this.findLargest();
+		Pair<Node> lowerUpperPair = new Pair<Node>(largest, Node.NULL_NODE);
+		lowerUpperPair = largest.getState().squeeze(lowerUpperPair);
+		return lowerUpperPair;
 	}
 	
 	/**
