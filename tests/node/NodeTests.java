@@ -140,12 +140,46 @@ public class NodeTests extends TestCase{
 		assertTrue(node1.findNode(5) == node6);
 		assertTrue(node1.findNode(6) == node7);
 		assertTrue(node1.findNode(7) == node8);
+		
+		/*
+		 * Start Exhaustive Testing
+		 * Exhaustively tests findNode for a web of size 32.
+		 */
+		//create nodes
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		int numberOfNodes = 32;
+		for(int i = 0; i < numberOfNodes; i++){
+			nodes.add(new Node(i));
+		}
+		//construct web
+		for(int i = 1; i < nodes.size(); i++){
+			nodes.get(calculateSurrogateWebId(i)).addChild(nodes.get(i));
+		}
+		//run exhaustive testing
+		for(int i = 0; i < nodes.size(); i++){
+			for(int j = 0; j < nodes.size(); j++){
+				Node startNode = nodes.get(i);
+				Node expectedFoundNode = nodes.get(j);
+				Node foundNode = startNode.findNode(j);
+				
+				assertTrue("\nActual: " + foundNode.constructSimplifiedNodeDomain().toString() + "\n" +
+							"Expected: " + expectedFoundNode.constructSimplifiedNodeDomain().toString(),
+							(expectedFoundNode.getWebIdValue() == j && 
+							foundNode.getWebIdValue() == j));
+			}
+		}
+		/*
+		 * End Exhaustive Testing
+		 */
 	}
 	
 	/**
 	 * Tests adding a few child nodes.
 	 */
-	public void testAddChildSimple(){
+	public void testAddChild(){
+		/*
+		 * Start Simple Test
+		 */
 		Node node0 = new Node(0);
 		int webSize = 1;
 		assertTrue(isNodeDomainCorrect(node0, webSize));
@@ -170,6 +204,67 @@ public class NodeTests extends TestCase{
 		assertTrue(isNodeDomainCorrect(node1, webSize));
 		assertTrue(isNodeDomainCorrect(node2, webSize));
 		assertTrue(isNodeDomainCorrect(node3, webSize));
+		/*
+		 * End Simple Test
+		 */
+		
+		/*
+		 * Start Random Exhaustive Testing
+		 */
+		//create the nodes
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		Random generator = new Random();
+		int numberOfNodes = generator.nextInt(37-19)+20;
+		for(int i = 0; i < numberOfNodes; i++){
+			nodes.add(new Node(i));
+		}
+		SimplifiedNodeDomain simpleNode = nodes.get(0).constructSimplifiedNodeDomain();
+		ExpectedResult expectedNode = new ExpectedResult(1, 0);
+		assertTrue("\nActual: " + simpleNode + "\n" +
+					"Expected: " + expectedNode,
+					simpleNode.equals(expectedNode));
+		
+		//add the nodes to their respective parents
+		for(int i = 1; i < numberOfNodes; i++){
+			nodes.get(calculateSurrogateWebId(i)).addChild(nodes.get(i));
+			
+			//after each addition, exhaustively test all of the nodes in the web
+			for(int j = i; j >= 0; j--){
+				simpleNode = nodes.get(j).constructSimplifiedNodeDomain();
+				expectedNode = new ExpectedResult(i+1, j);
+				//assertTrue(isNodeDomainCorrect(nodes.get(j), i+1));
+				assertTrue("\nSize of web: " + (i+1) + "\n" +
+							"Actual: " + simpleNode + "\n" +
+							"Expected: " + expectedNode,
+							simpleNode.equals(expectedNode));
+			}
+		}
+		/*
+		 * End Random Exhaustive Testing
+		 */
+		
+		/*
+		 * Start Random Testing
+		 * Adds 2049 to 4096 (inclusive) nodes testing random nodes for the proper node domain.
+		 */
+		//create the nodes
+		nodes = new ArrayList<Node>();
+		numberOfNodes = generator.nextInt(2048)+2049;
+		for(int i = 0; i < numberOfNodes; i++){
+			nodes.add(new Node(i));
+		}
+		
+		//add the nodes to their respective parents
+		for(int i = 1; i < numberOfNodes; i++){
+			nodes.get(calculateSurrogateWebId(i)).addChild(nodes.get(i));
+			
+			//test a random node
+			int randomNode = generator.nextInt(i);
+			assertTrue(isNodeDomainCorrect(nodes.get(randomNode), i+1));
+		}
+		/*
+		 * End Random Testing
+		 */
 	}
 	
 	/**
@@ -251,65 +346,13 @@ public class NodeTests extends TestCase{
 			}
 		}
 		
+		if(simpleNode.getState() != expectedNode.getState()){
+			result = false;
+			System.err.println("Actual state: " + simpleNode.getState() + "\n" +
+								"Expected state: " + expectedNode.getState());
+		}
+		
 		return result;
-	}
-	
-	/**
-	 * Adds 19 to 37 (inclusive) nodes (by adding to the parent node directly) to the web and 
-	 * exhaustively tests each and every node after each insertion.
-	 */
-	public void testAddChildRandomExhaustive(){
-		//create the nodes
-		ArrayList<Node> nodes = new ArrayList<Node>();
-		Random generator = new Random();
-		int numberOfNodes = generator.nextInt(37-19)+20;
-		for(int i = 0; i < numberOfNodes; i++){
-			nodes.add(new Node(i));
-		}
-		SimplifiedNodeDomain simpleNode = nodes.get(0).constructSimplifiedNodeDomain();
-		ExpectedResult expectedNode = new ExpectedResult(1, 0);
-		assertTrue("\nActual: " + simpleNode + "\n" +
-					"Expected: " + expectedNode,
-					simpleNode.equals(expectedNode));
-		
-		//add the nodes to their respective parents
-		for(int i = 1; i < numberOfNodes; i++){
-			nodes.get(calculateSurrogateWebId(i)).addChild(nodes.get(i));
-			
-			//after each addition, exhaustively test all of the nodes in the web
-			for(int j = i; j >= 0; j--){
-				simpleNode = nodes.get(j).constructSimplifiedNodeDomain();
-				expectedNode = new ExpectedResult(i+1, j);
-				//assertTrue(isNodeDomainCorrect(nodes.get(j), i+1));
-				assertTrue("\nSize of web: " + (i+1) + "\n" +
-							"Actual: " + simpleNode + "\n" +
-							"Expected: " + expectedNode,
-							simpleNode.equals(expectedNode));
-			}
-		}
-	}
-	
-	/**
-	 * Adds 2049 to 4096 (inclusive) nodes (by adding to the parent node directly) to the web and 
-	 * exhaustively tests each and every node after each insertion.
-	 */
-	public void testAddChildRandomLarge(){
-		//create the nodes
-		ArrayList<Node> nodes = new ArrayList<Node>();
-		Random generator = new Random();
-		int numberOfNodes = generator.nextInt(2048)+2049;
-		for(int i = 0; i < numberOfNodes; i++){
-			nodes.add(new Node(i));
-		}
-		
-		//add the nodes to their respective parents
-		for(int i = 1; i < numberOfNodes; i++){
-			nodes.get(calculateSurrogateWebId(i)).addChild(nodes.get(i));
-			
-			//test a random node
-			int randomNode = generator.nextInt(i);
-			assertTrue(isNodeDomainCorrect(nodes.get(randomNode), i+1));
-		}
 	}
 	
 	/**
@@ -317,7 +360,10 @@ public class NodeTests extends TestCase{
 	 * Then finds the insertion point by randomly selecting a node and calling 
 	 * {@code findInsertionPoint}.
 	 */
-	public void testFindInsertionPointExhaustive(){
+	public void testFindInsertionPoint(){
+		/*
+		 * Start Random Testing
+		 */
 		//create the nodes
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		int numberOfNodes = 200;
@@ -342,10 +388,13 @@ public class NodeTests extends TestCase{
 			insertionPoint.addChild(nodes.get(i));
 			assertTrue(isNodeDomainCorrect(nodes.get(i), i+1));
 		}
+		/*
+		 * End Random Testing
+		 */
 	}
 
 	/**
-	 * Randomly creates a HyPeerWeb of size between 1 and 20000, inclusive.
+	 * Randomly creates a HyPeerWeb of size between 101 and 2000, inclusive.
 	 * Then tests the {@code findDeletionPoint} from 100 randomly selected nodes within the web.
 	 */
 	public void testFindDeletionPoint(){
@@ -358,7 +407,7 @@ public class NodeTests extends TestCase{
 
 		// Generate a random size for the web
 		Random random = new Random();
-		int webSize = random.nextInt(20000) + 1;
+		int webSize = random.nextInt(2000-100) + 101;
 		int expectedDeletionPoint = webSize - 1;
 		
 		// Fill the web with nodes
@@ -400,7 +449,10 @@ public class NodeTests extends TestCase{
 	/**
 	 * Tests the findLargest() method which should return either the cap node or an edge node.
 	 */
-	public void testFindLargestExhaustive(){
+	public void testFindLargest(){
+		/*
+		 * Start Exhaustive Testing
+		 */
 		//create the nodes
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		int numberOfNodes = 200;
@@ -422,11 +474,14 @@ public class NodeTests extends TestCase{
 							"Start node webId: " + j + "\n" +
 							"Cap Node? " + (largest.getFold().getWebIdValue() == 0) + "\n" + 
 							"|DownPointers| = " + largest.getDownPointers().size(), 
-							(largest.getFold().getWebIdValue() == 0 || 
-							largest.getDownPointers().size() > 0) &&
-							(largest.getState() == NodeState.DOWN_POINTING ||
-							largest.getState() == NodeState.CAP));
+							(largest.getFold().getWebIdValue() == 0 &&
+							largest.getState() == NodeState.CAP) ||
+							(largest.getState() == NodeState.DOWN_POINTING &&
+							largest.getDownPointers().size() > 0));
 			}
 		}
+		/*
+		 * End Exhaustive Testing
+		 */
 	}
 }
