@@ -42,7 +42,6 @@ public class HyPeerWeb {
 			Node.NULL_NODE.addChild(newNode);
 		}
 		else{
-			assert (nodes.contains(startNode));
 			startNode.addToHyPeerWeb(newNode);
 		}
 		this.addNode(newNode);

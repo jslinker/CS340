@@ -106,12 +106,23 @@ public class Node implements Comparable<Node>{
 		insertionPoint.addChild(newNode);
 	}
 	
+	/**
+	 * Removes the node from the HyPeerWeb.
+	 * @param deleteNode The node you want to delete.
+	 * @pre The node is in the web and is not null or NULL_NODE
+	 * @post The node was deleted and replaced with the last node in the web.
+	 */
+	public void removeFromHyPeerWeb(Node deleteNode) {
+		// TODO: Implement
+	}
+	
 	public Node findInsertionPoint(){
 		Node largest = this.findLargest();
 		return largest.getState().squeeze(largest, Node.NULL_NODE);
 	}
 
 	public Node findDeletionPoint(){
+		// TODO: Implement
 		return null;
 	}
 	
