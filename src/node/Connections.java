@@ -205,23 +205,29 @@ public class Connections {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj){
 			return true;
-		if (obj == null)
+		}
+		if (obj == null){
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()){
 			return false;
+		}
 		Connections other = (Connections) obj;
 		if (downPointers == null) {
-			if (other.downPointers != null)
+			if (other.downPointers != null){
 				return false;
+			}
 		} else if (!downPointers.equals(other.downPointers))
 			return false;
 		if (fold == null) {
-			if (other.fold != null)
+			if (other.fold != null){
 				return false;
-		} else if (!fold.equals(other.fold))
+			}
+		} else if (!fold.equals(other.fold)){
 			return false;
+		}
 		if (inverseSurrogateFold == null) {
 			if (other.inverseSurrogateFold != null){
 				return false;
