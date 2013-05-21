@@ -421,7 +421,6 @@ public class NodeTests extends TestCase{
 			Node deletionPoint = web.getNode(randomNode).findDeletionPoint();
 			assertEquals(deletionPoint.getWebIdValue(), expectedDeletionPoint);
 		}
-		
 	}
 	
 	public void testAddToHyPeerWeb(){
