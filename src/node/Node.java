@@ -113,7 +113,7 @@ public class Node implements Comparable<Node>{
 	 * Removes the node from the HyPeerWeb.
 	 * @param deleteNode The node that is to be deleted.
 	 * @pre The node is in the web and is not null or NULL_NODE
-	 * @post The node was deleted and replaced with the last node in the web.
+	 * @post The node was removed from the web and replaced with the last node in the web.
 	 */
 	public void removeFromHyPeerWeb(Node deleteNode) {
 		Node deletionPoint = findDeletionPoint();
@@ -149,8 +149,8 @@ public class Node implements Comparable<Node>{
 		lowerUpperPair = largest.getState().squeeze(lowerUpperPair);
 		return lowerUpperPair;
 	}
-	
-	private void disconnect() {
+
+	protected void disconnect() {
 		int parentId = BitManipulation.calculateParentWebId(this.getWebIdValue(), this.getHeight());
 		Node parent = connections.getLowerNeighbors().get(parentId);
 		parent.setHeight(parent.getHeight() - 1);
@@ -160,15 +160,22 @@ public class Node implements Comparable<Node>{
 		for(Node lowerNeighbor : connections.getLowerNeighbors().values()){
 			lowerNeighbor.removeNeighbor(this);
 			lowerNeighbor.addDownPointer(parent);
+			NodeState.setNodeState(lowerNeighbor);
+			
 			parent.addUpPointer(lowerNeighbor);
 		}
 		
 		for(Node upPointToMe : connections.getDownPointers().values()){
 			upPointToMe.removeUpPointer(this);
+			NodeState.setNodeState(upPointToMe);
 		}
 		
 		Node fold = this.getFold();
-		if(parent.getConnections().hasSurrogateFold()){
+		if(fold.equals(parent)){
+			parent.setFold(parent);
+			parent.setInverseSurrogateFold(NULL_NODE);
+			parent.setSurrogateFold(NULL_NODE);
+		} else if(parent.getConnections().hasSurrogateFold()){
 			parent.setFold(fold);
 			parent.setInverseSurrogateFold(NULL_NODE);
 			parent.setSurrogateFold(NULL_NODE);
@@ -179,6 +186,9 @@ public class Node implements Comparable<Node>{
 			fold.setSurrogateFold(parent);
 			parent.setInverseSurrogateFold(fold);
 		}
+		
+		NodeState.setNodeState(parent);
+		NodeState.setNodeState(fold);
 	}
 	
 	/**
