@@ -173,6 +173,10 @@ public class NodeTests extends TestCase{
 		 */
 	}
 	
+	public void testReplaceNode(){
+		Node node0 = new Node(0);
+	}
+	
 	/**
 	 * Tests adding a few child nodes.
 	 */

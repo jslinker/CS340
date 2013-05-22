@@ -117,6 +117,16 @@ public class Node implements Comparable<Node>{
 	}
 	
 	/**
+	 * Removes the node from the HyPeerWeb.
+	 * @param replacementNode is the node that will be taking this nodes place
+	 * @pre The node is in the web and is not null or NULL_NODE
+	 * @post All pointers to this node will now be pointing to replacementNode
+	 */
+	public void replaceNode(Node replacementNode) {
+		this.connections.replaceNode(this, replacementNode);
+	}
+	
+	/**
 	 * Finds the insertion point.
 	 * @return The insertion point.
 	 */
