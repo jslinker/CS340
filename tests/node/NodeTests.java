@@ -164,8 +164,7 @@ public class NodeTests extends TestCase{
 				
 				assertTrue("\nActual: " + foundNode.constructSimplifiedNodeDomain().toString() + "\n" +
 							"Expected: " + expectedFoundNode.constructSimplifiedNodeDomain().toString(),
-							(expectedFoundNode.getWebIdValue() == j && 
-							foundNode.getWebIdValue() == j));
+							(expectedFoundNode == foundNode));
 			}
 		}
 		/*
@@ -425,7 +424,6 @@ public class NodeTests extends TestCase{
 			Node deletionPoint = web.getNode(randomNode).findDeletionPoint();
 			assertEquals(deletionPoint.getWebIdValue(), expectedDeletionPoint);
 		}
-		
 	}
 	
 	public void testAddToHyPeerWeb(){
@@ -484,6 +482,40 @@ public class NodeTests extends TestCase{
 							largest.getDownPointers().size() > 0));
 			}
 		}
+		/*
+		 * End Exhaustive Testing
+		 */
+	}
+	
+	public void testDisconnect(){
+		/*
+		 * Start Exhaustive Testing
+		 */
+		
+		//create nodes
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		int numberOfNodes = 32;
+		for(int i = 0; i < numberOfNodes; i++){
+			nodes.add(new Node(i));
+		}
+		//construct web
+		for(int i = 1; i < nodes.size(); i++){
+			nodes.get(calculateSurrogateWebId(i)).addChild(nodes.get(i));
+		}
+		//disconnect and test nodes
+		for(int i = nodes.size()-1; i != 0; i--){
+			//disconnect final node
+			nodes.get(i).disconnect();
+			for(int j = 0; j < i; j++){
+				Node aNode = nodes.get(j);
+				SimplifiedNodeDomain aSimpleNode = aNode.constructSimplifiedNodeDomain();
+				ExpectedResult expectedNode = new ExpectedResult(i, j);
+				assertTrue("\nActual: " + aSimpleNode.toString() + "\n" +
+						"Expected: " + expectedNode.toString(),
+						aSimpleNode.equals(expectedNode));
+			}
+		}
+		
 		/*
 		 * End Exhaustive Testing
 		 */

@@ -225,6 +225,20 @@ public class Connections {
 		else
 			return true;
 	}
+	
+	public boolean hasSurrogateFold() {
+		if(surrogateFold == Node.NULL_NODE)
+			return false;
+		else
+			return true;
+	}
+	
+	public boolean hasFold(){
+		if(fold == Node.NULL_NODE)
+			return false;
+		else
+			return true;
+	}
 
 	@Override
 	public int hashCode() {
@@ -321,4 +335,38 @@ public class Connections {
 		}
 		return result;
 	}
+	
+	public String toString(){
+		String info = "";
+		info += String.format("Fold WebId: %d\n", fold.getWebIdValue());
+		info += String.format("Surrogate Fold WebId: %d\n", surrogateFold.getWebIdValue());
+		info += String.format("Inverse Surrogate Fold WebID: %d\n", inverseSurrogateFold.getWebIdValue());
+		info += "Neighbors: ";
+		
+		for(Node neighbor: upperNeighbors.values()){
+			info += neighbor.getWebIdValue() + " ";
+		}
+		
+		for(Node neighbor: lowerNeighbors.values()){
+			info += neighbor.getWebIdValue() + " ";
+		}
+		
+		info += "\nUpPointers";
+		
+		for(Node upPointer: upPointers.values()){
+			info += upPointer.getWebIdValue() + " ";
+		}
+		
+		info += "\nDownPointers";
+		
+		for(Node downPointer: downPointers.values()){
+			info += downPointer.getWebIdValue() + " ";
+		}
+		
+		info += "\n";
+		
+		return info;
+	}
+
+	
 }

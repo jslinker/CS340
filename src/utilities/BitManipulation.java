@@ -44,6 +44,10 @@ public class BitManipulation{
 		return (parentWebId^highestOneBitMask);
 	}
 	
+	public static int calculateParentWebId(int childWebId, int childHeight){
+		return calculateChildWebId(childWebId, childHeight - 1);
+	}
+	
 	/**
 	 * Calculates the WebId of the insertion point from the WebId of the last node in the
 	 * HyPeerWeb, also known as the deletion point.

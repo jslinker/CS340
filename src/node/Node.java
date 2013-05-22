@@ -4,7 +4,10 @@ package node;
 import static utilities.BitManipulation.calculateChildWebId;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeMap;
+
+import utilities.BitManipulation;
 
 /**
  * @author Joseph
@@ -108,14 +111,16 @@ public class Node implements Comparable<Node>{
 	
 	/**
 	 * Removes the node from the HyPeerWeb.
-	 * @param deleteNode The node you want to delete.
+	 * @param deleteNode The node that is to be deleted.
 	 * @pre The node is in the web and is not null or NULL_NODE
-	 * @post The node was deleted and replaced with the last node in the web.
+	 * @post The node was removed from the web and replaced with the last node in the web.
 	 */
 	public void removeFromHyPeerWeb(Node deleteNode) {
-		// TODO: Implement
+		Node deletionPoint = findDeletionPoint();
+		deletionPoint.disconnect();
+		//deleteNode.replace(deletionPoint);
 	}
-	
+
 	/**
 	 * Removes the node from the HyPeerWeb.
 	 * @param replacementNode is the node that will be taking this nodes place
@@ -153,6 +158,47 @@ public class Node implements Comparable<Node>{
 		Pair<Node> lowerUpperPair = new Pair<Node>(largest, Node.NULL_NODE);
 		lowerUpperPair = largest.getState().squeeze(lowerUpperPair);
 		return lowerUpperPair;
+	}
+
+	protected void disconnect() {
+		int parentId = BitManipulation.calculateParentWebId(this.getWebIdValue(), this.getHeight());
+		Node parent = connections.getLowerNeighbors().get(parentId);
+		parent.setHeight(parent.getHeight() - 1);
+		parent.getUpperNeighbors().remove(this.getWebIdValue());
+		
+		connections.getLowerNeighbors().remove(parent.getWebIdValue());
+		for(Node lowerNeighbor : connections.getLowerNeighbors().values()){
+			lowerNeighbor.removeNeighbor(this);
+			lowerNeighbor.addDownPointer(parent);
+			NodeState.setNodeState(lowerNeighbor);
+			
+			parent.addUpPointer(lowerNeighbor);
+		}
+		
+		for(Node upPointToMe : connections.getDownPointers().values()){
+			upPointToMe.removeUpPointer(this);
+			NodeState.setNodeState(upPointToMe);
+		}
+		
+		Node fold = this.getFold();
+		if(fold.equals(parent)){
+			parent.setFold(parent);
+			parent.setInverseSurrogateFold(NULL_NODE);
+			parent.setSurrogateFold(NULL_NODE);
+		} else if(parent.getConnections().hasSurrogateFold()){
+			parent.setFold(fold);
+			parent.setInverseSurrogateFold(NULL_NODE);
+			parent.setSurrogateFold(NULL_NODE);
+			fold.setFold(parent);
+			fold.setInverseSurrogateFold(NULL_NODE);
+		} else {
+			fold.setFold(NULL_NODE);
+			fold.setSurrogateFold(parent);
+			parent.setInverseSurrogateFold(fold);
+		}
+		
+		NodeState.setNodeState(parent);
+		NodeState.setNodeState(fold);
 	}
 	
 	/**
@@ -379,6 +425,10 @@ public class Node implements Comparable<Node>{
 		return connections;
 	}
 	
+	public Map<Integer, Node> getUpperNeighbors(){
+		return connections.getUpperNeighbors();
+	}
+	
 	//------------------
 	//  S E T T E R S
 	//------------------
@@ -391,6 +441,10 @@ public class Node implements Comparable<Node>{
 		}
 		
 		NodeState.setNodeState(this);
+	}
+	
+	public void setHeight(int height){
+		this.height = height;
 	}
 	
 	public void setInverseSurrogateFold(Node inverseSurrogateFold){
@@ -460,7 +514,7 @@ public class Node implements Comparable<Node>{
 		}
 		
 		Node other = (Node) obj;
-		
+
 		return this.webId == other.webId;
 	}
 

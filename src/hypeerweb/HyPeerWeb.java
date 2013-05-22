@@ -47,6 +47,23 @@ public class HyPeerWeb {
 		this.addNode(newNode);
 	}
 	
+	
+	/**
+	 * Removes a node from the HyPeerWeb
+	 * @param removeNode The node to remove from the HyPeerWeb.
+	 * @param startNode The node that represents the start point in the HyPeerWeb
+	 * @pre removeNode is not null/NULL_NODE and is in nodes; startNode is not null and is in nodes
+	 * @post removeNode has been removed from HyPeerWeb.  Web has N-1 nodes and connections are updated.
+	 */
+	public void removeFromHyPeerWeb(Node removeNode, Node startNode){
+		assert(removeNode != null && removeNode != Node.NULL_NODE);
+		assert(startNode != null && startNode != Node.NULL_NODE);
+		assert(nodes.contains(removeNode) && nodes.contains(startNode));
+		
+		getNode(startNode.getWebIdValue()).removeFromHyPeerWeb(removeNode);
+		nodes.remove(removeNode);
+	}
+	
 	public void addNode(Node node){
 		this.nodes.add(node);
 	}
