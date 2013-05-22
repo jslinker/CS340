@@ -225,6 +225,32 @@ public class HyPeerWebTests extends TestCase{
 	}
 	
 	@Test
+	public void testRemoveFromHyPeerWeb(){
+		HyPeerWeb web = HyPeerWeb.getSingleton();
+		web.clear();
+		
+		final int TEST_SIZE = 32;
+		
+		web.addToHyPeerWeb(nodes[0], Node.NULL_NODE);
+		
+		for(int i = 1; i < TEST_SIZE; i++){
+			web.addToHyPeerWeb(new Node(i), nodes[0]);
+		}
+		
+		int max = TEST_SIZE - 1;
+		
+		while(max > 2){
+			for(int i = max; i > 0; i--){
+				SimplifiedNodeDomain expected = new ExpectedResult(max + 1, i);
+				assertEquals(expected, web.getNode(i).constructSimplifiedNodeDomain());
+			}
+		
+			web.removeFromHyPeerWeb(new Node(max), nodes[0]);
+			max--;
+		}
+	}
+	
+	@Test
 	public void testAddToHyPeerWebExp(){
 		HyPeerWeb web = HyPeerWeb.getSingleton();
         web.clear();
