@@ -118,7 +118,7 @@ public class Node implements NodeInterface, Comparable<Node>{
 	public void removeFromHyPeerWeb(Node deleteNode) {
 		Node deletionPoint = findDeletionPoint();
 		deletionPoint.disconnect();
-		//deleteNode.replace(deletionPoint);
+		deleteNode.replaceNode(deletionPoint);
 	}
 
 	/**
@@ -129,6 +129,7 @@ public class Node implements NodeInterface, Comparable<Node>{
 	 */
 	public void replaceNode(Node replacementNode) {
 		this.connections.replaceNode(this, replacementNode);
+		replacementNode.setWebId(this.webId);
 	}
 	
 	/**
