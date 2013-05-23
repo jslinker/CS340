@@ -2,6 +2,7 @@ package node;
 
 
 import static utilities.BitManipulation.calculateChildWebId;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -101,11 +102,11 @@ public class Node implements NodeInterface, Comparable<Node>{
 	 */
 	public void addToHyPeerWeb(Node newNode){
 		assert (newNode != null && newNode != NULL_NODE);
+		
 		Node insertionPoint = findInsertionPoint();
-		//System.out.println("this: "+this.getWebIdValue() + " " + this.getHeight());
-		int childWebId = calculateChildWebId(insertionPoint.getWebIdValue(), insertionPoint.getHeight());
-		//System.out.println(""+childWebId);
-		newNode.setWebId(new WebId(childWebId));
+		int childWebId = calculateChildWebId(insertionPoint);
+
+		newNode.setWebId(childWebId);
 		insertionPoint.addChild(newNode);
 	}
 	
@@ -197,13 +198,15 @@ public class Node implements NodeInterface, Comparable<Node>{
 			parent.setFold(parent);
 			parent.setInverseSurrogateFold(NULL_NODE);
 			parent.setSurrogateFold(NULL_NODE);
-		} else if(parent.getConnections().hasSurrogateFold()){
+		}
+		else if(parent.getConnections().hasSurrogateFold()){
 			parent.setFold(fold);
 			parent.setInverseSurrogateFold(NULL_NODE);
 			parent.setSurrogateFold(NULL_NODE);
 			fold.setFold(parent);
 			fold.setInverseSurrogateFold(NULL_NODE);
-		} else {
+		}
+		else {
 			fold.setFold(NULL_NODE);
 			fold.setSurrogateFold(parent);
 			parent.setInverseSurrogateFold(fold);
@@ -279,6 +282,7 @@ public class Node implements NodeInterface, Comparable<Node>{
 		TreeMap<Integer,Node> upPointers = connections.getUpPointers();
 		childConnections.setLowerNeighbors(upPointers);
 		connections.setUpPointers(new TreeMap<Integer,Node>());
+		
 		//notify child node's lower neighbors
 		Iterator<Node> childsLowerNeighbors = upPointers.values().iterator();
 		while(childsLowerNeighbors.hasNext()){
@@ -477,6 +481,10 @@ public class Node implements NodeInterface, Comparable<Node>{
 		}
 	}
 	
+	public void setWebId(int newWebId) {
+		setWebId(new WebId(newWebId));
+	}
+	
 	public void setWebId(WebId newWebId){
 		if(webId == null) {
 			this.webId = WebId.NULL_WEB_ID;
@@ -534,9 +542,11 @@ public class Node implements NodeInterface, Comparable<Node>{
 	public int compareTo(Node other) {
 		if(getWebIdValue() > other.getWebIdValue()){
 			return 1;
-		} else if(getWebIdValue() < other.getWebIdValue()){
+		}
+		else if(getWebIdValue() < other.getWebIdValue()){
 			return -1;
-		} else {
+		}
+		else {
 			return 0;
 		}
 	}

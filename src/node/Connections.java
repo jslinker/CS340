@@ -105,12 +105,6 @@ public class Connections {
 		assert(myWebId != webId);
 		
 		Node nextClosest = Node.NULL_NODE;
-		TreeMap<Integer,Node> nodes;
-		if(myWebId < webId) {
-			nodes = upperNeighbors;
-		} else if (myWebId > webId) {
-			nodes = lowerNeighbors;
-		}
 		
 		int bitsToFlip = myWebId ^ webId;
 		
@@ -175,10 +169,6 @@ public class Connections {
 		replacementNode.setFold(this.getFold());
 		replacementNode.setSurrogateFold(this.getSurrogateFold());
 		replacementNode.setInverseSurrogateFold(this.getInverseSurrogateFold());
-		
-//		fold.setFold(replacementNode);
-//		surrogateFold.setSurrogateFold(replacementNode);
-//		inverseSurrogateFold.setInverseSurrogateFold(replacementNode);
 	}
 	
 	//--------------------
@@ -224,24 +214,30 @@ public class Connections {
 	//--------------------
 	
 	public boolean hasInverseSurrogateFold(){
-		if(inverseSurrogateFold == Node.NULL_NODE)
+		if(inverseSurrogateFold == Node.NULL_NODE) {
 			return false;
-		else
+		}
+		else {
 			return true;
+		}
 	}
 	
 	public boolean hasSurrogateFold() {
-		if(surrogateFold == Node.NULL_NODE)
+		if(surrogateFold == Node.NULL_NODE) {
 			return false;
-		else
+		}
+		else {
 			return true;
+		}
 	}
 	
 	public boolean hasFold(){
-		if(fold == Node.NULL_NODE)
+		if(fold == Node.NULL_NODE) {
 			return false;
-		else
+		}
+		else {
 			return true;
+		}
 	}
 
 	@Override
@@ -355,13 +351,13 @@ public class Connections {
 			info += neighbor.getWebIdValue() + " ";
 		}
 		
-		info += "\nUpPointers";
+		info += "\nUpPointers: ";
 		
 		for(Node upPointer: upPointers.values()){
 			info += upPointer.getWebIdValue() + " ";
 		}
 		
-		info += "\nDownPointers";
+		info += "\nDownPointers: ";
 		
 		for(Node downPointer: downPointers.values()){
 			info += downPointer.getWebIdValue() + " ";

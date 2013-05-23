@@ -7,6 +7,8 @@ import node.SimplifiedNodeDomain;
 
 public class Phase2 {
     public static HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();
+    private static final int HYPEERWEB_SIZE = 32;
+    private static final boolean VERBOSE = false;
     private static final int PHASE_2_TEST_COUNT = 10912;
     private static int errorCount = 0;
 
@@ -41,7 +43,7 @@ public class Phase2 {
             SimplifiedNodeDomain simplifiedNodeDomain = firstNode.constructSimplifiedNodeDomain();
             ExpectedResult expectedResult = new ExpectedResult(1, 0);
 
-            if (!simplifiedNodeDomain.equals(expectedResult)) {
+            if ( ! simplifiedNodeDomain.equals(expectedResult)) {
                 insertionError = true;
                 printErrorMessage(size, null, simplifiedNodeDomain, expectedResult);
             }
@@ -100,7 +102,4 @@ public class Phase2 {
             node0.addToHyPeerWeb(node);
         }
     }
-    
-    private static final int HYPEERWEB_SIZE = 32;
-    private static final boolean VERBOSE = true;
 }
