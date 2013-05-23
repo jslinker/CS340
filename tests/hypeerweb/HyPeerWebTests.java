@@ -245,7 +245,7 @@ public class HyPeerWebTests extends TestCase{
 				assertEquals(expected, web.getNode(i).constructSimplifiedNodeDomain());
 			}
 		
-			web.removeFromHyPeerWeb(new Node(max), nodes[1]);
+			web.removeFromHyPeerWeb(new Node(max));
 			max--;
 		}
 	}
