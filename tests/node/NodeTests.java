@@ -528,12 +528,15 @@ public class NodeTests extends TestCase{
 		for(int i = 0; i < numberOfNodes; i++){
 			nodes.add(new Node(i));
 		}
+		
 		//construct web
 		for(int i = 1; i < nodes.size(); i++){
 			nodes.get(calculateSurrogateWebId(i)).addChild(nodes.get(i));
 		}
+
 		//test replace
 		for(int i = 0; i < nodes.size(); i++){
+			
 			//replace the node
 			Node replacementNode = new Node(230);
 			Node nodeToReplace = nodes.get(i);
@@ -543,9 +546,8 @@ public class NodeTests extends TestCase{
 			//Test references to ensure the node is actually replaced.
 			//This also checks to see if the web can be properly traversed after replacement
 			//since the node domain may not be enough to ensure web integrity.
-			//temporarily commented out
-			//TODO uncomment this after node domain's are correct
-			/*Node nodeFound = null;
+			
+			Node nodeFound = null;
 			if(i == 0){
 				nodeFound = nodes.get(1).findNode(i);
 			}
@@ -554,7 +556,7 @@ public class NodeTests extends TestCase{
 			}
 			
 			assertTrue("The node found in the web is not the replacement node.", 
-						nodeFound == nodes.get(i) && nodeFound != nodeToReplace);*/
+						nodeFound == nodes.get(i) && nodeFound != nodeToReplace);
 			
 			//test node domains to ensure connection integrity is intact
 			for(int j = 0; j < nodes.size(); j++){

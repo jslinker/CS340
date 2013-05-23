@@ -1,5 +1,7 @@
 package utilities;
 
+import node.Node;
+
 /**
  * The functions included are made for convenient bit manipulation of webId's in the 
  * context of the HyPeerWeb.
@@ -33,6 +35,10 @@ public class BitManipulation{
 	 * @pre parentWebId >= 0, parentHeight >= 0, parentWebId <= 0x3FFFFFFF, parentHeight <= 30
 	 * @post result = child's webId
 	 */
+	public static int calculateChildWebId(Node parent) {
+		return calculateChildWebId(parent.getWebIdValue(), parent.getHeight());
+	}
+	
 	public static int calculateChildWebId(int parentWebId, int parentHeight){
 		assert (parentWebId >= 0 && parentWebId <= (0x3FFFFFFF) 
 				&& parentHeight >= 0 && parentHeight <=30);

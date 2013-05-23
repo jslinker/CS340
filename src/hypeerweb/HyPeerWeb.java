@@ -58,8 +58,8 @@ public class HyPeerWeb {
 		assert(removeNode != null && removeNode != Node.NULL_NODE);
 		assert(nodes.contains(removeNode));
 		
-		nodes.get(0).removeFromHyPeerWeb(removeNode);
 		nodes.remove(removeNode);
+		removeNode.removeFromHyPeerWeb(removeNode);
 	}
 	
 	public void addNode(Node node){

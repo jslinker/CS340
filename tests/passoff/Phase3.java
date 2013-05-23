@@ -55,7 +55,6 @@ public class Phase3 {
         		// Verify all the nodes in the remaining web
         		for(int i = 0; i < size - 1; i++) {
 
-        			// TODO: Null exception happens here - implementing replace method should fix this 
         			SimplifiedNodeDomain actual = hypeerweb.getNode(i).constructSimplifiedNodeDomain();
         			ExpectedResult expected = new ExpectedResult(size - 1, i);
 

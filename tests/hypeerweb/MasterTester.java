@@ -16,7 +16,13 @@ import database.HyPeerWebDatabaseTests;
  *
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({WebIdTests.class, BitManipulationTests.class, NodeTests.class, 
-						HyPeerWebDatabaseTests.class, HyPeerWebTests.class})
+@Suite.SuiteClasses({
+	WebIdTests.class,
+	BitManipulationTests.class,
+	NodeTests.class, 
+	HyPeerWebDatabaseTests.class,
+	HyPeerWebTests.class
+})
+
 public final class MasterTester extends TestCase{
 }
