@@ -172,9 +172,13 @@ public class Connections {
 			node.addNeighbor(replacementNode);
 		}
 		
-		fold.setFold(replacementNode);
-		surrogateFold.setSurrogateFold(replacementNode);
-		inverseSurrogateFold.setInverseSurrogateFold(replacementNode);
+		replacementNode.setFold(this.getFold());
+		replacementNode.setSurrogateFold(this.getSurrogateFold());
+		replacementNode.setInverseSurrogateFold(this.getInverseSurrogateFold());
+		
+//		fold.setFold(replacementNode);
+//		surrogateFold.setSurrogateFold(replacementNode);
+//		inverseSurrogateFold.setInverseSurrogateFold(replacementNode);
 	}
 	
 	//--------------------

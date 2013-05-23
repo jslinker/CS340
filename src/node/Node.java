@@ -128,8 +128,19 @@ public class Node implements NodeInterface, Comparable<Node>{
 	 * @post All pointers to this node will now be pointing to replacementNode
 	 */
 	public void replaceNode(Node replacementNode) {
-		this.connections.replaceNode(this, replacementNode);
-		replacementNode.setWebId(this.webId);
+		if(this != replacementNode) {
+			replacementNode.setWebId(this.webId);
+			replacementNode.setState(this.state);
+			
+			// Notify neighbors of the new node
+			this.connections.replaceNode(this, replacementNode);
+			
+			replacementNode.setConnections(this.connections);
+			replacementNode.setHeight(this.height);
+			replacementNode.setFold(this.getFold());
+			replacementNode.setSurrogateFold(this.getSurrogateFold());
+			replacementNode.setInverseSurrogateFold(this.getInverseSurrogateFold());
+		}
 	}
 	
 	/**
