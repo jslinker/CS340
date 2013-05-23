@@ -113,7 +113,7 @@ public class Node implements NodeInterface, Comparable<Node>{
 	 * Removes the node from the HyPeerWeb.
 	 * @param deleteNode The node that is to be deleted.
 	 * @pre The node is in the web and is not null or NULL_NODE
-	 * @post The node was deleted and replaced with the last node in the web.
+	 * @post The node was removed from the web and replaced with the last node in the web.
 	 */
 	public void removeFromHyPeerWeb(Node deleteNode) {
 		Node deletionPoint = findDeletionPoint();
@@ -121,6 +121,16 @@ public class Node implements NodeInterface, Comparable<Node>{
 		//deleteNode.replace(deletionPoint);
 	}
 
+	/**
+	 * Removes the node from the HyPeerWeb.
+	 * @param replacementNode is the node that will be taking this nodes place
+	 * @pre The node is in the web and is not null or NULL_NODE
+	 * @post All pointers to this node will now be pointing to replacementNode
+	 */
+	public void replaceNode(Node replacementNode) {
+		this.connections.replaceNode(this, replacementNode);
+	}
+	
 	/**
 	 * Finds the insertion point.
 	 * @return The insertion point.
@@ -160,15 +170,22 @@ public class Node implements NodeInterface, Comparable<Node>{
 		for(Node lowerNeighbor : connections.getLowerNeighbors().values()){
 			lowerNeighbor.removeNeighbor(this);
 			lowerNeighbor.addDownPointer(parent);
+			NodeState.setNodeState(lowerNeighbor);
+			
 			parent.addUpPointer(lowerNeighbor);
 		}
 		
 		for(Node upPointToMe : connections.getDownPointers().values()){
 			upPointToMe.removeUpPointer(this);
+			NodeState.setNodeState(upPointToMe);
 		}
 		
 		Node fold = this.getFold();
-		if(parent.getConnections().hasSurrogateFold()){
+		if(fold.equals(parent)){
+			parent.setFold(parent);
+			parent.setInverseSurrogateFold(NULL_NODE);
+			parent.setSurrogateFold(NULL_NODE);
+		} else if(parent.getConnections().hasSurrogateFold()){
 			parent.setFold(fold);
 			parent.setInverseSurrogateFold(NULL_NODE);
 			parent.setSurrogateFold(NULL_NODE);
@@ -179,6 +196,9 @@ public class Node implements NodeInterface, Comparable<Node>{
 			fold.setSurrogateFold(parent);
 			parent.setInverseSurrogateFold(fold);
 		}
+		
+		NodeState.setNodeState(parent);
+		NodeState.setNodeState(fold);
 	}
 	
 	/**

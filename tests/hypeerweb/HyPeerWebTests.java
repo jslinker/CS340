@@ -239,13 +239,13 @@ public class HyPeerWebTests extends TestCase{
 		
 		int max = TEST_SIZE - 1;
 		
-		while(max > 2){
+		while(max > 1){
 			for(int i = max; i > 0; i--){
 				SimplifiedNodeDomain expected = new ExpectedResult(max + 1, i);
 				assertEquals(expected, web.getNode(i).constructSimplifiedNodeDomain());
 			}
 		
-			web.removeFromHyPeerWeb(new Node(max), nodes[0]);
+			web.removeFromHyPeerWeb(new Node(max));
 			max--;
 		}
 	}

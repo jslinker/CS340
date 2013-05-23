@@ -1,5 +1,6 @@
 package node;
 
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 
@@ -103,7 +104,7 @@ public class Connections {
 	public Node getNextClosestNeighbor(int myWebId, int webId){
 		assert(myWebId != webId);
 		
-		Node nextClosest = null;
+		Node nextClosest = Node.NULL_NODE;
 		TreeMap<Integer,Node> nodes;
 		if(myWebId < webId) {
 			nodes = upperNeighbors;
@@ -124,14 +125,56 @@ public class Connections {
 			int nextWebId = myWebId ^ masker;
 			nextClosest = upperNeighbors.get(nextWebId);
 			
+			if (nextClosest == null) {
+				nextClosest = lowerNeighbors.get(nextWebId);
+			}
+			
 			if (nextClosest != null) {
 				break;
 			}
 			
 			mask <<= 1;
 		}
-
+		
 		return nextClosest;
+	}
+	
+	//--------------------
+	//  R E P L A C E R S
+	//--------------------
+	
+	public void replaceNode(Node nodeToReplace, Node replacementNode){
+		for (Entry<Integer, Node> entry : downPointers.entrySet())
+		{
+			Node node = entry.getValue();
+		    node.removeUpPointer(nodeToReplace);
+		    node.addUpPointer(replacementNode);
+		}
+		
+		for (Entry<Integer, Node> entry : upPointers.entrySet())
+		{
+			Node node = entry.getValue();
+			node.removeDownPointer(nodeToReplace);
+			node.addDownPointer(replacementNode);
+		}
+		
+		for (Entry<Integer, Node> entry : lowerNeighbors.entrySet())
+		{
+			Node node = entry.getValue();
+			node.removeNeighbor(nodeToReplace);
+			node.addNeighbor(replacementNode);
+		}
+		
+		for (Entry<Integer, Node> entry : upperNeighbors.entrySet())
+		{
+			Node node = entry.getValue();
+			node.removeNeighbor(nodeToReplace);
+			node.addNeighbor(replacementNode);
+		}
+		
+		fold.setFold(replacementNode);
+		surrogateFold.setSurrogateFold(replacementNode);
+		inverseSurrogateFold.setInverseSurrogateFold(replacementNode);
 	}
 	
 	//--------------------

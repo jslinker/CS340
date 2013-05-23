@@ -172,6 +172,10 @@ public class NodeTests extends TestCase{
 		 */
 	}
 	
+	public void testReplaceNode(){
+		Node node0 = new Node(0);
+	}
+	
 	/**
 	 * Tests adding a few child nodes.
 	 */
@@ -394,7 +398,7 @@ public class NodeTests extends TestCase{
 
 	/**
 	 * Randomly creates a HyPeerWeb of size between 101 and 2000, inclusive.
-	 * Then tests the {@code findDeletionPoint} from 100 randomly selected nodes within the web.
+	 * Then tests the {@code findDeletionPoint} from all the nodes within the web.
 	 */
 	public void testFindDeletionPoint(){
 
@@ -411,10 +415,9 @@ public class NodeTests extends TestCase{
 			web.addToHyPeerWeb(new Node(i), web.getNode(0));
 		}
 		
-		// Test findDeletionPoint on 100 random nodes in the web
-		for(int i = 0; i < 100; i++) {
-			int randomNode = random.nextInt(webSize);
-			Node deletionPoint = web.getNode(randomNode).findDeletionPoint();
+		// Test findDeletionPoint from all the nodes in the web
+		for(int i = 0; i < webSize; i++) {
+			Node deletionPoint = web.getNode(i).findDeletionPoint();
 			assertEquals(deletionPoint.getWebIdValue(), expectedDeletionPoint);
 		}
 	}
