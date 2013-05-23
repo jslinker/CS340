@@ -181,4 +181,15 @@ public class BitManipulation{
 		}
 		return (currentWebId^bitMask);
 	}
+	
+	/**
+	 * Calculates all of the neighbors you should broadcast to.
+	 * @param webId The webId of the node to broadcast from.
+	 * @param height The height of the node to broadcast from.
+	 * @pre Valid webId and height. Note that height is only necessary if webId == 0.
+	 * @post An integer array of all of the nodes' webIds to broadcast to.
+	 */
+	public static int[] calculateBroadcastWebIds(int webId, int height){
+		return new int[0];
+	}
 }
