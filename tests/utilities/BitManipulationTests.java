@@ -282,4 +282,92 @@ public class BitManipulationTests extends TestCase{
 		currentWebId = calculateNextJumpWebId(currentWebId, destinationWebId);
 		assertTrue(currentWebId == 6);
 	}
+	
+	public void testCalculateBroadcastWebIds(){
+		//test invalid inputs
+		try{
+			calculateBroadcastWebIds(-1, 0);
+			fail("Failed to throw AssertionError on invalid arguments.");
+		}
+		catch(AssertionError e){
+		}
+		
+		try{
+			calculateBroadcastWebIds(0, -1);
+			fail("Failed to throw AssertionError on invalid arguments.");
+		}
+		catch(AssertionError e){
+		}
+		
+		try{
+			calculateBroadcastWebIds(Integer.MIN_VALUE, 0);
+			fail("Failed to throw AssertionError on invalid arguments.");
+		}
+		catch(AssertionError e){
+		}
+		
+		try{
+			calculateBroadcastWebIds(0, Integer.MIN_VALUE);
+			fail("Failed to throw AssertionError on invalid arguments.");
+		}
+		catch(AssertionError e){
+		}
+		
+		//test edge cases
+		int[] result = calculateBroadcastWebIds(0,0);
+		assertTrue("\nActual array length: " + result.length + "\n" +
+					"Expected array length: 0",
+					result.length == 0);
+		
+		result = calculateBroadcastWebIds(0,1);
+		assertTrue("\nActual array length: " + result.length + "\n" +
+					"Expected array length: 1",
+					result.length == 1);
+		assertEquals(1, result[0]);
+		
+		result = calculateBroadcastWebIds(0,3);
+		assertTrue("\nActual array length: " + result.length + "\n" +
+					"Expected array length: 3",
+					result.length == 3);
+		assertEquals(1, result[0]);
+		assertEquals(2, result[1]);
+		assertEquals(4, result[2]);
+		
+		result = calculateBroadcastWebIds(1,0);//note that the height is only important for webId = 0
+		assertTrue("\nActual array length: " + result.length + "\n" +
+					"Expected array length: 0",
+					result.length == 0);
+		
+		result = calculateBroadcastWebIds(3,0);
+		assertTrue("\nActual array length: " + result.length + "\n" +
+					"Expected array length: 0",
+					result.length == 0);
+		
+		result = calculateBroadcastWebIds(2,0);
+		assertTrue("\nActual array length: " + result.length + "\n" +
+					"Expected array length: 1",
+					result.length == 1);
+		assertEquals(3, result[0]);
+		
+		result = calculateBroadcastWebIds(Integer.MAX_VALUE,0);
+		assertTrue("\nActual array length: " + result.length + "\n" +
+					"Expected array length: 0",
+					result.length == 0);
+		
+		result = calculateBroadcastWebIds(Integer.MAX_VALUE-1,0);
+		assertTrue("\nActual array length: " + result.length + "\n" +
+					"Expected array length: 1",
+					result.length == 1);
+		assertEquals(Integer.MAX_VALUE, result[0]);
+		
+		//test regular value
+		result = calculateBroadcastWebIds(688,0);
+		assertTrue("\nActual array length: " + result.length + "\n" +
+					"Expected array length: 4",
+					result.length == 4);
+		assertEquals(688+1, result[0]);
+		assertEquals(688+2, result[1]);
+		assertEquals(688+4, result[2]);
+		assertEquals(688+8, result[3]);
+	}
 }

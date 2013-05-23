@@ -192,10 +192,33 @@ public class BitManipulation{
 	 * Calculates all of the neighbors you should broadcast to.
 	 * @param webId The webId of the node to broadcast from.
 	 * @param height The height of the node to broadcast from.
-	 * @pre Valid webId and height. Note that height is only necessary if webId == 0.
-	 * @post An integer array of all of the nodes' webIds to broadcast to.
+	 * @pre Valid webId and height greater than or equal to zero. 
+	 * Note that height is only necessary if webId == 0.
+	 * Also, the broadcast algorithm assumes that the broadcast started at node zero, otherwise
+	 * not all nodes will be broadcasted to.
+	 * @post An integer array of all of the nodes' webIds to broadcast to. 
+	 * Arranged in ascending order.
 	 */
 	public static int[] calculateBroadcastWebIds(int webId, int height){
-		return new int[0];
+		assert (webId >= 0 && height >= 0);
+		
+		int[] result = null;
+		
+		//calculate number of webIds there will be
+		if(webId == 0){
+			result = new int[height];
+		}
+		else{
+			result = new int[Integer.numberOfTrailingZeros(webId)];
+		}
+		
+		//calculate the webIds
+		int bitMask = 1;
+		for(int i = 0; i < result.length; i++){
+			result[i] = webId^bitMask;
+			bitMask <<= 1;
+		}
+		
+		return result;
 	}
 }
