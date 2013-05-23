@@ -1,16 +1,20 @@
-package providedtests.phase1;
+package passoff;
 
 import node.Node;
 import node.SimplifiedNodeDomain;
 import node.WebId;
 import hypeerweb.HyPeerWeb;
 
-public class Exp {
+public class Phase1 {
 	public static HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();
 	private static final int PHASE_1_TEST_COUNT = 66;
 	private static int errorCount = 0;
 
 	public static void main(String[] args) {
+		Phase1.run();
+	}
+	
+	public static void run() {
 		hypeerweb.clear();
     	System.out.println("Testing Phase 1");
 		testSimpleNodeOperationsOnNodeBeforeItHasBeenAddedToHyPeerWeb();
@@ -639,7 +643,7 @@ public class Exp {
 		}
 		
 		Node node = hypeerweb.getNode(0);
-		if (node != null) {
+		if (node != Node.NULL_NODE) {
 			System.err.println("When opening an empty database, 'temp.db', it should be empty.");
 			error = true;
 			errorCount++;
