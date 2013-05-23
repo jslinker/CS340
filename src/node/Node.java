@@ -12,7 +12,7 @@ import utilities.BitManipulation;
 /**
  * @author Joseph
  */
-public class Node implements Comparable<Node>{
+public class Node implements NodeInterface, Comparable<Node>{
 	
 	private WebId webId = null;
 	private int height = -1;
@@ -150,7 +150,7 @@ public class Node implements Comparable<Node>{
 		return lowerUpperPair;
 	}
 	
-	private void disconnect() {
+	public void disconnect() {
 		int parentId = BitManipulation.calculateParentWebId(this.getWebIdValue(), this.getHeight());
 		Node parent = connections.getLowerNeighbors().get(parentId);
 		parent.setHeight(parent.getHeight() - 1);
@@ -507,5 +507,26 @@ public class Node implements Comparable<Node>{
 		} else {
 			return 0;
 		}
+	}
+
+	/**
+	 * Duplicate method. Defined in specs though.
+	 */
+	@Override
+	public void changeFold(Node newFold) {
+		assert (getConnections().hasFold());
+		this.setFold(newFold);
+	}
+
+	@Override
+	public void addConnection(Node aNode) {
+	}
+
+	@Override
+	public void removeConnection(Node aNode) {
+	}
+
+	@Override
+	public void replaceConnection(Node aNode, Node replacementNode) {
 	}
 }

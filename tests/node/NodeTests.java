@@ -398,9 +398,6 @@ public class NodeTests extends TestCase{
 	 */
 	public void testFindDeletionPoint(){
 
-		// This test should pass as soon as these are done:
-		// TODO: Implement Node.FindDeletionPoint()
-		
 		HyPeerWeb web = HyPeerWeb.getSingleton();
 		web.clear();
 
@@ -512,6 +509,41 @@ public class NodeTests extends TestCase{
 			}
 		}
 		
+		/*
+		 * End Exhaustive Testing
+		 */
+	}
+	
+	public void testReplace(){
+		/*
+		 * Start Exhaustive Testing
+		 */
+		
+		//create nodes
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		int numberOfNodes = 32;
+		for(int i = 0; i < numberOfNodes; i++){
+			nodes.add(new Node(i));
+		}
+		//construct web
+		for(int i = 1; i < nodes.size(); i++){
+			nodes.get(calculateSurrogateWebId(i)).addChild(nodes.get(i));
+		}
+		//test replace
+		for(int i = 0; i < nodes.size(); i++){
+			//replace
+			Node replacementNode = new Node(230);
+			
+			//test
+			for(int j = 0; j < nodes.size(); j++){
+				Node aNode = nodes.get(j);
+				SimplifiedNodeDomain aSimpleNode = aNode.constructSimplifiedNodeDomain();
+				ExpectedResult expectedNode = new ExpectedResult(nodes.size(), j);
+				assertTrue("\nActual: " + aSimpleNode.toString() + "\n" +
+							"Expected: " + expectedNode.toString(),
+							aSimpleNode.equals(expectedNode));
+			}
+		}
 		/*
 		 * End Exhaustive Testing
 		 */
