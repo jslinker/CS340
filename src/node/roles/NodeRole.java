@@ -6,7 +6,7 @@ import node.SimplifiedNodeDomain;
 import node.WebId;
 
 public abstract class NodeRole implements NodeInterface{
-	protected NodeInterface node = null;
+	protected Node node = null;
 
 	public void setWebId(WebId webId) {
 		node.setWebId(webId);
@@ -73,5 +73,17 @@ public abstract class NodeRole implements NodeInterface{
 	@Override
 	public void replaceConnection(Node aNode, Node replacementNode) {
 		node.replaceConnection(aNode, replacementNode);
+	}
+	
+	public int getWebIdValue(){
+		return node.getWebIdValue();
+	}
+	
+	public boolean equals(Object other){
+		return node.equals(other);
+	}
+	
+	public Node getNode(){
+		return this.node;
 	}
 }

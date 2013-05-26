@@ -1,7 +1,10 @@
 package node;
 
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+
+import node.roles.*;
 
 
 /**
@@ -11,7 +14,7 @@ import java.util.TreeMap;
  *
  */
 public class Connections {
-	private TreeMap<Integer,Node> downPointers = new TreeMap<Integer,Node>();
+	private TreeMap<Integer,NodeInterface> downPointers = new TreeMap<Integer,NodeInterface>();
 	private TreeMap<Integer,Node> upPointers = new TreeMap<Integer,Node>();
 	private TreeMap<Integer,Node> lowerNeighbors = new TreeMap<Integer,Node>();
 	private TreeMap<Integer,Node> upperNeighbors = new TreeMap<Integer,Node>();
@@ -27,11 +30,11 @@ public class Connections {
 	//  GETTERS AND SETTERS
 	//--------------------
 
-	public TreeMap<Integer,Node> getDownPointers() {
+	public Map<Integer,NodeInterface> getDownPointers() {
 		return downPointers;
 	}
 
-	public void setDownPointers(TreeMap<Integer,Node> downPointers) {
+	public void setDownPointers(TreeMap<Integer,NodeInterface> downPointers) {
 		this.downPointers = downPointers;
 	}
 
@@ -138,9 +141,9 @@ public class Connections {
 	//--------------------
 	
 	public void replaceNode(Node nodeToReplace, Node replacementNode){
-		for (Entry<Integer, Node> entry : downPointers.entrySet())
+		for (Entry<Integer, NodeInterface> entry : downPointers.entrySet())
 		{
-			Node node = entry.getValue();
+			Node node = entry.getValue().getNode();
 		    node.removeUpPointer(nodeToReplace);
 		    node.addUpPointer(replacementNode);
 		}
@@ -175,7 +178,7 @@ public class Connections {
 	//  A D D E R S
 	//--------------------		
 	public void addDownPointer(Node downPointer){
-		this.downPointers.put(downPointer.getWebIdValue(), downPointer);
+		this.downPointers.put(downPointer.getWebIdValue(), new SurrogateNeighbor(downPointer));
 	}
 	
 	public void addLowerNeighbor(Node lowerNeighbor){
@@ -322,7 +325,7 @@ public class Connections {
 		return downPointers.size();
 	}
 
-	public Node getSmallestDownPointer() {
+	public NodeInterface getSmallestDownPointer() {
 		return downPointers.get(downPointers.firstKey());
 	}
 
@@ -359,7 +362,7 @@ public class Connections {
 		
 		info += "\nDownPointers: ";
 		
-		for(Node downPointer: downPointers.values()){
+		for(NodeInterface downPointer: downPointers.values()){
 			info += downPointer.getWebIdValue() + " ";
 		}
 		

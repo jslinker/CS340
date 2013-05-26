@@ -85,7 +85,7 @@ public class Node implements NodeInterface, Comparable<Node>{
 		}
 		
 		HashSet<Integer> downIds = new HashSet<Integer>();
-		for(Node n : getDownPointers().values()){
+		for(NodeInterface n : getDownPointers().values()){
 			downIds.add(n.getWebIdValue());
 		}
 		
@@ -188,7 +188,7 @@ public class Node implements NodeInterface, Comparable<Node>{
 			parent.addUpPointer(lowerNeighbor);
 		}
 		
-		for(Node upPointToMe : connections.getDownPointers().values()){
+		for(NodeInterface upPointToMe : connections.getDownPointers().values()){
 			upPointToMe.removeUpPointer(this);
 			NodeState.setNodeState(upPointToMe);
 		}
@@ -406,7 +406,7 @@ public class Node implements NodeInterface, Comparable<Node>{
 		return webId.getHeight();
 	}
 	
-	public TreeMap<Integer,Node> getDownPointers(){
+	public Map<Integer,NodeInterface> getDownPointers(){
 		return connections.getDownPointers();
 	}
 	
@@ -570,5 +570,10 @@ public class Node implements NodeInterface, Comparable<Node>{
 
 	@Override
 	public void replaceConnection(Node aNode, Node replacementNode) {
+	}
+
+	@Override
+	public Node getNode() {
+		return this;
 	}
 }

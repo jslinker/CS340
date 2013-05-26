@@ -34,4 +34,6 @@ public interface NodeInterface{
 	/*
 	 * Other methods we may need in the interface.
 	 */
+	public int getWebIdValue();
+	public Node getNode();
 }
