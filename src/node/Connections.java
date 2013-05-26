@@ -20,9 +20,9 @@ public class Connections {
 	private TreeMap<Integer,NodeInterface> lowerNeighbors = new TreeMap<Integer,NodeInterface>();
 	private TreeMap<Integer,NodeInterface> upperNeighbors = new TreeMap<Integer,NodeInterface>();
 	
-	private Node fold = Node.NULL_NODE;
-	private Node surrogateFold = Node.NULL_NODE;
-	private Node inverseSurrogateFold = Node.NULL_NODE;
+	private NodeInterface fold = Node.NULL_NODE;
+	private NodeInterface surrogateFold = Node.NULL_NODE;
+	private NodeInterface inverseSurrogateFold = Node.NULL_NODE;
 	
 	public Connections(){
 	}
@@ -83,27 +83,27 @@ public class Connections {
 	}
 
 	public Node getFold() {
-		return this.fold;
+		return this.fold.getNode();
 	}
 
 	public void setFold(Node fold) {
-		this.fold = fold;
+		this.fold = new Fold(fold);
 	}
 
 	public Node getSurrogateFold() {
-		return surrogateFold;
+		return surrogateFold.getNode();
 	}
 
 	public void setSurrogateFold(Node surrogateFold) {
-		this.surrogateFold = surrogateFold;
+		this.surrogateFold = new SurrogateFold(surrogateFold);
 	}
 
 	public Node getInverseSurrogateFold() {
-		return inverseSurrogateFold;
+		return inverseSurrogateFold.getNode();
 	}
 
 	public void setInverseSurrogateFold(Node inverseSurrogateFold){
-		this.inverseSurrogateFold = inverseSurrogateFold;
+		this.inverseSurrogateFold = new InverseSurrogateFold(inverseSurrogateFold);
 	}
 	
 	public Node getLargestUpPointer(){
@@ -241,7 +241,7 @@ public class Connections {
 	//--------------------
 	
 	public boolean hasInverseSurrogateFold(){
-		if(inverseSurrogateFold == Node.NULL_NODE) {
+		if(inverseSurrogateFold.equals(Node.NULL_NODE)) {
 			return false;
 		}
 		else {
@@ -250,7 +250,7 @@ public class Connections {
 	}
 	
 	public boolean hasSurrogateFold() {
-		if(surrogateFold == Node.NULL_NODE) {
+		if(surrogateFold.equals(Node.NULL_NODE)) {
 			return false;
 		}
 		else {

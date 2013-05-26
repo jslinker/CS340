@@ -180,18 +180,6 @@ public class Node implements NodeInterface, Comparable<Node>{
 		parent.getUpperNeighbors().remove(this.getWebIdValue());
 		
 		connections.getLowerNeighbors().remove(parent.getWebIdValue());
-//		for(NodeInterface lowerNeighbor : connections.getLowerNeighbors().values()){
-//			lowerNeighbor.removeNeighbor(this);
-//			lowerNeighbor.addDownPointer(parent);
-//			NodeState.setNodeState(lowerNeighbor);
-//			
-//			parent.getNode().addUpPointer(lowerNeighbor.getNode());
-//		}
-//		
-//		for(NodeInterface upPointToMe : connections.getDownPointers().values()){
-//			upPointToMe.removeUpPointer(this);
-//			NodeState.setNodeState(upPointToMe);
-//		}
 		
 		for(NodeInterface connection: connections.getDisconnectNodeList()){
 			connection.removeConnection(this, parent);
