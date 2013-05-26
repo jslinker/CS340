@@ -1,11 +1,12 @@
 package node.roles;
 
 import node.Node;
+import node.NodeInterface;
 
 public class InverseSurrogateNeighbor extends NodeRole{
 
-	public InverseSurrogateNeighbor(Node node){
-		this.node = node;
+	public InverseSurrogateNeighbor(NodeInterface node){
+		this.node = node.getNode();
 	}
 
 	@Override
@@ -14,6 +15,10 @@ public class InverseSurrogateNeighbor extends NodeRole{
 
 	@Override
 	public void removeConnection(Node aNode) {
+	}
+	
+	@Override
+	public void removeConnection(Node aNode, Node parent) {
 	}
 
 	@Override

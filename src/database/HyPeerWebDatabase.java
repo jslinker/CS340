@@ -298,7 +298,7 @@ public class HyPeerWebDatabase {
 
 			// Store Neighbors
 
-			for(Node neighbor : node.getNeighbors().values()){
+			for(NodeInterface neighbor : node.getNeighbors().values()){
 				sql = String.format("INSERT INTO " + tableNames[1] +
 						"(node, neighbor) " +
 						"VALUES ('%d', '%d');",
@@ -309,7 +309,7 @@ public class HyPeerWebDatabase {
 
 			// Store Up Pointers
 
-			for(Node up : node.getUpPointers().values()){
+			for(NodeInterface up : node.getUpPointers().values()){
 				sql = String.format("INSERT INTO " + tableNames[2] +
 						"(node, edge_node) " +
 						"VALUES ('%d', '%d');",

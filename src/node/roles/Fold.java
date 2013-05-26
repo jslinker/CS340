@@ -1,11 +1,13 @@
 package node.roles;
 
 import node.Node;
+import node.NodeInterface;
+import node.NodeState;
 
 public class Fold extends NodeRole{
 	
-	public Fold(Node node){
-		this.node = node;
+	public Fold(NodeInterface node){
+		this.node = node.getNode();
 	}
 
 	@Override
@@ -14,6 +16,10 @@ public class Fold extends NodeRole{
 
 	@Override
 	public void removeConnection(Node aNode) {
+	}
+	
+	@Override
+	public void removeConnection(Node aNode, Node parent) {
 	}
 
 	@Override

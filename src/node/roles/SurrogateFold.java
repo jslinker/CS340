@@ -1,11 +1,12 @@
 package node.roles;
 
 import node.Node;
+import node.NodeInterface;
 
 public class SurrogateFold extends NodeRole{
 
-	public SurrogateFold(Node node){
-		this.node = node;
+	public SurrogateFold(NodeInterface node){
+		this.node = node.getNode();
 	}
 
 	@Override
@@ -14,6 +15,10 @@ public class SurrogateFold extends NodeRole{
 
 	@Override
 	public void removeConnection(Node aNode) {
+	}
+	
+	@Override
+	public void removeConnection(Node aNode, Node parent) {
 	}
 
 	@Override

@@ -29,6 +29,7 @@ public interface NodeInterface{
 	 */
 	public void addConnection(Node aNode);
 	public void removeConnection(Node aNode);
+	public void removeConnection(Node aNode, Node parent);
 	public void replaceConnection(Node aNode, Node replacementNode);
 
 	/*
