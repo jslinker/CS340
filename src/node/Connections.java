@@ -160,42 +160,29 @@ public class Connections {
 		}
 	}
 	
+	private ArrayList<NodeInterface> getReplaceNodeList(){
+		ArrayList<NodeInterface> replaceNodeList = new ArrayList<NodeInterface>();
+		replaceNodeList.addAll(downPointers.values());
+		replaceNodeList.addAll(upPointers.values());
+		replaceNodeList.addAll(lowerNeighbors.values());
+		replaceNodeList.addAll(upperNeighbors.values());
+		replaceNodeList.add(fold);
+		replaceNodeList.add(inverseSurrogateFold);
+		replaceNodeList.add(surrogateFold);
+		
+		return replaceNodeList;
+	}
+	
 	//--------------------
 	//  R E P L A C E R S
 	//--------------------
 	
 	public void replaceNode(Node nodeToReplace, Node replacementNode){
-		for (Entry<Integer, NodeInterface> entry : downPointers.entrySet())
-		{
-			Node node = entry.getValue().getNode();
-		    node.removeUpPointer(nodeToReplace);
-		    node.addUpPointer(replacementNode);
-		}
+		ArrayList<NodeInterface> replaceNodeList = getReplaceNodeList();
 		
-		for (Entry<Integer, NodeInterface> entry : upPointers.entrySet())
-		{
-			Node node = entry.getValue().getNode();
-			node.removeDownPointer(nodeToReplace);
-			node.addDownPointer(replacementNode);
+		for(NodeInterface nodeInterface : replaceNodeList){
+			nodeInterface.replaceConnection(nodeToReplace, replacementNode);
 		}
-		
-		for (Entry<Integer, NodeInterface> entry : lowerNeighbors.entrySet())
-		{
-			Node node = entry.getValue().getNode();
-			node.removeNeighbor(nodeToReplace);
-			node.addNeighbor(replacementNode);
-		}
-		
-		for (Entry<Integer, NodeInterface> entry : upperNeighbors.entrySet())
-		{
-			Node node = entry.getValue().getNode();
-			node.removeNeighbor(nodeToReplace);
-			node.addNeighbor(replacementNode);
-		}
-		
-		replacementNode.setFold(this.getFold());
-		replacementNode.setSurrogateFold(this.getSurrogateFold());
-		replacementNode.setInverseSurrogateFold(this.getInverseSurrogateFold());
 	}
 	
 	//--------------------

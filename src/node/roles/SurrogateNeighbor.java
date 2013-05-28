@@ -11,6 +11,7 @@ public class SurrogateNeighbor extends NodeRole{
 
 	@Override
 	public void addConnection(Node aNode) {
+		addUpPointer(aNode);
 	}
 
 	@Override

@@ -138,9 +138,6 @@ public class Node implements NodeInterface, Comparable<Node>{
 			
 			replacementNode.setConnections(this.connections);
 			replacementNode.setHeight(this.height);
-			replacementNode.setFold(this.getFold());
-			replacementNode.setSurrogateFold(this.getSurrogateFold());
-			replacementNode.setInverseSurrogateFold(this.getInverseSurrogateFold());
 		}
 	}
 	

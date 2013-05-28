@@ -11,17 +11,21 @@ public class InverseSurrogateFold extends NodeRole{
 
 	@Override
 	public void addConnection(Node aNode) {
+		node.setSurrogateFold(aNode);
 	}
 
 	@Override
 	public void removeConnection(Node aNode) {
+		node.setSurrogateFold(Node.NULL_NODE);
 	}
 
 	@Override
 	public void removeConnection(Node aNode, Node parent) {
+		removeConnection(aNode);
 	}
 	
 	@Override
 	public void replaceConnection(Node aNode, Node replacementNode) {
+		node.setSurrogateFold(replacementNode);
 	}
 }
