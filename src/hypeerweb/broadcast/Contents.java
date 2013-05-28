@@ -1,21 +1,24 @@
 package hypeerweb.broadcast;
 
+import java.util.HashMap;
+
 /**
  * An arbitrary collection of named objects
  * @Domain contents : Map -- a set of key-value pairs such that
  * no two key-value pairs have the same key.
- * @author Jason Robertson
+ * @author Jason Robertson, Craig Jacobson
  *
  */
-public class Contents {
+public class Contents{
+	
+	private HashMap<String, Object> contents = new HashMap<String, Object>();
 
 	/**
 	 * The default constructor.
 	 * @precondition none
 	 * @postcondition |contents| = 0
 	 */
-	public Contents() {
-		
+	public Contents(){
 	}
 	
 	/**
@@ -24,8 +27,8 @@ public class Contents {
 	 * @param key - The key we are searching for.
 	 * @return
 	 */
-	boolean	containsKey(String key) {
-		return false; 
+	boolean	containsKey(String key){
+		return contents.containsKey(key); 
 	}
 	
 	/** 
@@ -35,8 +38,8 @@ public class Contents {
 	 * @precondition none
 	 * @postcondition the object may be null
 	 */
-	public Object get(String key) {
-		return null; 
+	public Object get(String key){
+		return contents.get(key);
 	}
 	
 	/** 
@@ -49,8 +52,14 @@ public class Contents {
 	 * @precondition key != null
 	 * @postcondition (key,value) is a member of contents
 	 */
-	public void set(String key, Object value) { 
+	public void set(String key, Object value){ 
+		assert (key != null);
 		
+		if(this.containsKey(key)){
+			contents.remove(key);
+		}
+		
+		contents.put(key, value);
 	}
 	
 }

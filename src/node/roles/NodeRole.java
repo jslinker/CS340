@@ -1,5 +1,8 @@
 package node.roles;
 
+import hypeerweb.broadcast.Contents;
+import hypeerweb.broadcast.Parameters;
+import hypeerweb.broadcast.Visitor;
 import node.Node;
 import node.NodeInterface;
 import node.SimplifiedNodeDomain;
@@ -78,5 +81,15 @@ public abstract class NodeRole implements NodeInterface{
 	@Override
 	public Node getNode(){
 		return node;
+	}
+	
+	@Override 
+	public Contents getContents(){
+		return node.getContents();
+	}
+	
+	@Override
+	public void accept(Visitor visitor, Parameters parameters){
+		node.accept(visitor, parameters);
 	}
 }

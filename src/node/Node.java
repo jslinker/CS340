@@ -3,6 +3,10 @@ package node;
 
 import static utilities.BitManipulation.calculateChildWebId;
 
+import hypeerweb.broadcast.Contents;
+import hypeerweb.broadcast.Parameters;
+import hypeerweb.broadcast.Visitor;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,6 +23,7 @@ public class Node implements NodeInterface, Comparable<Node>{
 	private int height = -1;
 	private Connections connections;
 	private NodeState state = NodeState.STANDARD;
+	private Contents contents = new Contents();
 	
 	public static final Node NULL_NODE = new Node(){
 		@Override public void addDownPointer(Node downPointer){ return; }
@@ -40,6 +45,7 @@ public class Node implements NodeInterface, Comparable<Node>{
 		@Override public Node findNode(int webId){
 			return this;
 		}
+		@Override public void accept(Visitor visitor, Parameters parameters){ return; }
 	};
 	
 	private Node(){
@@ -575,5 +581,16 @@ public class Node implements NodeInterface, Comparable<Node>{
 	@Override
 	public Node getNode(){
 		return this;
+	}
+	
+	@Override 
+	public Contents getContents(){
+		return this.contents;
+	}
+	
+	@Override
+	public void accept(Visitor visitor, Parameters parameters){
+		assert (visitor != null && parameters != null);
+		visitor.visit(this, parameters);
 	}
 }
