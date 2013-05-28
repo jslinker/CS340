@@ -1,5 +1,7 @@
 package hypeerweb.broadcast;
 
+import utilities.BitManipulation;
+import node.Connections;
 import node.Node;
 
 /**
@@ -32,13 +34,29 @@ public abstract class BroadcastVisitor implements Visitor{
 	 * broadcast visitor pattern.
 	 * @param node The node being visited.
 	 * @param parameters The parameters used during the broadcast.
-	 * @pre
-	 * @post parameters contains START_KEY AND operation.postCondition is met AND 
+	 * @pre node != null AND parameters != null
+	 * @post parameters contains START_KEY AND operation.postCondition is met AND non-visited neighbors
+	 * have accept called on them; otherwise, node zero is found and accept is called on it
 	 */
 	@Override
 	public void visit(Node node, Parameters parameters) {
 		assert (node != null && parameters != null);
 		
+		if(parameters.containsKey(STARTED_KEY)){
+			this.operation(node, parameters);
+			
+			int[] nextWebIds = BitManipulation.calculateBroadcastWebIds(node.getWebIdValue(), 
+																		node.getWebIdHeight());
+			
+			Connections nodeConnections = node.getConnections();
+			for(int i = 0; i < nextWebIds.length; i++){
+				nodeConnections.getNeighborByWebId(nextWebIds[i]).accept(this, parameters);
+			}
+		}
+		else{
+			parameters.set(STARTED_KEY, node.getWebIdValue());
+			node.findNode(0).accept(this, parameters);
+		}
 		
 	}
 	
