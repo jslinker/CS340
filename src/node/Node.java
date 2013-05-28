@@ -571,4 +571,9 @@ public class Node implements NodeInterface, Comparable<Node>{
 	@Override
 	public void replaceConnection(Node aNode, Node replacementNode) {
 	}
+	
+	@Override
+	public Node getNode(){
+		return this;
+	}
 }

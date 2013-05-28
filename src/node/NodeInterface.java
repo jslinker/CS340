@@ -34,4 +34,5 @@ public interface NodeInterface{
 	/*
 	 * Other methods we may need in the interface.
 	 */
+	public Node getNode();
 }
