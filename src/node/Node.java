@@ -174,9 +174,16 @@ public class Node implements NodeInterface, Comparable<Node>{
 	 */
 	public Pair<Node> findLowerBoundUpperBoundPair(){
 		Node largest = this.findLargest();
-		Pair<Node> lowerUpperPair = new Pair<Node>(largest, Node.NULL_NODE);
-		lowerUpperPair = largest.getState().squeeze(lowerUpperPair);
-		return lowerUpperPair;
+		Pair<Node> lowerBoundUpperBoundPair = new Pair<Node>(largest, Node.NULL_NODE);
+		lowerBoundUpperBoundPair = largest.squeeze(lowerBoundUpperBoundPair);
+		return lowerBoundUpperBoundPair;
+	}
+	
+	/**
+	 * Forwards the squeeze call to the NodeState. Helps eliminate message chains.
+	 */
+	public Pair<Node> squeeze(Pair<Node> lowerBoundUpperBoundPair){
+		return this.getState().squeeze(lowerBoundUpperBoundPair);
 	}
 	
 	public void disconnect() {

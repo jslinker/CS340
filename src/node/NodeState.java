@@ -3,7 +3,8 @@ package node;
 import utilities.BitManipulation;
 
 /**
- * 
+ * Used to track the state of a node and provide methods that change the behavior of the node 
+ * accordingly.
  * @author Craig Jacobson
  *
  */
@@ -37,11 +38,11 @@ public enum NodeState{
 				Node largestUpPointer = pair.getUpperBound().getConnections().getLargestUpPointer();
 				if(largestUpPointer.getWebIdValue() > pair.getLowerBound().getWebIdValue()){
 					pair.setLowerBound(largestUpPointer);
-					return pair.getLowerBound().getState().squeeze(pair);
+					return pair.getLowerBound().squeeze(pair);
 				}
 				else{
 					pair.setUpperBound(pair.getUpperBound().getConnections().getSmallestChildlessNeighbor());
-					return pair.getUpperBound().getState().squeeze(pair);
+					return pair.getUpperBound().squeeze(pair);
 				}
 			}
 		}
@@ -59,7 +60,7 @@ public enum NodeState{
 			if(smallestDownPointer.getWebIdValue() < pair.getUpperBound().getWebIdValue() || pair.getUpperBound() == Node.NULL_NODE){
 				pair.setUpperBound(smallestDownPointer);
 			}
-			return pair.getUpperBound().getState().squeeze(pair);
+			return pair.getUpperBound().squeeze(pair);
 		}
 	},
 	
@@ -76,6 +77,10 @@ public enum NodeState{
 		}
 	},
 	
+	/**
+	 * This state is unused in our implementation and is only here because it was given
+	 * in an example.
+	 */
 	TERMINAL(5){
 		@Override
 		public String toString(){
