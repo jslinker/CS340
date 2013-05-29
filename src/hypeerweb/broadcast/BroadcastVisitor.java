@@ -1,5 +1,7 @@
 package hypeerweb.broadcast;
 
+import utilities.BitManipulation;
+import node.Connections;
 import node.Node;
 
 /**
@@ -11,26 +13,51 @@ import node.Node;
  * @author Jason Robertson
  *
  */
-public abstract class BroadcastVisitor implements Visitor {
+public abstract class BroadcastVisitor implements Visitor{
 
 	/** 
 	 * The key used to identify a key-value pair in the parameters list.
 	 * The actual value associated with the key can be any value including null.
 	 */
-	protected static final String STARTED_KEY = "";
+	protected static final String STARTED_KEY = "STARTED_KEY";
 	
 	/**
 	 * The default constructor.
 	 * @precondition None
 	 * @postcondition True
 	 */
-	public BroadcastVisitor() {
-		
+	public BroadcastVisitor(){
 	}
 	
+	/**
+	 * The visit operation called by a node in the accept method implementing the 
+	 * broadcast visitor pattern.
+	 * @param node The node being visited.
+	 * @param parameters The parameters used during the broadcast.
+	 * @pre node != null AND parameters != null
+	 * @post parameters contains START_KEY AND operation.postCondition is met AND non-visited neighbors
+	 * have accept called on them; otherwise, node zero is found and accept is called on it
+	 */
 	@Override
 	public void visit(Node node, Parameters parameters) {
-		// TODO Auto-generated method stub
+		assert (node != null && parameters != null);
+		
+		if(parameters.containsKey(STARTED_KEY)){
+			this.operation(node, parameters);
+			
+			int[] nextWebIds = BitManipulation.calculateBroadcastWebIds(node.getWebIdValue(), 
+																		node.getWebIdHeight());
+			
+			Connections nodeConnections = node.getConnections();
+			for(int i = 0; i < nextWebIds.length; i++){
+				nodeConnections.getNeighborByWebId(nextWebIds[i]).accept(this, parameters);
+			}
+		}
+		else{
+			parameters.set(STARTED_KEY, node.getWebIdValue());
+			node.findNode(0).accept(this, parameters);
+		}
+		
 	}
 	
 	/** 
@@ -41,8 +68,8 @@ public abstract class BroadcastVisitor implements Visitor {
 	 * @precondition None
 	 * @postcondition |result| = 0
 	 */
-	public static Parameters createInitialParameters() {
-		return null;
+	public static Parameters createInitialParameters(){
+		return (new Parameters());
 	}
 	
 	/**

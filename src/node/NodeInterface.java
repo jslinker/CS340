@@ -1,5 +1,9 @@
 package node;
 
+import hypeerweb.broadcast.Contents;
+import hypeerweb.broadcast.Parameters;
+import hypeerweb.broadcast.Visitor;
+
 /**
  * All of the methods as defined by the Node specification.
  * Additionally, the addMe(), disconnectMe(), and replaceMe(Node) methods have been added.
@@ -23,9 +27,12 @@ public interface NodeInterface{
 	public void removeDownPointer(Node downPointer);
 	public SimplifiedNodeDomain constructSimplifiedNodeDomain();
 	public void changeFold(Node newFold);//duplicate method in Node specification
+	public Contents getContents();
+	public void accept(Visitor visitor, Parameters parameters);
+	
 	
 	/*
-	 * Methods for moving nodes around.
+	 * Methods for modifying a node's connections.
 	 */
 	public void addConnection(Node aNode);
 	public void removeConnection(Node aNode);
@@ -35,6 +42,7 @@ public interface NodeInterface{
 	/*
 	 * Other methods we may need in the interface.
 	 */
+    
 	public int getWebIdValue();
 	public Node getNode();
 }

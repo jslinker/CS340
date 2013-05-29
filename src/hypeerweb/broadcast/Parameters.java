@@ -1,20 +1,23 @@
 package hypeerweb.broadcast;
 
+import java.util.HashMap;
+
 /**
  * An arbitrary collection of named objects
  * @Domain parameters : Map -- a set of key-value pairs
  * such that no two key-value pairs have the same key.
- * @author Jason Robertson
+ * @author Jason Robertson, Craig Jacobson
  */
-public class Parameters {
+public class Parameters{
+	
+	private HashMap<String, Object> parameters = new HashMap<String, Object>();
 
 	/**
 	 * The default constructor.
 	 * @precondition none
 	 * @postcondition |parameters| = 0
 	 */
-	public Parameters() {
-
+	public Parameters(){
 	}
 
 	/**
@@ -22,8 +25,8 @@ public class Parameters {
 	 * @param key - The key we are searching for.
 	 * @return
 	 */
-	public boolean containsKey(String key) {
-		return false; 
+	public boolean containsKey(String key){
+		return parameters.containsKey(key); 
 	}
 
 	/**
@@ -31,8 +34,8 @@ public class Parameters {
 	 * @param key
 	 * @return
 	 */
-	public Object get(String key) {
-		return null; 
+	public Object get(String key){
+		return parameters.get(key); 
 	}
 	
 	/**
@@ -44,8 +47,14 @@ public class Parameters {
 	 * @precondition key != null
 	 * @postcondition (key,value) is a member of parameters
 	 */
-	public void set(String key, Object value) { 
+	public void set(String key, Object value){ 
+		assert (key != null);
 		
+		if(this.containsKey(key)){
+			parameters.remove(key);
+		}
+		
+		parameters.put(key, value);
 	}
 	
 }

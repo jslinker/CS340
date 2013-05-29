@@ -381,6 +381,26 @@ public class Connections {
 		
 		return info;
 	}
+	
+	/**
+	 * Gets a neighbor by webId.
+	 * @param webId The desired neighbor's webId.
+	 * @pre webId >= 0
+	 * @post If a neighbor has the given webId that node is returned; otherwise, NULL_NODE is returned.
+	 */
+	public Node getNeighborByWebId(int webId){
+		assert (webId >= 0);
+		
+		if(this.upperNeighbors.containsKey(webId)){
+			return this.upperNeighbors.get(webId);
+		}
+		else if(this.lowerNeighbors.containsKey(webId)){
+			return this.lowerNeighbors.get(webId);
+		}
+		else{
+			return Node.NULL_NODE;
+		}
+	}
 
 	
 }
