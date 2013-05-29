@@ -56,7 +56,7 @@ public enum NodeState{
 
 		@Override
 		public Pair<Node> squeeze(Pair<Node> pair) {
-			Node smallestDownPointer = pair.getLowerBound().getConnections().getSmallestDownPointer();
+			Node smallestDownPointer = pair.getLowerBound().getConnections().getSmallestDownPointer().getNode();
 			if(smallestDownPointer.getWebIdValue() < pair.getUpperBound().getWebIdValue() || pair.getUpperBound() == Node.NULL_NODE){
 				pair.setUpperBound(smallestDownPointer);
 			}
@@ -122,6 +122,10 @@ public enum NodeState{
 		else{
 			node.setState(NodeState.STANDARD);
 		}
+	}
+	
+	public static void setNodeState(NodeInterface node){
+		setNodeState(node.getNode());
 	}
 	
 	public abstract Pair<Node> squeeze(Pair<Node> pair);

@@ -81,17 +81,17 @@ public class Node implements NodeInterface, Comparable<Node>{
 	 */
 	public SimplifiedNodeDomain constructSimplifiedNodeDomain(){
 		HashSet<Integer> neighborIds = new HashSet<Integer>();
-		for(Node n : getNeighbors().values()) {
+		for(NodeInterface n : getNeighbors().values()) {
 			neighborIds.add(n.getWebIdValue());
 		}
 		
 		HashSet<Integer> upIds = new HashSet<Integer>();
-		for(Node n : getUpPointers().values()){
+		for(NodeInterface n : getUpPointers().values()){
 			upIds.add(n.getWebIdValue());
 		}
 		
 		HashSet<Integer> downIds = new HashSet<Integer>();
-		for(Node n : getDownPointers().values()){
+		for(NodeInterface n : getDownPointers().values()){
 			downIds.add(n.getWebIdValue());
 		}
 		
@@ -144,9 +144,6 @@ public class Node implements NodeInterface, Comparable<Node>{
 			
 			replacementNode.setConnections(this.connections);
 			replacementNode.setHeight(this.height);
-			replacementNode.setFold(this.getFold());
-			replacementNode.setSurrogateFold(this.getSurrogateFold());
-			replacementNode.setInverseSurrogateFold(this.getInverseSurrogateFold());
 		}
 	}
 	
@@ -188,22 +185,14 @@ public class Node implements NodeInterface, Comparable<Node>{
 	
 	public void disconnect() {
 		int parentId = BitManipulation.calculateParentWebId(this.getWebIdValue(), this.getHeight());
-		Node parent = connections.getLowerNeighbors().get(parentId);
+		Node parent = connections.getLowerNeighbors().get(parentId).getNode();
 		parent.setHeight(parent.getHeight() - 1);
 		parent.getUpperNeighbors().remove(this.getWebIdValue());
 		
 		connections.getLowerNeighbors().remove(parent.getWebIdValue());
-		for(Node lowerNeighbor : connections.getLowerNeighbors().values()){
-			lowerNeighbor.removeNeighbor(this);
-			lowerNeighbor.addDownPointer(parent);
-			NodeState.setNodeState(lowerNeighbor);
-			
-			parent.addUpPointer(lowerNeighbor);
-		}
 		
-		for(Node upPointToMe : connections.getDownPointers().values()){
-			upPointToMe.removeUpPointer(this);
-			NodeState.setNodeState(upPointToMe);
+		for(NodeInterface connection: connections.getDisconnectNodeList()){
+			connection.removeConnection(this, parent);
 		}
 		
 		Node fold = this.getFold();
@@ -292,22 +281,22 @@ public class Node implements NodeInterface, Comparable<Node>{
 		child.setConnections(childConnections);
 		
 		//set child node's lower neighbors
-		TreeMap<Integer,Node> upPointers = connections.getUpPointers();
+		Map<Integer,NodeInterface> upPointers = connections.getUpPointers();
 		childConnections.setLowerNeighbors(upPointers);
-		connections.setUpPointers(new TreeMap<Integer,Node>());
+		connections.setUpPointers(new TreeMap<Integer,NodeInterface>());
 		
 		//notify child node's lower neighbors
-		Iterator<Node> childsLowerNeighbors = upPointers.values().iterator();
+		Iterator<NodeInterface> childsLowerNeighbors = upPointers.values().iterator();
 		while(childsLowerNeighbors.hasNext()){
-			Node lowerNeighbor = childsLowerNeighbors.next();
+			NodeInterface lowerNeighbor = childsLowerNeighbors.next();
 			lowerNeighbor.removeDownPointer(this);
 			lowerNeighbor.addNeighbor(child);
 		}
 		
 		//set child node's surrogate neighbors
-		Iterator<Node> childsSurrogateNeighbors = connections.getUpperNeighbors().values().iterator();
+		Iterator<NodeInterface> childsSurrogateNeighbors = connections.getUpperNeighbors().values().iterator();
 		while(childsSurrogateNeighbors.hasNext()){
-			Node surrogateNeighbor = childsSurrogateNeighbors.next();
+			Node surrogateNeighbor = childsSurrogateNeighbors.next().getNode();
 			child.addDownPointer(surrogateNeighbor);
 			surrogateNeighbor.addUpPointer(child);
 		}
@@ -419,16 +408,16 @@ public class Node implements NodeInterface, Comparable<Node>{
 		return webId.getHeight();
 	}
 	
-	public TreeMap<Integer,Node> getDownPointers(){
+	public Map<Integer,NodeInterface> getDownPointers(){
 		return connections.getDownPointers();
 	}
 	
-	public TreeMap<Integer,Node> getUpPointers(){
+	public Map<Integer,NodeInterface> getUpPointers(){
 		return connections.getUpPointers();
 	}
 	
-	public TreeMap<Integer,Node> getNeighbors(){
-		TreeMap<Integer,Node> result = new TreeMap<Integer,Node>();
+	public TreeMap<Integer,NodeInterface> getNeighbors(){
+		TreeMap<Integer,NodeInterface> result = new TreeMap<Integer,NodeInterface>();
 		result.putAll(connections.getLowerNeighbors());
 		result.putAll(connections.getUpperNeighbors());
 		return result;
@@ -454,7 +443,7 @@ public class Node implements NodeInterface, Comparable<Node>{
 		return connections;
 	}
 	
-	public Map<Integer, Node> getUpperNeighbors(){
+	public Map<Integer, NodeInterface> getUpperNeighbors(){
 		return connections.getUpperNeighbors();
 	}
 	

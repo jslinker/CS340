@@ -77,7 +77,15 @@ public abstract class NodeRole implements NodeInterface{
 	public void replaceConnection(Node aNode, Node replacementNode) {
 		node.replaceConnection(aNode, replacementNode);
 	}
-
+	
+	public int getWebIdValue(){
+		return node.getWebIdValue();
+	}
+	
+	public boolean equals(Object other){
+		return node.equals(other);
+	}
+    
 	@Override
 	public Node getNode(){
 		return node;

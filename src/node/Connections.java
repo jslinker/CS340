@@ -1,7 +1,11 @@
 package node;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+
+import node.roles.*;
 
 
 /**
@@ -11,14 +15,14 @@ import java.util.TreeMap;
  *
  */
 public class Connections {
-	private TreeMap<Integer,Node> downPointers = new TreeMap<Integer,Node>();
-	private TreeMap<Integer,Node> upPointers = new TreeMap<Integer,Node>();
-	private TreeMap<Integer,Node> lowerNeighbors = new TreeMap<Integer,Node>();
-	private TreeMap<Integer,Node> upperNeighbors = new TreeMap<Integer,Node>();
+	private TreeMap<Integer,NodeInterface> downPointers = new TreeMap<Integer,NodeInterface>();
+	private TreeMap<Integer,NodeInterface> upPointers = new TreeMap<Integer,NodeInterface>();
+	private TreeMap<Integer,NodeInterface> lowerNeighbors = new TreeMap<Integer,NodeInterface>();
+	private TreeMap<Integer,NodeInterface> upperNeighbors = new TreeMap<Integer,NodeInterface>();
 	
-	private Node fold = Node.NULL_NODE;
-	private Node surrogateFold = Node.NULL_NODE;
-	private Node inverseSurrogateFold = Node.NULL_NODE;
+	private NodeInterface fold = Node.NULL_NODE;
+	private NodeInterface surrogateFold = Node.NULL_NODE;
+	private NodeInterface inverseSurrogateFold = Node.NULL_NODE;
 	
 	public Connections(){
 	}
@@ -27,65 +31,84 @@ public class Connections {
 	//  GETTERS AND SETTERS
 	//--------------------
 
-	public TreeMap<Integer,Node> getDownPointers() {
+	public Map<Integer,NodeInterface> getDownPointers() {
 		return downPointers;
 	}
-
-	public void setDownPointers(TreeMap<Integer,Node> downPointers) {
-		this.downPointers = downPointers;
+	
+	public ArrayList<NodeInterface> getDisconnectNodeList(){
+		ArrayList<NodeInterface> nodeList = new ArrayList<NodeInterface>();
+		nodeList.addAll(downPointers.values());
+		nodeList.addAll(lowerNeighbors.values());
+		return nodeList;
 	}
 
-	public TreeMap<Integer,Node> getUpPointers() {
+	public void setDownPointers(TreeMap<Integer,NodeInterface> downPointers) {
+		this.downPointers = new TreeMap<Integer, NodeInterface>();
+		for(NodeInterface nodeInterface : downPointers.values()){
+			this.downPointers.put(nodeInterface.getWebIdValue(), new SurrogateNeighbor(nodeInterface));
+		}
+	}
+
+	public Map<Integer,NodeInterface> getUpPointers() {
 		return upPointers;
 	}
 
-	public void setUpPointers(TreeMap<Integer,Node> upPointers) {
-		this.upPointers = upPointers;
+	public void setUpPointers(Map<Integer,NodeInterface> upPointers) {
+		this.upPointers = new TreeMap<Integer, NodeInterface>();
+		for(NodeInterface nodeInterface : upPointers.values()){
+			this.upPointers.put(nodeInterface.getWebIdValue(), new InverseSurrogateNeighbor(nodeInterface));
+		}
 	}
 	
-	public TreeMap<Integer,Node> getLowerNeighbors() {
+	public Map<Integer,NodeInterface> getLowerNeighbors() {
 		return lowerNeighbors;
 	}
 
-	public void setLowerNeighbors(TreeMap<Integer,Node> lowerNeighbors) {
-		this.lowerNeighbors = lowerNeighbors;
+	public void setLowerNeighbors(Map<Integer, NodeInterface> lowerNeighbors) {
+		this.lowerNeighbors = new TreeMap<Integer, NodeInterface>();
+		for(NodeInterface nodeInterface : lowerNeighbors.values()){
+			this.lowerNeighbors.put(nodeInterface.getWebIdValue(), new Neighbor(nodeInterface));
+		}
 	}
 
-	public TreeMap<Integer,Node> getUpperNeighbors() {
+	public Map<Integer,NodeInterface> getUpperNeighbors() {
 		return upperNeighbors;
 	}
 
-	public void setUpperNeighbors(TreeMap<Integer,Node> upperNeighbors) {
-		this.upperNeighbors = upperNeighbors;
+	public void setUpperNeighbors(Map<Integer,NodeInterface> upperNeighbors) {
+		this.upperNeighbors = new TreeMap<Integer, NodeInterface>();
+		for(NodeInterface nodeInterface : upperNeighbors.values()){
+			this.upperNeighbors.put(nodeInterface.getWebIdValue(), new Neighbor(nodeInterface));
+		}
 	}
 
 	public Node getFold() {
-		return this.fold;
+		return this.fold.getNode();
 	}
 
 	public void setFold(Node fold) {
-		this.fold = fold;
+		this.fold = new Fold(fold);
 	}
 
 	public Node getSurrogateFold() {
-		return surrogateFold;
+		return surrogateFold.getNode();
 	}
 
 	public void setSurrogateFold(Node surrogateFold) {
-		this.surrogateFold = surrogateFold;
+		this.surrogateFold = new SurrogateFold(surrogateFold);
 	}
 
 	public Node getInverseSurrogateFold() {
-		return inverseSurrogateFold;
+		return inverseSurrogateFold.getNode();
 	}
 
 	public void setInverseSurrogateFold(Node inverseSurrogateFold){
-		this.inverseSurrogateFold = inverseSurrogateFold;
+		this.inverseSurrogateFold = new InverseSurrogateFold(inverseSurrogateFold);
 	}
 	
 	public Node getLargestUpPointer(){
 		if(upPointers.size() > 0){
-			return upPointers.get(upPointers.lastKey());
+			return upPointers.get(upPointers.lastKey()).getNode();
 		}
 		else{
 			return Node.NULL_NODE;
@@ -94,7 +117,7 @@ public class Connections {
 	
 	public Node getBiggestNeighbor(){
 		if(upperNeighbors.size() > 0){
-			return upperNeighbors.get(upperNeighbors.lastKey());
+			return upperNeighbors.get(upperNeighbors.lastKey()).getNode();
 		}
 		else{
 			return Node.NULL_NODE;
@@ -104,7 +127,7 @@ public class Connections {
 	public Node getNextClosestNeighbor(int myWebId, int webId){
 		assert(myWebId != webId);
 		
-		Node nextClosest = Node.NULL_NODE;
+		NodeInterface nextClosest = Node.NULL_NODE;
 		
 		int bitsToFlip = myWebId ^ webId;
 		
@@ -130,7 +153,24 @@ public class Connections {
 			mask <<= 1;
 		}
 		
-		return nextClosest;
+		if(nextClosest == null){
+			return Node.NULL_NODE;
+		} else {
+			return nextClosest.getNode();
+		}
+	}
+	
+	private ArrayList<NodeInterface> getReplaceNodeList(){
+		ArrayList<NodeInterface> replaceNodeList = new ArrayList<NodeInterface>();
+		replaceNodeList.addAll(downPointers.values());
+		replaceNodeList.addAll(upPointers.values());
+		replaceNodeList.addAll(lowerNeighbors.values());
+		replaceNodeList.addAll(upperNeighbors.values());
+		replaceNodeList.add(fold);
+		replaceNodeList.add(inverseSurrogateFold);
+		replaceNodeList.add(surrogateFold);
+		
+		return replaceNodeList;
 	}
 	
 	//--------------------
@@ -138,56 +178,30 @@ public class Connections {
 	//--------------------
 	
 	public void replaceNode(Node nodeToReplace, Node replacementNode){
-		for (Entry<Integer, Node> entry : downPointers.entrySet())
-		{
-			Node node = entry.getValue();
-		    node.removeUpPointer(nodeToReplace);
-		    node.addUpPointer(replacementNode);
-		}
+		ArrayList<NodeInterface> replaceNodeList = getReplaceNodeList();
 		
-		for (Entry<Integer, Node> entry : upPointers.entrySet())
-		{
-			Node node = entry.getValue();
-			node.removeDownPointer(nodeToReplace);
-			node.addDownPointer(replacementNode);
+		for(NodeInterface nodeInterface : replaceNodeList){
+			nodeInterface.replaceConnection(nodeToReplace, replacementNode);
 		}
-		
-		for (Entry<Integer, Node> entry : lowerNeighbors.entrySet())
-		{
-			Node node = entry.getValue();
-			node.removeNeighbor(nodeToReplace);
-			node.addNeighbor(replacementNode);
-		}
-		
-		for (Entry<Integer, Node> entry : upperNeighbors.entrySet())
-		{
-			Node node = entry.getValue();
-			node.removeNeighbor(nodeToReplace);
-			node.addNeighbor(replacementNode);
-		}
-		
-		replacementNode.setFold(this.getFold());
-		replacementNode.setSurrogateFold(this.getSurrogateFold());
-		replacementNode.setInverseSurrogateFold(this.getInverseSurrogateFold());
 	}
 	
 	//--------------------
 	//  A D D E R S
 	//--------------------		
 	public void addDownPointer(Node downPointer){
-		this.downPointers.put(downPointer.getWebIdValue(), downPointer);
+		this.downPointers.put(downPointer.getWebIdValue(), new SurrogateNeighbor(downPointer));
 	}
 	
 	public void addLowerNeighbor(Node lowerNeighbor){
-		this.lowerNeighbors.put(lowerNeighbor.getWebIdValue(), lowerNeighbor);
+		this.lowerNeighbors.put(lowerNeighbor.getWebIdValue(), new Neighbor(lowerNeighbor));
 	}
 	
 	public void addUpperNeighbor(Node upperNeighbor){
-		this.upperNeighbors.put(upperNeighbor.getWebIdValue(), upperNeighbor);
+		this.upperNeighbors.put(upperNeighbor.getWebIdValue(), new Neighbor(upperNeighbor));
 	}
 	
 	public void addUpPointer(Node upPointer){
-		this.upPointers.put(upPointer.getWebIdValue(), upPointer);
+		this.upPointers.put(upPointer.getWebIdValue(), new InverseSurrogateNeighbor(upPointer));
 	}
 	
 	//--------------------
@@ -214,7 +228,7 @@ public class Connections {
 	//--------------------
 	
 	public boolean hasInverseSurrogateFold(){
-		if(inverseSurrogateFold == Node.NULL_NODE) {
+		if(inverseSurrogateFold.equals(Node.NULL_NODE)) {
 			return false;
 		}
 		else {
@@ -223,7 +237,7 @@ public class Connections {
 	}
 	
 	public boolean hasSurrogateFold() {
-		if(surrogateFold == Node.NULL_NODE) {
+		if(surrogateFold.equals(Node.NULL_NODE)) {
 			return false;
 		}
 		else {
@@ -322,15 +336,15 @@ public class Connections {
 		return downPointers.size();
 	}
 
-	public Node getSmallestDownPointer() {
+	public NodeInterface getSmallestDownPointer() {
 		return downPointers.get(downPointers.firstKey());
 	}
 
 	public Node getSmallestChildlessNeighbor() {
 		Node result = Node.NULL_NODE;
-		for(Node ln: lowerNeighbors.values()){
-			if(ln.getConnections().getUpPointerCount() > 0){
-				return ln;
+		for(NodeInterface ln: lowerNeighbors.values()){
+			if(ln.getNode().getConnections().getUpPointerCount() > 0){
+				return ln.getNode();
 			}
 		}
 		return result;
@@ -343,23 +357,23 @@ public class Connections {
 		info += String.format("Inverse Surrogate Fold WebID: %d\n", inverseSurrogateFold.getWebIdValue());
 		info += "Neighbors: ";
 		
-		for(Node neighbor: upperNeighbors.values()){
+		for(NodeInterface neighbor: upperNeighbors.values()){
 			info += neighbor.getWebIdValue() + " ";
 		}
 		
-		for(Node neighbor: lowerNeighbors.values()){
+		for(NodeInterface neighbor: lowerNeighbors.values()){
 			info += neighbor.getWebIdValue() + " ";
 		}
 		
 		info += "\nUpPointers: ";
 		
-		for(Node upPointer: upPointers.values()){
+		for(NodeInterface upPointer: upPointers.values()){
 			info += upPointer.getWebIdValue() + " ";
 		}
 		
 		info += "\nDownPointers: ";
 		
-		for(Node downPointer: downPointers.values()){
+		for(NodeInterface downPointer: downPointers.values()){
 			info += downPointer.getWebIdValue() + " ";
 		}
 		
