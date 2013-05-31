@@ -55,10 +55,6 @@ public class Contents{
 	public void set(String key, Object value){ 
 		assert (key != null);
 		
-		if(this.containsKey(key)){
-			contents.remove(key);
-		}
-		
 		contents.put(key, value);
 	}
 	

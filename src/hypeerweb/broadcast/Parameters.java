@@ -50,10 +50,6 @@ public class Parameters{
 	public void set(String key, Object value){ 
 		assert (key != null);
 		
-		if(this.containsKey(key)){
-			parameters.remove(key);
-		}
-		
 		parameters.put(key, value);
 	}
 	

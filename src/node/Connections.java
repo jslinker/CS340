@@ -392,10 +392,10 @@ public class Connections {
 		assert (webId >= 0);
 		
 		if(this.upperNeighbors.containsKey(webId)){
-			return this.upperNeighbors.get(webId);
+			return this.upperNeighbors.get(webId).getNode();
 		}
 		else if(this.lowerNeighbors.containsKey(webId)){
-			return this.lowerNeighbors.get(webId);
+			return this.lowerNeighbors.get(webId).getNode();
 		}
 		else{
 			return Node.NULL_NODE;

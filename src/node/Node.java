@@ -589,4 +589,10 @@ public class Node implements NodeInterface, Comparable<Node>{
 		assert (visitor != null && parameters != null);
 		visitor.visit(this, parameters);
 	}
+
+	@Override
+	public void removeConnection(Node aNode, Node parent) {
+		// TODO Auto-generated method stub
+		
+	}
 }
