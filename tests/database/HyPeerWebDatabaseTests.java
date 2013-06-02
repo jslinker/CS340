@@ -3,6 +3,11 @@ package database;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import hypeerweb.HyPeerWeb;
+
+import java.awt.List;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
 import node.Node;
@@ -33,8 +38,8 @@ public class HyPeerWebDatabaseTests {
 		node.addUpPointer(up);
 		node.addDownPointer(down);
 
-		HyPeerWebDatabase.initHyPeerWebDatabase("test_db2.sqlite");
 		db = HyPeerWebDatabase.getSingleton();
+		HyPeerWebDatabase.initHyPeerWebDatabase("test_db2.sqlite");
 	}
 
 	/**
@@ -98,6 +103,24 @@ public class HyPeerWebDatabaseTests {
 		result = db.getNode(node1.getWebIdValue());
 		confirm = node1.constructSimplifiedNodeDomain();
 		assertTrue(result.equals(confirm));
-
+	}
+	
+	/**
+	 * A simple White Box test that checks all the error scenarios with the database
+	 */
+	@Test
+	public void testEdgeCases(){
+		java.util.List<Integer> webIdsList = db.getAllWebIds();
+		assertTrue("We should have a non null list on WebId's", webIdsList != null);
+		assertTrue("We should have 2 Web Id's left over from the other test", webIdsList.size() == 2);
+		
+		HyPeerWebDatabase.initHyPeerWebDatabase();
+		db = HyPeerWebDatabase.getSingleton();
+		
+		assertTrue("We should have a valid hypeerweb singleton", db != null);
+		 
+		HyPeerWebDatabase.clear();
+		webIdsList = db.getAllWebIds();
+		assertTrue("We should have no web id's after the clear operation", webIdsList.size() == 0);
 	}
 }

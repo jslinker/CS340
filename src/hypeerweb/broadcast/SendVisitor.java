@@ -33,8 +33,12 @@ public abstract class SendVisitor implements Visitor{
 	 * If more parameters are required in a subclass this method is overridden.
 	 * Normally this method is only called by the source node before sending the "message".
 	 * @param target - The webId of the node we are to perform the target operation on.
+	 * @precondition The node is in the HyPeerWeb and node.webId = target
+	 * @postcondition |result| = 1 AND (TARGET_KEY, target) in result.
 	 */
 	public static Parameters createInitialParameters(int target){
+		assert (target >= 0);
+		
 		Parameters parameters = new Parameters();
 		parameters.set(TARGET_KEY, target);
 		return parameters;
