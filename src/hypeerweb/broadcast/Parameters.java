@@ -23,7 +23,8 @@ public class Parameters{
 	/**
 	 * Returns true or false depending on whether or not there exists a key-value pair with the given key.
 	 * @param key - The key we are searching for.
-	 * @return
+	 * @precondition None.
+	 * @postcondition True if the key exists; false otherwise.
 	 */
 	public boolean containsKey(String key){
 		return parameters.containsKey(key); 
@@ -32,7 +33,8 @@ public class Parameters{
 	/**
 	 * Retrieves an object from the parameters with the given key.
 	 * @param key
-	 * @return
+	 * @precondition None.
+	 * @postcondition result = object associated with key; otherwise, result = null;
 	 */
 	public Object get(String key){
 		return parameters.get(key); 

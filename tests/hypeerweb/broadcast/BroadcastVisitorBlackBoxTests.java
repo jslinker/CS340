@@ -85,7 +85,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		//Test HyPeerWeb of size one (boundary value analysis).
 		try{
 			broadcastFindAllNodes.visit(nodeZero, BroadcastVisitor.createInitialParameters());
-			assertTrue(web.size() == this.broadcastedToNodesList.size());
+			assertTrue(1 == this.broadcastedToNodesList.size());
 		}
 		catch(AssertionError e){
 			fail("A node not in the HyPeerWeb was visited.");
