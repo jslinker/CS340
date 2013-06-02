@@ -1,6 +1,7 @@
 package hypeerweb;
 
 import junit.framework.TestCase;
+import node.NZWhiteBoxConnectionsTests;
 import node.NodeTests;
 import node.WebIdTests;
 
@@ -21,7 +22,8 @@ import database.HyPeerWebDatabaseTests;
 	BitManipulationTests.class,
 	NodeTests.class, 
 	HyPeerWebDatabaseTests.class,
-	HyPeerWebTests.class
+	HyPeerWebTests.class,
+	NZWhiteBoxConnectionsTests.class
 })
 
 public final class MasterTester extends TestCase{
