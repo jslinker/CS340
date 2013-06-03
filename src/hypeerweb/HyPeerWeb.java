@@ -198,6 +198,6 @@ public class HyPeerWeb {
 	 * @author Jason Robertson
 	 */
 	public void close() {
-		
+		saveToDatabase();
 	}
 }

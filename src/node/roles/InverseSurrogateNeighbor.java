@@ -29,4 +29,8 @@ public class InverseSurrogateNeighbor extends NodeRole{
 		node.removeDownPointer(aNode);
 		node.addDownPointer(replacementNode);
 	}
+	
+	public String getType(){
+		return "InverseSurrogateNeighbor";
+	}
 }

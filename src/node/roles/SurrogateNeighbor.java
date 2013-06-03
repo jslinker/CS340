@@ -28,4 +28,8 @@ public class SurrogateNeighbor extends NodeRole{
 		removeUpPointer(aNode);
 		addUpPointer(replacementNode);
 	}
+	
+	public String getType(){
+		return "SurrogateNeighbor";
+	}
 }

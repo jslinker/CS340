@@ -5,11 +5,22 @@ import hypeerweb.HyPeerWeb;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+
+import printer.DebugPrinter;
+
+import controllers.BroadcastArgs;
+import controllers.BroadcastWindowController;
+
+import node.Node;
+
+import mapper.NodeListing;
 
 /**
  * The central GUI used to display information about the HyPeerWeb and debug information
@@ -18,7 +29,7 @@ import javax.swing.SwingUtilities;
  *
  */
 @SuppressWarnings("serial")
-public class GUI extends JFrame
+public class GUI extends JFrame implements Observer
 {
 	private static GUI singleton = null;
 	
@@ -33,6 +44,7 @@ public class GUI extends JFrame
 	 */
 	public GUI(HyPeerWeb hypeerweb){
 		this.hypeerweb = hypeerweb;
+		//hypeerweb.reload();
 		this.setTitle("HyPeerWeb DEBUGGER V 1.1");
 
 		this.addWindowListener(new WindowAdapter() {
@@ -106,5 +118,21 @@ public class GUI extends JFrame
 	public void finalize(){
 		hypeerweb.close();
 	}
+	
+	public void setDebugContent(String newContent){
+		debugger.setDebugContext(newContent);
+	}
 
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		update(arg0, arg1);
+	}
+	
+	public NodeListing getNodeListing(){
+		return debugger.getNodeListing();
+	}
+	
+	public DebugPrinter getTracePanel(){
+		return debugger.getTracePanel();
+	}
 }

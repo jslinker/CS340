@@ -34,4 +34,8 @@ public class Neighbor extends NodeRole{
 		node.removeNeighbor(aNode);
 		node.addNeighbor(replacementNode);
 	}
+	
+	public String getType(){
+		return "Neighbor";
+	}
 }
