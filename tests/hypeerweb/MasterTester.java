@@ -6,6 +6,7 @@ import hypeerweb.broadcast.ParametersBlackBoxTests;
 import hypeerweb.broadcast.SendVisitorBlackBoxTests;
 import junit.framework.TestCase;
 import node.NodeBlackBoxTests;
+import node.NodeStateTests;
 import node.NodeTests;
 import node.WebIdTests;
 
@@ -24,7 +25,8 @@ import database.HyPeerWebDatabaseTests;
 @Suite.SuiteClasses({
 	WebIdTests.class,
 	BitManipulationTests.class,
-	NodeTests.class, 
+	NodeTests.class,
+	NodeStateTests.class,
 	HyPeerWebDatabaseTests.class,
 	HyPeerWebTests.class,
 	
