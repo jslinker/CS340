@@ -593,7 +593,6 @@ public class Node implements NodeInterface, Comparable<Node>{
 
 	@Override
 	public void removeConnection(Node aNode, Node parent) {
-		// TODO Auto-generated method stub
-		
+				
 	}
 }
