@@ -1,6 +1,7 @@
 package node;
 
 import junit.framework.TestCase;
+import node.roles.Neighbor;
 
 /**
  * Finishes testing the NodeState class.
@@ -50,6 +51,9 @@ public class NodeStateTests extends TestCase{
 		assertTrue(cap == NodeState.CAP);
 	}
 	
+	/**
+	 * Only tests an illegal squeeze call.
+	 */
 	public void testSqueezeStandard(){
 		//Test illegal squeeze call.
 		try{
@@ -59,5 +63,14 @@ public class NodeStateTests extends TestCase{
 		catch(UnsupportedOperationException e){
 			assertTrue(true);
 		}
+	}
+	
+	/**
+	 * Tests the setNodeState(NodeInterface) method.
+	 */
+	public void testSetNodeState(){
+		NodeInterface iNode = new Neighbor(new Node(0));
+		NodeState.setNodeState(iNode);
+		assertTrue(iNode.getNode().getState() == NodeState.CAP);
 	}
 }

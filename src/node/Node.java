@@ -231,9 +231,6 @@ public class Node implements NodeInterface, Comparable<Node>{
 		if(this.getFold().getWebIdValue() > largest.getWebIdValue()){
 			largest = this.getFold();
 		}
-		if(this.getInverseSurrogateFold().getWebIdValue() > largest.getWebIdValue()){
-			largest = this.getInverseSurrogateFold();
-		}
 		if(this.getSurrogateFold().getWebIdValue() > largest.getWebIdValue()){
 			largest = this.getSurrogateFold();
 		}
