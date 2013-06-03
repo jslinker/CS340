@@ -71,7 +71,7 @@ public class GUI extends JFrame implements Observer
 		if(singleton == null){
 			try{
 				singleton = new GUI(hypeerweb);
-						
+					System.out.println("YO");	
 				singleton.setVisible(true);
 			}
 			catch(Exception e)	{
@@ -93,7 +93,7 @@ public class GUI extends JFrame implements Observer
 			@Override
 			public void run() {
 
-				GUI gui = new GUI(HyPeerWeb.getSingleton());
+				GUI gui = GUI.getSingleton(HyPeerWeb.getSingleton());
 				gui.setVisible(true);
 			}
 		});
@@ -120,7 +120,7 @@ public class GUI extends JFrame implements Observer
 	}
 	
 	public void setDebugContent(String newContent){
-		debugger.setDebugContext(newContent);
+		debugger.setDebugContent(newContent);
 	}
 
 	@Override

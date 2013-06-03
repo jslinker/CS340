@@ -27,7 +27,7 @@ public class SendWindowController {
 		}
 		
 		GUISender sender = new GUISender();		
-		Parameters param = GUISender.createInitialParameters(args.getTargetId(), args.getMessage(), main.getTracePanel());
+		Parameters param = GUISender.createInitialParameters(args.getTargetId(), args.getMessage());
 		sender.visit(startNode, param);
 	}
 }

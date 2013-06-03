@@ -35,7 +35,7 @@ public class BroadcastWindowController  {
 		} else {
 			Broadcaster broadcaster = new Broadcaster();
 			
-			broadcaster.visit(startNode, Broadcaster.createInitialParameters(args.getMessage(), main.getTracePanel()));
+			broadcaster.visit(startNode, Broadcaster.createInitialParameters(args.getMessage()));
 		}
 	}
 }

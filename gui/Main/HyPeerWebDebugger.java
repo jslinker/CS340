@@ -143,7 +143,7 @@ public class HyPeerWebDebugger extends JPanel {
 		return debugMapper.getNodeListing();
 	}
 
-	public void setDebugContext(String newContent) {
+	public void setDebugContent(String newContent) {
 		debugStatus.setContent(newContent);		
 	}
 }

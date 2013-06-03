@@ -1,6 +1,8 @@
 package controllers;
 
+import Main.GUI;
 import printer.DebugPrinter;
+import hypeerweb.HyPeerWeb;
 import hypeerweb.broadcast.BroadcastVisitor;
 import hypeerweb.broadcast.Parameters;
 import node.Node;
@@ -33,11 +35,10 @@ public class Broadcaster extends BroadcastVisitor {
 	 * @pre <i>None</i>
 	 * @post result &ne; null AND result.contains(MESSAGE_KEY) AND result.get(MESSAGE_KEY) = message
 	 */
-	public static Parameters createInitialParameters(String message, DebugPrinter printer) {
+	public static Parameters createInitialParameters(String message) {
 		//TODO Phase 5 -- replace the next line with one or more lines implementing the initialization of the parameters.
 		Parameters param = new Parameters();
 		param.set(MESSAGE_KEY, message);
-		param.set(TRACE_KEY, printer);
 		return param;
 	}
 	
@@ -52,16 +53,16 @@ public class Broadcaster extends BroadcastVisitor {
 	 */
 	protected void operation(Node node, Parameters parameters) {
 		//TODO Phase 5 -- implement this method so that it satisfies the post condition.
-		assert(parameters.containsKey(TRACE_KEY) && parameters.containsKey(MESSAGE_KEY));
-		
-		DebugPrinter printer = (DebugPrinter)parameters.get(TRACE_KEY); 
+		String result = "";
 		if(node.getWebIdValue() == 0){
-			printer.println("----------------------------------------");
-			printer.println("---- Starting Broadcast ----");
-			printer.println("----------------------------------------");
+			result += "----------------------------------------\n";
+			result += "---- Starting Broadcast ----\n";
+			result += "----------------------------------------\n";
 		}
 		
-		printer.println(String.format("Broadcasting '%s' to node %d.", parameters.get(MESSAGE_KEY), node.getWebIdValue()));
+		result += String.format("Broadcasting '%s' to node %s.\n", parameters.get(MESSAGE_KEY), node.getWebId());
+		GUI gui = GUI.getSingleton(HyPeerWeb.getSingleton());
+		gui.printToTracePanel(result);
 	}
 	
 	
@@ -69,5 +70,4 @@ public class Broadcaster extends BroadcastVisitor {
 	 * The message parameter identifier to be used to add messages to the parameter list.
 	 */
 	private static final String MESSAGE_KEY = "message";
-	private static final String TRACE_KEY = "trace";
 }
