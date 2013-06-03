@@ -38,6 +38,19 @@ public class NodeTests extends TestCase{
 		assertTrue(Node.NULL_NODE.getNeighbors().size() == 0);
 		assertTrue(Node.NULL_NODE.getUpPointers().size() == 0);
 		assertTrue(Node.NULL_NODE.getDownPointers().size() == 0);
+		
+		try {
+			Node.NULL_NODE.removeConnection(null);
+			Node.NULL_NODE.removeConnection(null, null);
+			Node.NULL_NODE.removeDownPointer(null);
+			Node.NULL_NODE.removeFromHyPeerWeb(null);
+			Node.NULL_NODE.removeNeighbor(null);
+			Node.NULL_NODE.removeUpPointer(null);
+			Node.NULL_NODE.accept(null, null);
+			Node.NULL_NODE.findNode(0);
+		} catch (Exception e) {
+			fail("Should be able to call remove and accept on null objects with throwing an exception");
+		}
 	}
 	
 	public void testConstructors(){
@@ -441,6 +454,35 @@ public class NodeTests extends TestCase{
 			for(int j = 0; j <= i; j++){
 				assertTrue(isNodeDomainCorrect(nodes.get(j), i+1));
 			}
+		}
+	}
+	
+	/**
+	 * A semi-exhaustive Black Box test on removing nodes from the web
+	 */
+	public void testRemoveFromHyPeerWeb() {
+		HyPeerWeb web = HyPeerWeb.getSingleton();
+		web.clear();
+
+		// Generate a random size for the web
+		Random random = new Random();
+		int webSize = random.nextInt(2000-100) + 101;
+		
+		// Fill the web with nodes
+		for(int i = 0; i < webSize; i++) {
+			web.addToHyPeerWeb(new Node(i), web.getNode(0));
+		}
+		
+		Node rootNode = web.getNode(0);
+		// check to make sure all the nodes are present
+		for (int i = webSize - 1; i > 0; i--) {
+			assertTrue(rootNode.findNode(i) != Node.NULL_NODE);
+		}
+		
+		// check to make sure deleting them makes them go away
+		for (int i = webSize - 1; i > 0; i--) {
+			rootNode.removeFromHyPeerWeb(web.getNode(i));
+			assertTrue(rootNode.findNode(i) == Node.NULL_NODE);
 		}
 	}
 	
