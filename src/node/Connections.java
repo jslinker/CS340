@@ -87,7 +87,11 @@ public class Connections {
 	}
 
 	public void setFold(Node fold) {
-		this.fold = new Fold(fold);
+		if(fold == Node.NULL_NODE){
+			this.fold = Node.NULL_NODE;
+		} else{
+			this.fold = new Fold(fold);
+		}
 	}
 
 	public Node getSurrogateFold() {
@@ -95,7 +99,11 @@ public class Connections {
 	}
 
 	public void setSurrogateFold(Node surrogateFold) {
-		this.surrogateFold = new SurrogateFold(surrogateFold);
+		if(surrogateFold == Node.NULL_NODE){
+			this.surrogateFold = Node.NULL_NODE;
+		} else {
+			this.surrogateFold = new SurrogateFold(surrogateFold);
+		}
 	}
 
 	public Node getInverseSurrogateFold() {
@@ -103,7 +111,11 @@ public class Connections {
 	}
 
 	public void setInverseSurrogateFold(Node inverseSurrogateFold){
-		this.inverseSurrogateFold = new InverseSurrogateFold(inverseSurrogateFold);
+		if(inverseSurrogateFold == Node.NULL_NODE){
+			this.inverseSurrogateFold = Node.NULL_NODE;
+		} else {
+			this.inverseSurrogateFold = new InverseSurrogateFold(inverseSurrogateFold);
+		}
 	}
 	
 	public Node getLargestUpPointer(){
@@ -228,7 +240,7 @@ public class Connections {
 	//--------------------
 	
 	public boolean hasInverseSurrogateFold(){
-		if(inverseSurrogateFold.equals(Node.NULL_NODE)) {
+		if(inverseSurrogateFold == Node.NULL_NODE) {
 			return false;
 		}
 		else {
@@ -237,7 +249,7 @@ public class Connections {
 	}
 	
 	public boolean hasSurrogateFold() {
-		if(surrogateFold.equals(Node.NULL_NODE)) {
+		if(surrogateFold == Node.NULL_NODE) {
 			return false;
 		}
 		else {

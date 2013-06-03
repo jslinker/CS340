@@ -422,7 +422,7 @@ public class SimplifiedNodeDomain {
      * @param thisId the first id used in the computation.
      * @param otherId  the second id used in the computation
      * 
-     * @pre <i>None</i>
+     * @pre thisId and otherId must be non-negative and finite
      * @post result = NumberOf 0 &le; i &le; 31 (thisId.binaryRepresentation[i] &ne; otherId.binaryRepresentation[i])
      */
     public static int distanceTo(int thisId, int otherId) {

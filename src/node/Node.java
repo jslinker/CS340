@@ -32,6 +32,7 @@ public class Node implements NodeInterface, Comparable<Node>{
 		@Override public void removeDownPointer(Node downPointer){ return; }
 		@Override public void removeNeighbor(Node neighbor){ return; }
 		@Override public void removeUpPointer(Node upPointer){ return; }
+		@Override public void removeFromHyPeerWeb(Node deleteNode){ return; }
 		@Override public void setWebId(WebId webId){ return; }
 		@Override public void setFold(Node fold){ return; }
 		@Override public void setSurrogateFold(Node surrogateFold){ return; }
@@ -592,7 +593,6 @@ public class Node implements NodeInterface, Comparable<Node>{
 
 	@Override
 	public void removeConnection(Node aNode, Node parent) {
-		// TODO Auto-generated method stub
-		
+				
 	}
 }
