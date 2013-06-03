@@ -449,12 +449,9 @@ public class Node implements NodeInterface, Comparable<Node>{
 	//  S E T T E R S
 	//------------------
 	public void setFold(Node fold){
-		if(fold == null) {
-			connections.setFold(Node.NULL_NODE);
-		}
-		else {
-			connections.setFold(fold);
-		}
+		assert (fold != null);
+		
+		connections.setFold(fold);
 		
 		NodeState.setNodeState(this);
 	}
@@ -464,21 +461,15 @@ public class Node implements NodeInterface, Comparable<Node>{
 	}
 	
 	public void setInverseSurrogateFold(Node inverseSurrogateFold){
-		if(inverseSurrogateFold == null) {
-			connections.setInverseSurrogateFold(Node.NULL_NODE);
-		}
-		else {
-			connections.setInverseSurrogateFold(inverseSurrogateFold);
-		}
+		assert (inverseSurrogateFold != null);
+		
+		connections.setInverseSurrogateFold(inverseSurrogateFold);
 	}
 	
 	public void setSurrogateFold(Node surrogateFold){
-		if(surrogateFold == null) {
-			connections.setSurrogateFold(Node.NULL_NODE);
-		}
-		else {
-			connections.setSurrogateFold(surrogateFold);
-		}
+		assert (surrogateFold != null);
+		
+		connections.setSurrogateFold(surrogateFold);
 	}
 	
 	public void setWebId(int newWebId) {
@@ -486,12 +477,9 @@ public class Node implements NodeInterface, Comparable<Node>{
 	}
 	
 	public void setWebId(WebId newWebId){
-		if(webId == null) {
-			this.webId = WebId.NULL_WEB_ID;
-		}
-		else {
-			this.webId = newWebId;
-		}
+		assert (newWebId != null);
+		
+		this.webId = newWebId;
 		this.height = this.getWebIdHeight();
 		
 		NodeState.setNodeState(this);

@@ -274,4 +274,9 @@ public class NodeBlackBoxTests extends TestCase{
 		existingNodeDomain = existingNode.constructSimplifiedNodeDomain();
 		assertTrue(existingNodeDomain.getNeighbors().size() == 0);
 	}
+	
+	public void testGetContents(){
+		Node aNode = new Node(0);
+		assertTrue(aNode.getContents() != null);
+	}
 }

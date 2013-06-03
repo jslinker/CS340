@@ -87,9 +87,12 @@ public class HyPeerWeb {
 	 * @post result = Node with given webId
 	 */
 	public Node getNode(int webId){
-		assert (webId >= 0 && webId < this.size());
+		//TODO assert (webId >= 0 && webId < this.size());
 		
-		Node result = nodes.get(0).findNode(webId);
+		Node result = Node.NULL_NODE;
+		if(!nodes.isEmpty()){
+			result = nodes.get(0).findNode(webId);
+		}
 		return result;
 	}
 	
