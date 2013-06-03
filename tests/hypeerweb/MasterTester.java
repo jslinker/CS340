@@ -1,7 +1,11 @@
 package hypeerweb;
 
+import hypeerweb.broadcast.BroadcastVisitorBlackBoxTests;
+import hypeerweb.broadcast.ContentsBlackBoxTests;
+import hypeerweb.broadcast.ParametersBlackBoxTests;
+import hypeerweb.broadcast.SendVisitorBlackBoxTests;
 import junit.framework.TestCase;
-import node.NZWhiteBoxConnectionsTests;
+import node.NodeBlackBoxTests;
 import node.NodeTests;
 import node.WebIdTests;
 
@@ -23,7 +27,12 @@ import database.HyPeerWebDatabaseTests;
 	NodeTests.class, 
 	HyPeerWebDatabaseTests.class,
 	HyPeerWebTests.class,
-	NZWhiteBoxConnectionsTests.class
+	
+	BroadcastVisitorBlackBoxTests.class,
+	SendVisitorBlackBoxTests.class,
+	ContentsBlackBoxTests.class,
+	ParametersBlackBoxTests.class,
+	NodeBlackBoxTests.class
 })
 
 public final class MasterTester extends TestCase{
