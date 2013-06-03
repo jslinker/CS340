@@ -1,7 +1,11 @@
 package hypeerweb;
 
 import hypeerweb.broadcast.BroadcastVisitorBlackBoxTests;
+import hypeerweb.broadcast.ContentsBlackBoxTests;
+import hypeerweb.broadcast.ParametersBlackBoxTests;
+import hypeerweb.broadcast.SendVisitorBlackBoxTests;
 import junit.framework.TestCase;
+import node.NodeBlackBoxTests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -13,7 +17,11 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	BroadcastVisitorBlackBoxTests.class
+	SendVisitorBlackBoxTests.class,
+	BroadcastVisitorBlackBoxTests.class,
+	ParametersBlackBoxTests.class,
+	ContentsBlackBoxTests.class,
+	NodeBlackBoxTests.class
 })
 
 public final class BlackBoxTests extends TestCase{
