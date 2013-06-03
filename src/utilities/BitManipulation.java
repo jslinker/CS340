@@ -35,10 +35,6 @@ public class BitManipulation{
 	 * @pre parentWebId >= 0, parentHeight >= 0, parentWebId <= 0x3FFFFFFF, parentHeight <= 30
 	 * @post result = child's webId
 	 */
-	public static int calculateChildWebId(Node parent) {
-		return calculateChildWebId(parent.getWebIdValue(), parent.getHeight());
-	}
-	
 	public static int calculateChildWebId(int parentWebId, int parentHeight){
 		assert (parentWebId >= 0 && parentWebId <= (0x3FFFFFFF) 
 				&& parentHeight >= 0 && parentHeight <=30);
@@ -48,6 +44,17 @@ public class BitManipulation{
 		}
 		
 		return (parentWebId^highestOneBitMask);
+	}
+	
+	/**
+	 * Convenience method, see calculateChildWebId(int,int).
+	 * @param parent The parent node.
+	 * @pre parent != null AND the preconditions for calculateChildWebId(int,int).
+	 * @post See postconditions for calculateChildWebId(int,int).
+	 */
+	public static int calculateChildWebId(Node parent){
+		assert (parent != null);
+		return calculateChildWebId(parent.getWebIdValue(), parent.getHeight());
 	}
 	
 	public static int calculateParentWebId(int childWebId, int childHeight){
@@ -77,7 +84,7 @@ public class BitManipulation{
 	 * the largest node in the web.
 	 * @param webId The webId to test.
 	 * @return True if the webId is a cap node; false otherwise.
-	 * @pre The webId is assumed to be the highest webId in the HyPeerWeb.
+	 * @pre The webId is assumed to be the highest webId in the HyPeerWeb; webId >= 0.
 	 * @post result = (webId is cap node? true: false)
 	 */
 	public static boolean isCapNodeWebId(int webId){
@@ -87,14 +94,8 @@ public class BitManipulation{
 			return true;
 		}
 		else{
-			int target = calculateWebIdHeight(webId);
-			int temp = 0;
-			while(webId > 0){
-				int highestOneBitMask = calculateHighestOneBitMask(webId);
-				webId = webId^highestOneBitMask;
-				temp++;
-			}
-			return (target == temp? true: false);
+			int target = (calculateHighestOneBitMask(webId) << 1) - 1;
+			return (target == webId? true: false);
 		}
 	}
 	

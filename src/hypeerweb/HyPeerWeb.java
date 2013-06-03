@@ -83,12 +83,11 @@ public class HyPeerWeb {
 	 * Returns the node of the provided webId.
 	 * @param webId The webId of the Node you want to get.
 	 * @author Jason Robertson
+	 * @pre 0 <= webId < size()
+	 * @post result = Node with given webId
 	 */
 	public Node getNode(int webId){
-
-		if(nodes.size() == 0) {
-			return Node.NULL_NODE;
-		}
+		assert (webId >= 0 && webId < this.size());
 		
 		Node result = nodes.get(0).findNode(webId);
 		return result;
@@ -197,7 +196,7 @@ public class HyPeerWeb {
 	 * This method is being called from the GUI.
 	 * @author Jason Robertson
 	 */
-	public void close() {
+	public void close(){
 		
 	}
 }
