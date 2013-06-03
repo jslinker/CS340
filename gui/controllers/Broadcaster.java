@@ -1,3 +1,8 @@
+package controllers;
+
+import Main.GUI;
+import printer.DebugPrinter;
+import hypeerweb.HyPeerWeb;
 import hypeerweb.broadcast.BroadcastVisitor;
 import hypeerweb.broadcast.Parameters;
 import node.Node;
@@ -32,7 +37,9 @@ public class Broadcaster extends BroadcastVisitor {
 	 */
 	public static Parameters createInitialParameters(String message) {
 		//TODO Phase 5 -- replace the next line with one or more lines implementing the initialization of the parameters.
-		return null;
+		Parameters param = new Parameters();
+		param.set(MESSAGE_KEY, message);
+		return param;
 	}
 	
 	@Override
@@ -40,12 +47,22 @@ public class Broadcaster extends BroadcastVisitor {
 	 * Prints a string in the TracePanel of the GUI.  The string should contain the message and the
 	 * labeled webId of the current node.
 	 * 
-	 * @pre node &ne; null AND node &isin; HyPeerWeb AND parameters &ne; null AND parameters.contains(MESSAGE_KEY)
+	 * @pre node &ne; null AND node &isin; HyPeerWeb AND parameters &ne; null AND parameters.contains(MESSAGE_KEY) AND parameters.contians(TRACE_KEY)
 	 * @post A string with the message and current node's id should be printed on the tracePanel of the GUI.<br>
 	 * Required format: "Broadcasting '" parameters.get(MESSAGE_ID) "' to node " node.getWebId() ".\n"
 	 */
 	protected void operation(Node node, Parameters parameters) {
 		//TODO Phase 5 -- implement this method so that it satisfies the post condition.
+		String result = "";
+		if(node.getWebIdValue() == 0){
+			result += "----------------------------------------\n";
+			result += "---- Starting Broadcast ----\n";
+			result += "----------------------------------------\n";
+		}
+		
+		result += String.format("Broadcasting '%s' to node %s.\n", parameters.get(MESSAGE_KEY), node.getWebId());
+		GUI gui = GUI.getSingleton(HyPeerWeb.getSingleton());
+		gui.printToTracePanel(result);
 	}
 	
 	

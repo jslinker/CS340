@@ -1,3 +1,4 @@
+package controllers;
 
 import Main.GUI;
 import hypeerweb.HyPeerWeb;

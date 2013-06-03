@@ -7,7 +7,11 @@ import node.NodeState;
 public class Fold extends NodeRole{
 	
 	public Fold(NodeInterface node){
-		this.node = node.getNode();
+		if(node == null){
+			this.node = Node.NULL_NODE;
+		} else{
+			this.node = node.getNode();
+		}
 	}
 
 	@Override
@@ -28,5 +32,9 @@ public class Fold extends NodeRole{
 	@Override
 	public void replaceConnection(Node aNode, Node replacementNode) {
 		node.setFold(replacementNode);
+	}
+	
+	public String getType(){
+		return "Fold";
 	}
 }

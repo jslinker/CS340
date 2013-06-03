@@ -2,11 +2,14 @@ package Main;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 import mapper.DebugMapper;
+import mapper.NodeListing;
 import menus.DebugMenu;
 import printer.DebugPrinter;
 
@@ -19,7 +22,7 @@ import commander.StandardCommands;
  *
  */
 @SuppressWarnings("serial")
-public class HyPeerWebDebugger extends JPanel{
+public class HyPeerWebDebugger extends JPanel {
 	
 	public final int WIDTH = 600;	
 	public final int HEIGHT = 1000;
@@ -134,5 +137,13 @@ public class HyPeerWebDebugger extends JPanel{
 	
 	public DebugPrinter getTracePanel(){
 		return tracePanel;
+	}
+	
+	public NodeListing getNodeListing(){
+		return debugMapper.getNodeListing();
+	}
+
+	public void setDebugContent(String newContent) {
+		debugStatus.setContent(newContent);		
 	}
 }

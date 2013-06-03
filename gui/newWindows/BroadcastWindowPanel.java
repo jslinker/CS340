@@ -10,6 +10,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import mapper.NodeListing;
+
+import controllers.BroadcastArgs;
+import controllers.BroadcastWindowController;
+
 import Main.GUI;
 
 @SuppressWarnings("serial")
@@ -23,6 +28,8 @@ public class BroadcastWindowPanel
     protected JTextField messageBox;
     protected JButton broadcastButton;
 
+    private BroadcastWindowController controller;
+    
     public BroadcastWindowPanel(GUI main) {
         //super(new GridBagLayout());
     	super(new GridLayout(3, 1));
@@ -32,7 +39,7 @@ public class BroadcastWindowPanel
     	messageBoxLabel = new JLabel("Message");
 
         startingNode = new JTextField(3);
-        messageBox = new JTextField(20);	
+        messageBox = new JTextField(20);
         
 		//Build the send button
 		broadcastButton = new JButton("Broadcast Message");
@@ -55,7 +62,8 @@ public class BroadcastWindowPanel
 		this.add(messageNodePanel);
 		
 		this.add(broadcastButton);
-
+		
+		controller = new BroadcastWindowController(main);
     }
     
     private void setBroadcastWindowToNull(){
@@ -70,5 +78,20 @@ public class BroadcastWindowPanel
     	//			existing node in the HyPeerWeb, post an error message in the "debugStatus" component of the GUI.
     	//		B. Otherwise, get the message from the "messageBox" component and broadcast it to all nodes in the HyPeerWeb,
     	//			starting at the indicated start node, using the Broadcaster visitor.
+    	int startId = 0;
+    	String message = null;
+    	try {
+    		main.setDebugContent("");
+    		startId = Integer.parseInt(startingNode.getText());
+    		message = messageBox.getText();
+    	} catch(NumberFormatException e){
+    		main.setDebugContent("Please enter a valid integer as the startId");
+    		return;
+    	} catch(NullPointerException e){
+    		main.setDebugContent("Please enter a valid string in the message box.");
+    		return;
+    	}
+    	
+    	controller.startBroadcast(new BroadcastArgs(startId, message));
     }
 }

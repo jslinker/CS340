@@ -196,7 +196,7 @@ public class HyPeerWeb {
 	 * This method is being called from the GUI.
 	 * @author Jason Robertson
 	 */
-	public void close(){
-		
+	public void close() {
+		saveToDatabase();
 	}
 }

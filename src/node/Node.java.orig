@@ -32,7 +32,6 @@ public class Node implements NodeInterface, Comparable<Node>{
 		@Override public void removeDownPointer(Node downPointer){ return; }
 		@Override public void removeNeighbor(Node neighbor){ return; }
 		@Override public void removeUpPointer(Node upPointer){ return; }
-		@Override public void removeFromHyPeerWeb(Node deleteNode){ return; }
 		@Override public void setWebId(WebId webId){ return; }
 		@Override public void setFold(Node fold){ return; }
 		@Override public void setSurrogateFold(Node surrogateFold){ return; }
@@ -230,6 +229,9 @@ public class Node implements NodeInterface, Comparable<Node>{
 		Node largest = this;
 		if(this.getFold().getWebIdValue() > largest.getWebIdValue()){
 			largest = this.getFold();
+		}
+		if(this.getInverseSurrogateFold().getWebIdValue() > largest.getWebIdValue()){
+			largest = this.getInverseSurrogateFold();
 		}
 		if(this.getSurrogateFold().getWebIdValue() > largest.getWebIdValue()){
 			largest = this.getSurrogateFold();
@@ -535,7 +537,7 @@ public class Node implements NodeInterface, Comparable<Node>{
 		
 		Node other = (Node) obj;
 
-		return this.webId.getValue() == other.webId.getValue();
+		return this.webId == other.webId;
 	}
 
 	@Override
@@ -589,20 +591,12 @@ public class Node implements NodeInterface, Comparable<Node>{
 	}
 
 	@Override
-	public void removeConnection(Node aNode, Node parent) {	
-	}
-	
-	public Node deepCopy(){
-		if(this == Node.NULL_NODE){
-			return Node.NULL_NODE;
-		}
+	public void removeConnection(Node aNode, Node parent) {
+<<<<<<< HEAD
+				
+=======
+		// TODO Auto-generated method stub
 		
-		Node node = new Node(getWebIdValue(), getWebIdHeight());
-		node.setHeight(this.height);
-		
-		//need to find a way to copy connections.  
-		node.setConnections(connections);
-		node.setState(this.state);
-		return node;
+>>>>>>> baa1157ab5f0bdda30c9e6daacad03109b0c03c8
 	}
 }

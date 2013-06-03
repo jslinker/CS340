@@ -28,4 +28,9 @@ public class SurrogateFold extends NodeRole{
 	public void replaceConnection(Node aNode, Node replacementNode) {
 		node.setInverseSurrogateFold(replacementNode);
 	}
+
+	@Override
+	public String getType() {
+		return "SurrogateFold";
+	}
 }
