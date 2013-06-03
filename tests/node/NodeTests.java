@@ -487,6 +487,26 @@ public class NodeTests extends TestCase{
 	}
 	
 	/**
+	 * Simple test for comparing nodes
+	 */
+	public void testCompareNodes(){
+		Node n0 = new Node(0);
+		Node n1 = new Node(1);
+		Node n2 = new Node(2);
+		assertTrue(n0.compareTo(n0) == 0);
+		assertTrue(n0.compareTo(n1) == -1);
+		assertTrue(n0.compareTo(n2) == -1);
+		
+		assertTrue(n1.compareTo(n0) == 1);
+		assertTrue(n1.compareTo(n1) == 0);
+		assertTrue(n1.compareTo(n2) == -1);
+		
+		assertTrue(n2.compareTo(n0) == 1);
+		assertTrue(n2.compareTo(n1) == 1);
+		assertTrue(n2.compareTo(n2) == 0);
+	}
+	
+	/**
 	 * Tests the findLargest() method which should return either the cap node or an edge node.
 	 */
 	public void testFindLargest(){
