@@ -1,13 +1,18 @@
 package hypeerweb.broadcast;
 
+import hypeerweb.HyPeerWeb;
+
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Random;
 
-import hypeerweb.HyPeerWeb;
-import node.Node;
 import junit.framework.TestCase;
+import node.Node;
 
+/**
+ * Tests the specifications for the SendVisitor class.
+ * @author Craig Jacobson
+ *
+ */
 public class SendVisitorBlackBoxTests extends TestCase{
 	
 	private final HashSet<Node> allNodesSet = new HashSet<Node>();
@@ -129,12 +134,11 @@ public class SendVisitorBlackBoxTests extends TestCase{
 		
 		
 		
-		Random generator = new Random();
-		//Test a HyPeerWeb of size 121 (partitioning: valid case).
-		int size = 121;
+		//Test a HyPeerWeb of size 128 (partitioning: valid case).
+		int size = 128;
 		createHyPeerWeb(size);
-		final int startNodeWebId2 = generator.nextInt(size);
-		final int targetNodeWebId2 = generator.nextInt(size);
+		final int startNodeWebId2 = 127;
+		final int targetNodeWebId2 = 0;
 		startNode = web.getNode(startNodeWebId2);
 		
 		SendVisitor sendToNode = new SendVisitor(){
@@ -151,12 +155,12 @@ public class SendVisitorBlackBoxTests extends TestCase{
 		
 		try{
 			sendToNode.visit(startNode, SendVisitor.createInitialParameters(targetNodeWebId2));
-			double log2 = Math.log(2.0d);
-			assertTrue(this.sentToNodesList.size() < Math.ceil((Math.log(size) / log2)));
 		}
 		catch(AssertionError e){
 			fail("A node not in the HyPeerWeb was visited.");
 		}
+		double log2 = Math.log(2.0d);
+		assertTrue("Took too many jumps (not a log(N) algorithm).", this.sentToNodesList.size() <= Math.ceil((Math.log(size) / log2)));
 	}
 	
 	public void testIntermediateOperation(){

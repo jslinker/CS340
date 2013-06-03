@@ -2,6 +2,11 @@ package hypeerweb.broadcast;
 
 import junit.framework.TestCase;
 
+/**
+ * Tests the Parameters specs.
+ * @author Craig Jacobson
+ *
+ */
 public class ParametersBlackBoxTests extends TestCase{
 
 	public void testContainsKey(){

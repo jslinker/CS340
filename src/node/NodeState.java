@@ -17,7 +17,7 @@ public enum NodeState{
 
 		@Override
 		public Pair<Node> squeeze(Pair<Node> pair) {
-			throw new IllegalArgumentException("How did you get here? You can't call squeeze on a " +
+			throw new UnsupportedOperationException("How did you get here? You can't call squeeze on a " +
 					"Standard Node!");
 		}
 	},
@@ -74,23 +74,6 @@ public enum NodeState{
 		public Pair<Node> squeeze(Pair<Node> pair){
 			pair.setUpperBound(pair.getLowerBound().getFold());
 			return pair;
-		}
-	},
-	
-	/**
-	 * This state is unused in our implementation and is only here because it was given
-	 * in an example.
-	 */
-	TERMINAL(5){
-		@Override
-		public String toString(){
-			return "Terminal Node State";
-		}
-
-		@Override
-		public Pair<Node> squeeze(Pair<Node> pair) {
-			throw new IllegalArgumentException("How did you get here? You can't call squeeze on a " +
-					"Terminal Node!");
 		}
 	};
 	

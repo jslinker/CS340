@@ -1,6 +1,6 @@
-package controllers;
 
-import printer.DebugPrinter;
+import Main.GUI;
+import hypeerweb.HyPeerWeb;
 import hypeerweb.broadcast.Parameters;
 import hypeerweb.broadcast.SendVisitor;
 import node.Node;
@@ -34,12 +34,10 @@ public class GUISender extends SendVisitor {
 	 * @pre &exist; node (node &isin; HyPeerWeb AND node.webId = target)
 	 * @post result &ne; null AND result.contains(MESSAGE_KEY) AND result.get(MESSAGE_KEY) = message
 	 */
-	public static Parameters createInitialParameters(int target, String message, DebugPrinter printer){
-		//TODO Phase 5 -- replace the next line with one or more lines implementing the initialization of the parameters.
+	public static Parameters createInitialParameters(int target, String message){
 		Parameters param = new Parameters();
 		param.set(TARGET_KEY, target);
 		param.set(MESSAGE_KEY, message);
-		param.set(TRACE_KEY, printer);
 		return param;
 	}
 
@@ -52,11 +50,10 @@ public class GUISender extends SendVisitor {
 	 * @post A string with the current node's id and message should be printed on the tracePanel of the GUI.<br>
 	 * Required format: "Target node = " node.getWebId() + ", message = '" parameters.get(MESSAGE_ID) "'.\n"
 	 */
-	protected void targetOperation(Node node, Parameters parameters) {
-		assert(parameters.containsKey(MESSAGE_KEY) && parameters.containsKey(TRACE_KEY));
-		
-		DebugPrinter printer = (DebugPrinter)parameters.get(TRACE_KEY);
-		printer.println(String.format("Target node = %d, message = %s.", node.getWebIdValue(), parameters.get(MESSAGE_KEY)));
+	protected void targetOperation(Node node, Parameters parameters){
+		String result = "Target node = " + node.getWebId() + ", message = '" + parameters.get(MESSAGE_KEY) + "'.\n";
+		GUI gui = GUI.getSingleton(HyPeerWeb.getSingleton());
+		gui.printToTracePanel(result);
 	}
 	
 	/**
@@ -68,17 +65,13 @@ public class GUISender extends SendVisitor {
 	 * Required format: "Sending message to node = "  parameters.get(TARGET_ID) ", currently at node " node.getWebId() ".\n"
 	 */	
 	protected void intermediateOperation(Node node, Parameters parameters) {
-		//TODO Phase 5 -- implement this method so that it satisfies the post condition.
-		assert(parameters.containsKey(TARGET_KEY) && parameters.containsKey(TRACE_KEY));
-		
-		DebugPrinter printer = (DebugPrinter)parameters.get(TRACE_KEY);
-		printer.println(String.format("Sending message to node = %d, currently at node %d.", 
-									  parameters.get(TARGET_KEY),node.getWebIdValue()));
+		String result = "Sending message to node = " + parameters.get(TARGET_KEY) + ", currently at node " + node.getWebId() + ".\n";
+		GUI gui = GUI.getSingleton(HyPeerWeb.getSingleton());
+		gui.printToTracePanel(result);
 	}
 	
 	/**
 	 * The message parameter identifier to be used to add messages to the parameter list.
 	 */
 	protected static final String MESSAGE_KEY = "message";
-	protected static final String TRACE_KEY = "trace";
 }

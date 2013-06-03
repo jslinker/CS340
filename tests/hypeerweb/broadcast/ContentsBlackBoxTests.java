@@ -2,6 +2,11 @@ package hypeerweb.broadcast;
 
 import junit.framework.TestCase;
 
+/**
+ * Tests the Contents specs.
+ * @author Craig Jacobson
+ *
+ */
 public class ContentsBlackBoxTests extends TestCase{
 
 	public void testContainsKey(){
