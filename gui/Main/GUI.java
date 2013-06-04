@@ -44,6 +44,7 @@ public class GUI extends JFrame implements Observer
 	 */
 	public GUI(HyPeerWeb hypeerweb){
 		this.hypeerweb = hypeerweb;
+		//TODO allow for reloading of HyPeerWeb segment from the database.
 		//hypeerweb.reload();
 		this.setTitle("HyPeerWeb DEBUGGER V 1.1");
 
@@ -71,7 +72,6 @@ public class GUI extends JFrame implements Observer
 		if(singleton == null){
 			try{
 				singleton = new GUI(hypeerweb);
-					System.out.println("YO");	
 				singleton.setVisible(true);
 			}
 			catch(Exception e)	{
