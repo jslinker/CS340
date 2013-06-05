@@ -157,9 +157,23 @@ public class HyPeerWeb {
 				node.addNeighbor(map.get(ptr));
 			}
 			
-			node.setFold(map.get(data.getFold()));
-			node.setSurrogateFold(map.get(data.getSurrogateFold()));
-			node.setInverseSurrogateFold(map.get(data.getInverseSurrogateFold()));
+			Node fold = map.get(data.getFold());
+			if(fold == null){
+				fold = Node.NULL_NODE;
+			}
+			node.setFold(fold);
+			
+			Node surrogateFold = map.get(data.getSurrogateFold());
+			if(surrogateFold == null){
+				surrogateFold = Node.NULL_NODE;
+			}
+			node.setSurrogateFold(surrogateFold);
+			
+			Node inverseSurrogateFold = map.get(data.getInverseSurrogateFold());
+			if(inverseSurrogateFold == null){
+				inverseSurrogateFold = Node.NULL_NODE;
+			}
+			node.setInverseSurrogateFold(inverseSurrogateFold);
 		}
 		
 		this.nodes = list;
