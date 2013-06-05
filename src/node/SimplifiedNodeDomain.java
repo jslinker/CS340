@@ -426,6 +426,8 @@ public class SimplifiedNodeDomain {
      * @post result = NumberOf 0 &le; i &le; 31 (thisId.binaryRepresentation[i] &ne; otherId.binaryRepresentation[i])
      */
     public static int distanceTo(int thisId, int otherId) {
+    	assert(thisId > -1 && otherId > -1);
+    	assert(thisId <= Integer.MAX_VALUE && otherId <= Integer.MAX_VALUE);
         int result = 0;
         while (thisId != 0 || otherId != 0) {
             int digit1 = thisId & 1;

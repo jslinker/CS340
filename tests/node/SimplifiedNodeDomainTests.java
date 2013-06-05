@@ -2,13 +2,11 @@ package node;
 
 import static org.junit.Assert.*;
 
-import java.sql.ResultSet;
 import java.util.HashSet;
 
 import node.SimplifiedNodeDomain;
 
 import org.junit.Test;
-import org.junit.experimental.theories.suppliers.TestedOn;
 
 public class SimplifiedNodeDomainTests {
 
@@ -34,6 +32,7 @@ public class SimplifiedNodeDomainTests {
 	 */
 	@Test
 	public void testDistanceTo() {
+		// test 1, 2, and 3 loops through
 		assertTrue(SimplifiedNodeDomain.distanceTo(0, 0) == 0);
 		assertTrue(SimplifiedNodeDomain.distanceTo(0, 1) == 1);
 		assertTrue(SimplifiedNodeDomain.distanceTo(0, 2) == 1);
@@ -50,6 +49,39 @@ public class SimplifiedNodeDomainTests {
 	}
 	
 	/**
+	 * Black Box test showing that out of bounds conditions properly throw errors
+	 */
+	@Test(expected=AssertionError.class)
+	public void testDistanceToOutOfBounds() {
+		SimplifiedNodeDomain.distanceTo(-1, 0);
+		SimplifiedNodeDomain.distanceTo(0, Integer.MAX_VALUE);
+		SimplifiedNodeDomain.distanceTo(0, Integer.MAX_VALUE + 1);
+	}
+	
+	/**
+	 * White Box loop testing of distanceTo()
+	 */
+	@Test
+	public void testDistanceToWhiteBox() {
+		// no passes through the loop
+		assertTrue(SimplifiedNodeDomain.distanceTo(0, 0) == 0);
+		
+		// 1 pass through the loop
+		assertTrue(SimplifiedNodeDomain.distanceTo(0, 1) == 1);
+		assertTrue(SimplifiedNodeDomain.distanceTo(0, 2) == 1);
+		assertTrue(SimplifiedNodeDomain.distanceTo(0, 4) == 1);
+		assertTrue(SimplifiedNodeDomain.distanceTo(7, 6) == 1);
+		assertTrue(SimplifiedNodeDomain.distanceTo(7, 5) == 1);
+		assertTrue(SimplifiedNodeDomain.distanceTo(7, 3) == 1);
+		
+		// More than 1 pass throught the loop
+		assertTrue(SimplifiedNodeDomain.distanceTo(0, 3) == 2);
+		assertTrue(SimplifiedNodeDomain.distanceTo(0, 7) == 3);
+		assertTrue(SimplifiedNodeDomain.distanceTo(7, 4) == 2);
+		assertTrue(SimplifiedNodeDomain.distanceTo(7, 0) == 3);
+	}
+	
+	/**
 	 * Black Box test to make sure that closer nodes can be found if they exist
 	 */
 	@Test
@@ -59,6 +91,7 @@ public class SimplifiedNodeDomainTests {
 			neighbors.add(i);
 		}
 		
+		// test with each set of neighbors, surrogate, etc.
 		SimplifiedNodeDomain nodeDomain = new SimplifiedNodeDomain(0, 5, neighbors, new HashSet<Integer>(), new HashSet<Integer>(), 0, 0, 0, 0);
 		assertTrue(nodeDomain.containsCloserNode(0, 31));
 		
@@ -68,6 +101,7 @@ public class SimplifiedNodeDomainTests {
 		nodeDomain = new SimplifiedNodeDomain(0, 5, new HashSet<Integer>(), new HashSet<Integer>(), neighbors, 0, 0, 0, 0);
 		assertTrue(nodeDomain.containsCloserNode(0, 31));
 		
+		// test with each set of fold, surrogate, etc.
 		nodeDomain = new SimplifiedNodeDomain(0, 5, new HashSet<Integer>(), new HashSet<Integer>(), new HashSet<Integer>(), 31, 0, 0, 0);
 		assertTrue(nodeDomain.containsCloserNode(0, 31));
 		
@@ -76,6 +110,28 @@ public class SimplifiedNodeDomainTests {
 		
 		nodeDomain = new SimplifiedNodeDomain(0, 5, new HashSet<Integer>(), new HashSet<Integer>(), new HashSet<Integer>(), 0, 0, 31, 0);
 		assertTrue(nodeDomain.containsCloserNode(0, 31));
+	}
+	
+	/**
+	 * White box internal boundary testing of containsCloser()
+	 */
+	@Test
+	public void testContainsCloserWhiteBox() {
+		// test with empty data structures
+		SimplifiedNodeDomain nodeDomain = new SimplifiedNodeDomain(0, 5, new HashSet<Integer>(), new HashSet<Integer>(), new HashSet<Integer>(), 0, 0, 0, 0);
+		assertTrue(!nodeDomain.containsCloserNode(0, 31));
+		assertTrue(!nodeDomain.containsCloserNode(0, 15));
+		assertTrue(!nodeDomain.containsCloserNode(0, 7));
+		
+		// initialize a set of neighbors with 1 through 32 items
+		HashSet<Integer> neighbors = new HashSet<Integer>();
+		for (int i = 1; i < 32; i++) {
+			neighbors.add(i);
+			nodeDomain = new SimplifiedNodeDomain(i, 5, neighbors, neighbors, neighbors, 0, 0, 0, 0);
+			assertTrue(nodeDomain.containsCloserNode(0, 31));
+			assertTrue(nodeDomain.containsCloserNode(0, 15));
+			assertTrue(nodeDomain.containsCloserNode(0, 7));
+		}
 	}
 	
 	/**
@@ -95,7 +151,74 @@ public class SimplifiedNodeDomainTests {
 	}
 	
 	/**
-	 * Black Box test on the to string methods
+	 * White Box relational testing on equals() method
+	 */
+	@Test
+	public void whiteBoxTestEquals() {
+		HashSet<Integer> neighbors = new HashSet<Integer>();
+		for (int i = 1; i < 32; i++) {
+			neighbors.add(i);
+		}
+		
+		// Equals condition was tested in the above "black box" method
+		// All variations of the not equals are tested below
+		
+		// Test Web ID
+		SimplifiedNodeDomain domain1 = new SimplifiedNodeDomain(1, 0, neighbors, neighbors, neighbors, 0, 0, 0, 0);
+		SimplifiedNodeDomain domain2 = new SimplifiedNodeDomain(0, 0, neighbors, neighbors, neighbors, 0, 0, 0, 0);
+		assertFalse(domain1.equals(domain2));
+		assertFalse(domain2.equals(domain1));
+		
+		domain2 = new SimplifiedNodeDomain(2, 0, neighbors, neighbors, neighbors, 0, 0, 0, 0);
+		assertFalse(domain1.equals(domain2));
+		assertFalse(domain2.equals(domain1));
+		
+		// Test Height
+		domain1 = new SimplifiedNodeDomain(0, 1, neighbors, neighbors, neighbors, 0, 0, 0, 0);
+		domain2 = new SimplifiedNodeDomain(0, 0, neighbors, neighbors, neighbors, 0, 0, 0, 0);
+		assertFalse(domain1.equals(domain2));
+		assertFalse(domain2.equals(domain1));
+				
+		domain2 = new SimplifiedNodeDomain(0, 2, neighbors, neighbors, neighbors, 0, 0, 0, 0);
+		assertFalse(domain1.equals(domain2));
+		assertFalse(domain2.equals(domain1));
+		
+		// Test Fold
+		domain1 = new SimplifiedNodeDomain(0, 0, neighbors, neighbors, neighbors, 1, 0, 0, 0);
+		domain2 = new SimplifiedNodeDomain(0, 0, neighbors, neighbors, neighbors, 0, 0, 0, 0);
+		assertFalse(domain1.equals(domain2));
+		assertFalse(domain2.equals(domain1));
+						
+		domain2 = new SimplifiedNodeDomain(0, 0, neighbors, neighbors, neighbors, 2, 0, 0, 0);
+		assertFalse(domain1.equals(domain2));
+		assertFalse(domain2.equals(domain1));
+		
+		// Test Inverse Fold
+		domain1 = new SimplifiedNodeDomain(0, 0, neighbors, neighbors, neighbors, 0, 1, 0, 0);
+		domain2 = new SimplifiedNodeDomain(0, 0, neighbors, neighbors, neighbors, 0, 0, 0, 0);
+		assertFalse(domain1.equals(domain2));
+		assertFalse(domain2.equals(domain1));
+						
+		domain2 = new SimplifiedNodeDomain(0, 0, neighbors, neighbors, neighbors, 0, 2, 0, 0);
+		assertFalse(domain1.equals(domain2));
+		assertFalse(domain2.equals(domain1));
+		
+		// Test Inverse Surrogate Fold
+		domain1 = new SimplifiedNodeDomain(0, 0, neighbors, neighbors, neighbors, 0, 0, 1, 0);
+		domain2 = new SimplifiedNodeDomain(0, 0, neighbors, neighbors, neighbors, 0, 0, 0, 0);
+		assertFalse(domain1.equals(domain2));
+		assertFalse(domain2.equals(domain1));
+						
+		domain2 = new SimplifiedNodeDomain(0, 0, neighbors, neighbors, neighbors, 0, 0, 2, 0);
+		assertFalse(domain1.equals(domain2));
+		assertFalse(domain2.equals(domain1));
+	}
+	
+	/**
+	 * White Box test on the to string methods
+	 * This is the only instance of data flowing from one method to another int this class.
+	 * While the other methods accept parameters (and are thoroughly tested) none of them
+	 * are truly data flow tests because none of the create or destroy objects, only use.
 	 */
 	@Test
 	public void testToString() {
