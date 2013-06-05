@@ -178,7 +178,7 @@ public class BitManipulation{
 	public static int calculateNextJumpWebId(int currentWebId, int destinationWebId){
 		assert (currentWebId >=0 && destinationWebId >= 0);
 		
-		int bitMask = 0;
+		int bitMask;
 		int bitwiseDifference = currentWebId^destinationWebId;
 		if(currentWebId > destinationWebId){
 			bitMask = calculateHighestOneBitMask(bitwiseDifference);
@@ -193,7 +193,7 @@ public class BitManipulation{
 	 * Calculates all of the neighbors you should broadcast to.
 	 * @param webId The webId of the node to broadcast from.
 	 * @param height The height of the node to broadcast from.
-	 * @pre Valid webId and height greater than or equal to zero. 
+	 * @pre Valid webId and height >= 0; also, height < 32. 
 	 * Note that height is only necessary if webId == 0.
 	 * Also, the broadcast algorithm assumes that the broadcast started at node zero, otherwise
 	 * not all nodes will be broadcasted to.
@@ -201,7 +201,7 @@ public class BitManipulation{
 	 * Arranged in ascending order.
 	 */
 	public static int[] calculateBroadcastWebIds(int webId, int height){
-		assert (webId >= 0 && height >= 0);
+		assert (webId >= 0 && height >= 0 && height < 32);
 		
 		int[] result = null;
 		

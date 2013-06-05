@@ -19,13 +19,20 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 	private final HashSet<Node> allNodesSet = new HashSet<Node>();
 	private final ArrayList<Node> broadcastedToNodesList = new ArrayList<Node>();
 	
+	/**
+	 * Tests for valid output. Since no size method is provided in the Parameters specs
+	 *  the postconditions cannot be fully tested through black box testing.
+	 */
 	public void testCreateInitialParameters(){
 		Parameters param = BroadcastVisitor.createInitialParameters();
 		assertTrue(param != null);
 	}
 	
 	/**
-	 * Test invalid parameters (partitioning: invalid cases).
+	 * Test invalid parameters for visit (partitioning: invalid cases).
+	 * 1. null, null
+	 * 2. node, null
+	 * 3. null, parameters
 	 */
 	public void testVisitInvalidCases(){
 		HyPeerWeb web = HyPeerWeb.getSingleton();
@@ -38,41 +45,52 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 			}
 		};
 		
+		//#1
 		try{
 			broadcastNothing.visit(null, null);
 			fail("Failed to throw exception with null node and null parameters.");
 		}
-		catch(Exception e){
-		}
-		catch(Error e){
+		catch(AssertionError e){
 		}
 		
+		//#2
 		try{
 			broadcastNothing.visit(nodeZero, null);
 			fail("Failed to throw exception with null parameters.");
 		}
-		catch(Exception e){
-		}
-		catch(Error e){
+		catch(AssertionError e){
 		}
 		
+		//#3
 		try{
 			broadcastNothing.visit(null, BroadcastVisitor.createInitialParameters());
 			fail("Failed to throw exception for null node being passed in.");
 		}
-		catch(Exception e){
-		}
-		catch(Error e){
+		catch(AssertionError e){
 		}
 	}
 	
 	/**
-	 * Test valid parameters (partitioning: valid cases).
+	 * The valid partition is all HyPeerWebs of size >= 1, but there are two partitions in
+	 * where you can start the broadcast: at node zero, not at node zero.
+	 * Furthermore, the valid HyPeerWebs can be partitioned into HyPeerWebs that are HyperCubes,
+	 *  and those that aren't.
+	 * 
+	 * 
+	 * Boundary value analysis:
+	 * 1. HyPeerWeb size 1, starting at node zero.
+	 * 2. HyPeerWeb size 2, starting at node zero.
+	 * 
+	 * Test valid partitions:
+	 * 3. HyPeerWeb size 32, starting at node zero.
+	 * 4. HyPeerWeb size 32, starting at the last node (the last node would be a possible 
+	 * boundary for the visit method's start node).
+	 * 5. HyPeerWeb size 37, starting at node zero.
+	 * 6. HyPeerWeb size 37, starting at a node that is not zero.
+	 * Note that the upper bound for HyPeerWebs is too large to test.
 	 */
 	public void testVisitValidCases(){
 		HyPeerWeb web = HyPeerWeb.getSingleton();
-		createHyPeerWeb(1);
-		Node nodeZero = web.getNode(0);
 		
 		//Checks that each node is only visited once and that the node is in the HyPeerWeb.
 		BroadcastVisitor broadcastFindAllNodes = new BroadcastVisitor(){
@@ -82,7 +100,9 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 			}
 		};
 		
-		//Test HyPeerWeb of size one (boundary value analysis).
+		//#1 Test HyPeerWeb of size one (boundary value analysis).
+		createHyPeerWeb(1);
+		Node nodeZero = web.getNode(0);
 		try{
 			broadcastFindAllNodes.visit(nodeZero, BroadcastVisitor.createInitialParameters());
 			assertTrue(1 == this.broadcastedToNodesList.size());
@@ -92,10 +112,9 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		}
 		
 		Random generator = new Random();
-		//Test HyPeerWeb of size two (boundary value analysis).
+		//#2 Test HyPeerWeb of size two (boundary value analysis).
 		createHyPeerWeb(2);
-		int startNodeWebId = generator.nextInt(2);
-		Node startNode = web.getNode(startNodeWebId);
+		Node startNode = web.getNode(0);
 		try{
 			broadcastFindAllNodes.visit(startNode, BroadcastVisitor.createInitialParameters());
 			assertTrue(2 == this.broadcastedToNodesList.size());
@@ -104,10 +123,46 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 			fail("A node not in the HyPeerWeb was visited.");
 		}
 		
-		//Test a HyPeerWeb of size 30 (partitioning: valid case).
-		int size = 30;
+		//#3 Test a HyPeerWeb of size 32.
+		int size = 32;
 		createHyPeerWeb(size);
-		startNodeWebId = generator.nextInt(size);
+		startNode = web.getNode(0);
+		try{
+			broadcastFindAllNodes.visit(startNode, BroadcastVisitor.createInitialParameters());
+			assertTrue(size == this.broadcastedToNodesList.size());
+		}
+		catch(AssertionError e){
+			fail("A node not in the HyPeerWeb was visited.");
+		}
+		
+		//#4 Test a HyPeerWeb of size 32 starting at the last node.
+		size = 32;
+		createHyPeerWeb(size);
+		startNode = web.getNode(31);
+		try{
+			broadcastFindAllNodes.visit(startNode, BroadcastVisitor.createInitialParameters());
+			assertTrue(size == this.broadcastedToNodesList.size());
+		}
+		catch(AssertionError e){
+			fail("A node not in the HyPeerWeb was visited.");
+		}
+		
+		//#5 Test a HyPeerWeb size 37, starting at node zero.
+		size = 37;
+		createHyPeerWeb(size);
+		startNode = web.getNode(0);
+		try{
+			broadcastFindAllNodes.visit(startNode, BroadcastVisitor.createInitialParameters());
+			assertTrue(size == this.broadcastedToNodesList.size());
+		}
+		catch(AssertionError e){
+			fail("A node not in the HyPeerWeb was visited.");
+		}
+		
+		//#6 Test a HyPeerWeb size 37, starting at a node that is not zero.
+		size = 37;
+		createHyPeerWeb(size);
+		int startNodeWebId = generator.nextInt(size-1) + 1;
 		startNode = web.getNode(startNodeWebId);
 		try{
 			broadcastFindAllNodes.visit(startNode, BroadcastVisitor.createInitialParameters());
@@ -118,12 +173,20 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		}
 	}
 	
+	/**
+	 * Tests for invalid inputs into the operation method.
+	 * Invalid: null values, a node not in the HyPeerWeb, or parameters not originally passed in.
+	 * Valid: a node in the HyPeerWeb, and the parameters originally passed in.
+	 * 
+	 * Note that testing whether or not a node was in the HyPeerWeb was done in the
+	 * testVisitValidCases() method.
+	 */
 	public void testOperation(){
 		HyPeerWeb web = HyPeerWeb.getSingleton();
 		createHyPeerWeb(1);
 		final Node nodeZero = web.getNode(0);
 		
-		//Test that node and parameters are non-null.
+		//Testing for valid inputs.
 		BroadcastVisitor operationTestNotNull = new BroadcastVisitor(){
 			public void operation(Node node, Parameters parameters){
 				assert (node != null && parameters != null);
@@ -136,7 +199,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 			fail("Passed null value to operation method.");
 		}
 		
-		//Test that node and parameters are the node and parameters expected.
+		//Testing for valid and expected inputs.
 		final Parameters originalParameters = BroadcastVisitor.createInitialParameters();
 		BroadcastVisitor operationTestSameObject = new BroadcastVisitor(){
 			public void operation(Node node, Parameters parameters){
@@ -151,7 +214,14 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		}
 	}
 	
+	/**
+	 * Creates a web of the given size.
+	 * @param size The size of the desired web.
+	 * @pre size >= 0
+	 */
 	private void createHyPeerWeb(int size){
+		assert (size >= 0);
+		
 		clearAll();
 		HyPeerWeb web = HyPeerWeb.getSingleton();
 		
@@ -168,6 +238,9 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		}
 	}
 	
+	/**
+	 * Resets all webs, sets, and lists in use.
+	 */
 	private void clearAll(){
 		allNodesSet.clear();
 		broadcastedToNodesList.clear();
