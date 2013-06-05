@@ -25,3 +25,5 @@ Test Database - Craig - May 7
 UML Diagram - Everyone - May 8
 
 Create PERT Charts - Joseph
+
+![Contacts](/extra_content/contact_info.png "Contacts")

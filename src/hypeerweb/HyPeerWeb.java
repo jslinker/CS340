@@ -83,14 +83,16 @@ public class HyPeerWeb {
 	 * Returns the node of the provided webId.
 	 * @param webId The webId of the Node you want to get.
 	 * @author Jason Robertson
+	 * @pre 0 <= webId < size()
+	 * @post result = Node with given webId
 	 */
 	public Node getNode(int webId){
-
-		if(nodes.size() == 0) {
-			return Node.NULL_NODE;
-		}
+		//TODO assert (webId >= 0 && webId < this.size());
 		
-		Node result = nodes.get(0).findNode(webId);
+		Node result = Node.NULL_NODE;
+		if(!nodes.isEmpty()){
+			result = nodes.get(0).findNode(webId);
+		}
 		return result;
 	}
 	
@@ -155,9 +157,23 @@ public class HyPeerWeb {
 				node.addNeighbor(map.get(ptr));
 			}
 			
-			node.setFold(map.get(data.getFold()));
-			node.setSurrogateFold(map.get(data.getSurrogateFold()));
-			node.setInverseSurrogateFold(map.get(data.getInverseSurrogateFold()));
+			Node fold = map.get(data.getFold());
+			if(fold == null){
+				fold = Node.NULL_NODE;
+			}
+			node.setFold(fold);
+			
+			Node surrogateFold = map.get(data.getSurrogateFold());
+			if(surrogateFold == null){
+				surrogateFold = Node.NULL_NODE;
+			}
+			node.setSurrogateFold(surrogateFold);
+			
+			Node inverseSurrogateFold = map.get(data.getInverseSurrogateFold());
+			if(inverseSurrogateFold == null){
+				inverseSurrogateFold = Node.NULL_NODE;
+			}
+			node.setInverseSurrogateFold(inverseSurrogateFold);
 		}
 		
 		this.nodes = list;
@@ -198,6 +214,6 @@ public class HyPeerWeb {
 	 * @author Jason Robertson
 	 */
 	public void close() {
-		
+		saveToDatabase();
 	}
 }

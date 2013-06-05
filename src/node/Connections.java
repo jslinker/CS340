@@ -44,8 +44,12 @@ public class Connections {
 
 	public void setDownPointers(TreeMap<Integer,NodeInterface> downPointers) {
 		this.downPointers = new TreeMap<Integer, NodeInterface>();
-		for(NodeInterface nodeInterface : downPointers.values()){
-			this.downPointers.put(nodeInterface.getWebIdValue(), new SurrogateNeighbor(nodeInterface));
+		if(downPointers != null){
+			for(NodeInterface nodeInterface : downPointers.values()){
+				this.downPointers.put(nodeInterface.getWebIdValue(), new SurrogateNeighbor(nodeInterface));
+			}
+		} else{
+			this.downPointers = null;
 		}
 	}
 
@@ -55,8 +59,12 @@ public class Connections {
 
 	public void setUpPointers(Map<Integer,NodeInterface> upPointers) {
 		this.upPointers = new TreeMap<Integer, NodeInterface>();
-		for(NodeInterface nodeInterface : upPointers.values()){
-			this.upPointers.put(nodeInterface.getWebIdValue(), new InverseSurrogateNeighbor(nodeInterface));
+		if(upPointers != null){
+			for(NodeInterface nodeInterface : upPointers.values()){
+				this.upPointers.put(nodeInterface.getWebIdValue(), new InverseSurrogateNeighbor(nodeInterface));
+			}
+		} else{
+			this.upPointers = null;
 		}
 	}
 	
@@ -66,8 +74,12 @@ public class Connections {
 
 	public void setLowerNeighbors(Map<Integer, NodeInterface> lowerNeighbors) {
 		this.lowerNeighbors = new TreeMap<Integer, NodeInterface>();
-		for(NodeInterface nodeInterface : lowerNeighbors.values()){
-			this.lowerNeighbors.put(nodeInterface.getWebIdValue(), new Neighbor(nodeInterface));
+		if(lowerNeighbors != null){
+			for(NodeInterface nodeInterface : lowerNeighbors.values()){
+				this.lowerNeighbors.put(nodeInterface.getWebIdValue(), new Neighbor(nodeInterface));
+			}
+		} else{
+			this.lowerNeighbors = null;
 		}
 	}
 
@@ -77,8 +89,12 @@ public class Connections {
 
 	public void setUpperNeighbors(Map<Integer,NodeInterface> upperNeighbors) {
 		this.upperNeighbors = new TreeMap<Integer, NodeInterface>();
-		for(NodeInterface nodeInterface : upperNeighbors.values()){
-			this.upperNeighbors.put(nodeInterface.getWebIdValue(), new Neighbor(nodeInterface));
+		if(upperNeighbors != null){
+			for(NodeInterface nodeInterface : upperNeighbors.values()){
+				this.upperNeighbors.put(nodeInterface.getWebIdValue(), new Neighbor(nodeInterface));
+			}
+		} else {
+			this.upperNeighbors = null;
 		}
 	}
 
@@ -201,38 +217,54 @@ public class Connections {
 	//  A D D E R S
 	//--------------------		
 	public void addDownPointer(Node downPointer){
-		this.downPointers.put(downPointer.getWebIdValue(), new SurrogateNeighbor(downPointer));
+		if(this.downPointers != null){
+			this.downPointers.put(downPointer.getWebIdValue(), new SurrogateNeighbor(downPointer));
+		}
 	}
 	
 	public void addLowerNeighbor(Node lowerNeighbor){
-		this.lowerNeighbors.put(lowerNeighbor.getWebIdValue(), new Neighbor(lowerNeighbor));
+		if(this.lowerNeighbors != null){
+			this.lowerNeighbors.put(lowerNeighbor.getWebIdValue(), new Neighbor(lowerNeighbor));
+		}
 	}
 	
 	public void addUpperNeighbor(Node upperNeighbor){
-		this.upperNeighbors.put(upperNeighbor.getWebIdValue(), new Neighbor(upperNeighbor));
+		if(this.upperNeighbors != null){
+			this.upperNeighbors.put(upperNeighbor.getWebIdValue(), new Neighbor(upperNeighbor));
+		}
 	}
 	
 	public void addUpPointer(Node upPointer){
-		this.upPointers.put(upPointer.getWebIdValue(), new InverseSurrogateNeighbor(upPointer));
+		if(this.upPointers != null){
+			this.upPointers.put(upPointer.getWebIdValue(), new InverseSurrogateNeighbor(upPointer));
+		}
 	}
 	
 	//--------------------
 	//  R E M O V E R S
 	//--------------------	
 	public void removeDownPointer(Node downPointer){
-		this.downPointers.remove(downPointer.getWebIdValue());
+		if(this.downPointers != null){
+			this.downPointers.remove(downPointer.getWebIdValue());
+		}
 	}
 	
 	public void removeLowerNeighbor(Node lowerNeighbor){
-		this.lowerNeighbors.remove(lowerNeighbor.getWebIdValue());
+		if(this.lowerNeighbors != null){
+			this.lowerNeighbors.remove(lowerNeighbor.getWebIdValue());
+		}
 	}
 	
 	public void removeUpperNeighbor(Node upperNeighbor){
-		this.upperNeighbors.remove(upperNeighbor.getWebIdValue());
+		if(this.upperNeighbors != null){
+			this.upperNeighbors.remove(upperNeighbor.getWebIdValue());
+		}
 	}
 	
 	public void removeUpPointer(Node upPointer){
-		this.upPointers.remove(upPointer.getWebIdValue());
+		if(this.upPointers != null){
+			this.upPointers.remove(upPointer.getWebIdValue());
+		}
 	}
 	
 	//--------------------
@@ -302,29 +334,25 @@ public class Connections {
 			if (other.downPointers != null){
 				return false;
 			}
-		} else if (!downPointers.equals(other.downPointers))
+		} else if (!downPointers.equals(other.downPointers)){
 			return false;
-		if (fold == null) {
-			if (other.fold != null){
+		}
+		if (fold == Node.NULL_NODE) {
+			if (other.fold != Node.NULL_NODE){
 				return false;
 			}
 		} else if (!fold.equals(other.fold)){
 			return false;
 		}
-		if (inverseSurrogateFold == null) {
-			if (other.inverseSurrogateFold != null){
+		if (inverseSurrogateFold == Node.NULL_NODE) {
+			if (other.inverseSurrogateFold != Node.NULL_NODE){
 				return false;
 			}
 		} else if (!inverseSurrogateFold.equals(other.inverseSurrogateFold)){
 			return false;
 		}
-		/*if (neighbors == null) {
-			if (other.neighbors != null)
-				return false;
-		} else if (!neighbors.equals(other.neighbors))
-			return false;*/
-		if (surrogateFold == null) {
-			if (other.surrogateFold != null){
+		if (surrogateFold == Node.NULL_NODE) {
+			if (other.surrogateFold != Node.NULL_NODE){
 				return false;
 			}
 		} else if (!surrogateFold.equals(other.surrogateFold)){
@@ -341,18 +369,30 @@ public class Connections {
 	}
 
 	public int getUpPointerCount() {
+		if(upPointers == null){
+			return 0;
+		}
 		return upPointers.size();
 	}
 	
 	public int getDownPointerCount() {
+		if(downPointers == null){
+			return 0;
+		}
 		return downPointers.size();
 	}
 
 	public NodeInterface getSmallestDownPointer() {
+		if(downPointers == null){
+			return Node.NULL_NODE;
+		}
 		return downPointers.get(downPointers.firstKey());
 	}
 
 	public Node getSmallestChildlessNeighbor() {
+		if(lowerNeighbors == null){
+			return Node.NULL_NODE;
+		}
 		Node result = Node.NULL_NODE;
 		for(NodeInterface ln: lowerNeighbors.values()){
 			if(ln.getNode().getConnections().getUpPointerCount() > 0){
@@ -414,5 +454,20 @@ public class Connections {
 		}
 	}
 
-	
+	/**
+	 * Returns a copy of this Connections.  Used primarily for testing.
+	 * @return
+	 */
+	public Connections deepCopy(){
+		Connections con = new Connections();
+		con.setDownPointers(new TreeMap<Integer, NodeInterface>(this.downPointers));
+		con.setUpPointers(new TreeMap<Integer, NodeInterface>(this.upPointers));
+		con.setUpperNeighbors(new TreeMap<Integer, NodeInterface>(upperNeighbors));
+		con.setLowerNeighbors(new TreeMap<Integer, NodeInterface>(this.lowerNeighbors));
+		con.setFold(fold.getNode().deepCopy());
+		con.setSurrogateFold(surrogateFold.getNode().deepCopy());
+		con.setInverseSurrogateFold(inverseSurrogateFold.getNode().deepCopy());
+		
+		return con;		
+	}
 }

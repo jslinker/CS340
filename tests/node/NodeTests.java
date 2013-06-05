@@ -634,4 +634,18 @@ public class NodeTests extends TestCase{
 		 * End Exhaustive Testing
 		 */
 	}
+	
+	public void testEquals(){
+		//Test null.
+		Node newNode = new Node(0);
+		assertFalse(newNode.equals(null));
+		
+		//Test non-Node object.
+		assertFalse(newNode.equals("Node"));
+	}
+	
+	public void testToString(){
+		Node newNode = new Node(0);
+		assertTrue(newNode.toString().equals("Node [webId=0]"));
+	}
 }

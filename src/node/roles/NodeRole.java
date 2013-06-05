@@ -81,11 +81,32 @@ public abstract class NodeRole implements NodeInterface{
 	public int getWebIdValue(){
 		return node.getWebIdValue();
 	}
-	
-	public boolean equals(Object other){
-		return node.equals(other);
-	}
     
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((node == null) ? 0 : node.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NodeRole other = (NodeRole) obj;
+		if (node == null) {
+			if (other.node != null)
+				return false;
+		} else if (!node.equals(other.node))
+			return false;
+		return true;
+	}
+
 	@Override
 	public Node getNode(){
 		return node;
@@ -99,5 +120,11 @@ public abstract class NodeRole implements NodeInterface{
 	@Override
 	public void accept(Visitor visitor, Parameters parameters){
 		node.accept(visitor, parameters);
+	}
+	
+	public abstract String getType();
+	
+	public String toString(){
+		return getType() + " " + node.toString();
 	}
 }

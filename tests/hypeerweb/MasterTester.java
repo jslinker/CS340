@@ -1,8 +1,15 @@
 package hypeerweb;
 
+import hypeerweb.broadcast.BroadcastVisitorBlackBoxTests;
+import hypeerweb.broadcast.ContentsBlackBoxTests;
+import hypeerweb.broadcast.ParametersBlackBoxTests;
+import hypeerweb.broadcast.SendVisitorBlackBoxTests;
 import junit.framework.TestCase;
 import node.NZWhiteBoxConnectionsTests;
+import node.NodeBlackBoxTests;
+import node.NodeStateTests;
 import node.NodeTests;
+import node.SimplifiedNodeDomainTests;
 import node.WebIdTests;
 
 import org.junit.runner.RunWith;
@@ -20,10 +27,19 @@ import database.HyPeerWebDatabaseTests;
 @Suite.SuiteClasses({
 	WebIdTests.class,
 	BitManipulationTests.class,
-	NodeTests.class, 
+	NodeTests.class,
+	NodeStateTests.class,
 	HyPeerWebDatabaseTests.class,
 	HyPeerWebTests.class,
-	NZWhiteBoxConnectionsTests.class
+	
+	BroadcastVisitorBlackBoxTests.class,
+	SendVisitorBlackBoxTests.class,
+	ContentsBlackBoxTests.class,
+	ParametersBlackBoxTests.class,
+	NodeBlackBoxTests.class,
+	
+	NZWhiteBoxConnectionsTests.class,
+	SimplifiedNodeDomainTests.class
 })
 
 public final class MasterTester extends TestCase{

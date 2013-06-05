@@ -152,21 +152,22 @@ public class StandardCommands extends JPanel
 	public void insertButtonPressed()	{
 		NodeListing listing = main.getHyPeerWebDebugger().getMapper().getNodeListing();
 		if(listing.listSize() > listing.MAX_NUMBER_OF_NODES) {
-			// print an error in debug status
+			setDebugContent(String.format("Node list size is at its maximum size (%d), please remove nodes before" +
+										 "attempting to insert more.", listing.listSize()));
 		} else {
 			int insertIndex = listing.getSelectedIndex();
+			main.setDebugContent("");
 			HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();
 			Node startNode = hypeerweb.getNode(insertIndex);
 			Node newNode = new Node(10,10);
-			if(startNode != null) {
+			if(startNode != null && startNode != Node.NULL_NODE) {
 				hypeerweb.addToHyPeerWeb(newNode, startNode);
 				listing.increaseListSize();
-			} else if (insertIndex == 0 && hypeerweb.size() == 0) {
-				hypeerweb.addNode(newNode);
+			} else if (insertIndex == -1 && hypeerweb.size() == 0) {
+				hypeerweb.addToHyPeerWeb(newNode, Node.NULL_NODE);
 				listing.increaseListSize();
 			} else {
-				DebugPrinter tracePanel = main.getHyPeerWebDebugger().getTracePanel();
-				tracePanel.println("No valid node was selected for insertion.");
+				setDebugContent("Please select a valid node to perform insertion");
 			}
 		}
 		
@@ -190,13 +191,13 @@ public class StandardCommands extends JPanel
 	public void removeButtonPressed() {
 		NodeListing listing = main.getHyPeerWebDebugger().getMapper().getNodeListing();
 		if(listing.listSize() == 1) {
-			// print an error in debug status
+			setDebugContent("Node Listing size = 1, can't remove another node");
 		} else {
 			int insertIndex = listing.getSelectedIndex();
 			HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();
 			Node startNode = hypeerweb.getNode(insertIndex);
 			if(startNode != null) {
-				hypeerweb.removeNode(startNode);
+				hypeerweb.removeFromHyPeerWeb(startNode);
 				listing.decreaseListSize();
 			} else {
 				DebugPrinter tracePanel = main.getHyPeerWebDebugger().getTracePanel();
@@ -214,6 +215,10 @@ public class StandardCommands extends JPanel
 		//			2. Decrease the nodeListing size (See the NodeListing class for details).
 	}
 	
+	private void setDebugContent(String newContent){
+		main.setDebugContent(newContent);
+	}
+	
 	/**
 	 *  Sends a message through the HyPeerWeb
 	 */
@@ -227,5 +232,4 @@ public class StandardCommands extends JPanel
 	public void broadcastButtonPressed() {
 		broadcastWindow = new BroadcastWindow(main, "Broadcast Message");
 	}
-
 }

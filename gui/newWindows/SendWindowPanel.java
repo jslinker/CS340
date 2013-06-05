@@ -10,6 +10,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import controllers.SendArgs;
+import controllers.SendWindowController;
+
 import Main.GUI;
 
 @SuppressWarnings("serial")
@@ -24,6 +27,8 @@ public class SendWindowPanel
     protected JTextField endingNode;
     protected JTextField messageBox;
     protected JButton sendButton;
+    
+    private SendWindowController controller;
 
     public SendWindowPanel(GUI main) {
         //super(new GridBagLayout());
@@ -63,6 +68,7 @@ public class SendWindowPanel
 		
 		this.add(sendButton);
 
+		controller = new SendWindowController(main);
     }
     
     private void setSendWindowToNull(){
@@ -79,6 +85,24 @@ public class SendWindowPanel
     	//			existing node in the HyPeerWeb, post an error message in the "debugStatus" component of the GUI.
     	//			2. Otherwise, get the message from the "messageBox" component and send it from the start node to the target node
     	//				in the HyPeerWeb using the "GUISender" visitor.
+    	
+    	int startId = 0;
+    	int targetId = 0;
+    	String message = null;
+    	try {
+    		main.setDebugContent("");
+    		startId = Integer.parseInt(startingNode.getText());
+    		targetId = Integer.parseInt(endingNode.getText());
+    		message = messageBox.getText();
+    	} catch(NumberFormatException e){
+    		main.setDebugContent("Please enter a valid integer as the startId");
+    		return;
+    	} catch(NullPointerException e){
+    		main.setDebugContent("Please enter a valid string in the message box.");
+    		return;
+    	}
+    	
+    	controller.startSend(new SendArgs(startId, targetId, message));
     }
 }
 

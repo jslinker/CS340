@@ -35,10 +35,6 @@ public class BitManipulation{
 	 * @pre parentWebId >= 0, parentHeight >= 0, parentWebId <= 0x3FFFFFFF, parentHeight <= 30
 	 * @post result = child's webId
 	 */
-	public static int calculateChildWebId(Node parent) {
-		return calculateChildWebId(parent.getWebIdValue(), parent.getHeight());
-	}
-	
 	public static int calculateChildWebId(int parentWebId, int parentHeight){
 		assert (parentWebId >= 0 && parentWebId <= (0x3FFFFFFF) 
 				&& parentHeight >= 0 && parentHeight <=30);
@@ -48,6 +44,17 @@ public class BitManipulation{
 		}
 		
 		return (parentWebId^highestOneBitMask);
+	}
+	
+	/**
+	 * Convenience method, see calculateChildWebId(int,int).
+	 * @param parent The parent node.
+	 * @pre parent != null AND the preconditions for calculateChildWebId(int,int).
+	 * @post See postconditions for calculateChildWebId(int,int).
+	 */
+	public static int calculateChildWebId(Node parent){
+		assert (parent != null);
+		return calculateChildWebId(parent.getWebIdValue(), parent.getHeight());
 	}
 	
 	public static int calculateParentWebId(int childWebId, int childHeight){
@@ -77,7 +84,7 @@ public class BitManipulation{
 	 * the largest node in the web.
 	 * @param webId The webId to test.
 	 * @return True if the webId is a cap node; false otherwise.
-	 * @pre The webId is assumed to be the highest webId in the HyPeerWeb.
+	 * @pre The webId is assumed to be the highest webId in the HyPeerWeb; webId >= 0.
 	 * @post result = (webId is cap node? true: false)
 	 */
 	public static boolean isCapNodeWebId(int webId){
@@ -87,14 +94,8 @@ public class BitManipulation{
 			return true;
 		}
 		else{
-			int target = calculateWebIdHeight(webId);
-			int temp = 0;
-			while(webId > 0){
-				int highestOneBitMask = calculateHighestOneBitMask(webId);
-				webId = webId^highestOneBitMask;
-				temp++;
-			}
-			return (target == temp? true: false);
+			int target = (calculateHighestOneBitMask(webId) << 1) - 1;
+			return (target == webId? true: false);
 		}
 	}
 	
@@ -177,7 +178,7 @@ public class BitManipulation{
 	public static int calculateNextJumpWebId(int currentWebId, int destinationWebId){
 		assert (currentWebId >=0 && destinationWebId >= 0);
 		
-		int bitMask = 0;
+		int bitMask;
 		int bitwiseDifference = currentWebId^destinationWebId;
 		if(currentWebId > destinationWebId){
 			bitMask = calculateHighestOneBitMask(bitwiseDifference);
@@ -192,7 +193,7 @@ public class BitManipulation{
 	 * Calculates all of the neighbors you should broadcast to.
 	 * @param webId The webId of the node to broadcast from.
 	 * @param height The height of the node to broadcast from.
-	 * @pre Valid webId and height greater than or equal to zero. 
+	 * @pre Valid webId and height >= 0; also, height < 32. 
 	 * Note that height is only necessary if webId == 0.
 	 * Also, the broadcast algorithm assumes that the broadcast started at node zero, otherwise
 	 * not all nodes will be broadcasted to.
@@ -200,7 +201,7 @@ public class BitManipulation{
 	 * Arranged in ascending order.
 	 */
 	public static int[] calculateBroadcastWebIds(int webId, int height){
-		assert (webId >= 0 && height >= 0);
+		assert (webId >= 0 && height >= 0 && height < 32);
 		
 		int[] result = null;
 		
