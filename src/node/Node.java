@@ -580,6 +580,9 @@ public class Node implements NodeInterface, Comparable<Node>{
 	public void removeConnection(Node aNode, Node parent) {	
 	}
 	
+	//I was writing this and a similar method in connections for testing purposes
+	//but they are not working yet.  Haven't worked out the creation of new objects
+	//when there is a web with bi-directional references.
 	public Node deepCopy(){
 		if(this == Node.NULL_NODE){
 			return Node.NULL_NODE;

@@ -200,7 +200,9 @@ public class HyPeerWebDatabase {
 
 			result = new SimplifiedNodeDomain(web_id, height, neighbors,
 					upPointers, downPointers, fold, surrogate_fold, inverse_surrogate_fold, state);
-
+			
+			rs.close();
+			stmt.close();
 		}
 		catch(SQLException e) {
 			System.out.println(e);
@@ -227,6 +229,9 @@ public class HyPeerWebDatabase {
 			while(rs.next()) {
 				result.add(rs.getInt(2));
 			}
+			
+			rs.close();
+			stmt.close();
 		}
 		catch (SQLException e) {
 			System.out.println(e);
@@ -252,6 +257,8 @@ public class HyPeerWebDatabase {
 			while(rs.next()) {
 				result.add(rs.getInt(1));
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch(SQLException e) {
 			System.out.println(e);
@@ -276,10 +283,10 @@ public class HyPeerWebDatabase {
 			
 			Statement stmt = getSingleton().getConnection().createStatement();
 			
-			stmt.execute(sql_delete);
-			stmt.execute(sql_upPtrs);
-			stmt.execute(sql_downPtrs);
-			stmt.execute(sql_neighbors);					
+			stmt.executeUpdate(sql_delete);
+			stmt.executeUpdate(sql_upPtrs);
+			stmt.executeUpdate(sql_downPtrs);
+			stmt.executeUpdate(sql_neighbors);					
 			
 			// Store General Info
 
@@ -287,13 +294,12 @@ public class HyPeerWebDatabase {
 					"(web_id, height, fold, surrogate_fold, inverse_surrogate_fold, state) " +
 					"VALUES ('%d', '%d', '%d', '%d', '%d', '%d');",
 					node.getWebIdValue(),
-					node.getWebIdHeight(),
+					node.getHeight(),
 					node.getFold().getWebIdValue(),
 					node.getSurrogateFold().getWebIdValue(),
 					node.getInverseSurrogateFold().getWebIdValue(),
 					node.getState().STATE_ID
 					);
-
 			stmt.executeUpdate(sql);
 
 			// Store Neighbors

@@ -24,6 +24,11 @@ public class Connections {
 	private NodeInterface surrogateFold = Node.NULL_NODE;
 	private NodeInterface inverseSurrogateFold = Node.NULL_NODE;
 	
+	/**
+	 * Default constructor
+	 * @pre NONE
+	 * @post result = initialized Connections
+	 */
 	public Connections(){
 	}
 	
@@ -31,10 +36,22 @@ public class Connections {
 	//  GETTERS AND SETTERS
 	//--------------------
 
+	/**
+	 * Returns a map of all this Connection's downpointers.
+	 * @pre NONE
+	 * @post result = Map of all downpointers.
+	 */
 	public Map<Integer,NodeInterface> getDownPointers() {
 		return downPointers;
 	}
 	
+	/**
+	 * Contructs a list of every node that a node must notify when it is
+	 * disconnected from the HyPeerWeb
+	 * 
+	 * @pre NONE
+	 * @post result = List of nodes that the disconnected node must notify.
+	 */
 	public ArrayList<NodeInterface> getDisconnectNodeList(){
 		ArrayList<NodeInterface> nodeList = new ArrayList<NodeInterface>();
 		nodeList.addAll(downPointers.values());
@@ -42,7 +59,14 @@ public class Connections {
 		return nodeList;
 	}
 
-	public void setDownPointers(TreeMap<Integer,NodeInterface> downPointers) {
+	/**
+	 * Sets the passed in map as this connections downpointers.  Wraps each node in the map
+	 * in NodeRoles.SurrogateNeighbor
+	 * @param downPointers
+	 * @pre NONE
+	 * @post this.downpointers = downpointers 
+	 */
+	public void setDownPointers(Map<Integer,NodeInterface> downPointers) {
 		this.downPointers = new TreeMap<Integer, NodeInterface>();
 		if(downPointers != null){
 			for(NodeInterface nodeInterface : downPointers.values()){
@@ -53,6 +77,11 @@ public class Connections {
 		}
 	}
 
+	/**
+	 * Get this Connection's upPointers.
+	 * @pre 
+	 * @post 
+	 */
 	public Map<Integer,NodeInterface> getUpPointers() {
 		return upPointers;
 	}

@@ -107,6 +107,10 @@ public class HyPeerWeb {
 		reload(HyPeerWebDatabase.DEFAULT_DATABASE_NAME);
 	}
 	
+	public List<Node> getNodes(){
+		return nodes;
+	}
+	
 	/**
 	 * Rebuilds the HyPeerWeb from the database provided.
 	 * If the dbName is null then the results are loaded from the default database.
@@ -215,5 +219,6 @@ public class HyPeerWeb {
 	 */
 	public void close() {
 		saveToDatabase();
+		clear();
 	}
 }
