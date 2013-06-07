@@ -3,12 +3,14 @@ package node;
 
 import static utilities.BitManipulation.calculateChildWebId;
 
+import hypeerweb.HyPeerWeb;
 import hypeerweb.broadcast.Contents;
 import hypeerweb.broadcast.Parameters;
 import hypeerweb.broadcast.Visitor;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -184,7 +186,16 @@ public class Node implements NodeInterface, Comparable<Node>{
 		return this.getState().squeeze(lowerBoundUpperBoundPair);
 	}
 	
+	/**
+	 * Disconnects this node from the hypeerweb.
+	 * @pre |web| >= 2, web.contains(this), this.connections.lowerNeighbors != null, this.webId = web.maxWebId
+	 * @post web does not contain this.  Connections of surrounding nodes updated.
+	 */
 	public void disconnect() {
+		List<Node> nodes = HyPeerWeb.getSingleton().getNodes();
+		assert(connections.getLowerNeighbors() != null && connections.getLowerNeighbors().size() != 0 &&
+			   nodes.size() >= 2 && nodes.contains(this) && nodes.get(nodes.size() - 1).equals(this));
+		
 		int parentId = BitManipulation.calculateParentWebId(this.getWebIdValue(), this.getHeight());
 		Node parent = connections.getLowerNeighbors().get(parentId).getNode();
 		parent.setHeight(parent.getHeight() - 1);

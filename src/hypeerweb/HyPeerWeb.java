@@ -219,6 +219,7 @@ public class HyPeerWeb {
 	 */
 	public void close() {
 		saveToDatabase();
+		HyPeerWebDatabase.closeConnection();
 		clear();
 	}
 }

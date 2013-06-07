@@ -196,12 +196,11 @@ public class StandardCommands extends JPanel
 			int insertIndex = listing.getSelectedIndex();
 			HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();
 			Node startNode = hypeerweb.getNode(insertIndex);
-			if(startNode != null) {
+			if(startNode != null && startNode != Node.NULL_NODE) {
 				hypeerweb.removeFromHyPeerWeb(startNode);
 				listing.decreaseListSize();
 			} else {
-				DebugPrinter tracePanel = main.getHyPeerWebDebugger().getTracePanel();
-				tracePanel.println("No valid node was selected for deletion.");
+				setDebugContent("Please select a node to delete");
 			}
 		}
 		//TODO Phase 5 -- Add functionality for removing a node.

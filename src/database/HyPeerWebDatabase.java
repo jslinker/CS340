@@ -363,4 +363,12 @@ public class HyPeerWebDatabase {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void closeConnection(){
+		try {
+			getSingleton().getConnection().close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
