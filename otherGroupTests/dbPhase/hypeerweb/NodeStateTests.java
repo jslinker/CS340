@@ -1,7 +1,7 @@
 package dbPhase.hypeerweb;
 
+import hypeerweb.node.roles.Neighbor;
 import junit.framework.TestCase;
-import node.roles.Neighbor;
 
 /**
  * Finishes testing the NodeState class.

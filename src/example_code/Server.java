@@ -1,6 +1,7 @@
 package example_code;
 
-import hypeerweb.communicator.PeerCommunicator;
+import communicator.PeerCommunicator;
+
 import hypeerweb.identification.ObjectDB;
 
 public class Server {	

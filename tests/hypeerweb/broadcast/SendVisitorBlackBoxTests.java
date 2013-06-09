@@ -1,12 +1,12 @@
 package hypeerweb.broadcast;
 
-import hypeerweb.HyPeerWeb;
+import hypeerweb.HyPeerWebSegment;
+import hypeerweb.node.Node;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import junit.framework.TestCase;
-import node.Node;
 
 /**
  * Tests the specifications for the SendVisitor class.
@@ -40,7 +40,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 	 * Tests invalid parameters (partitioning: invalid cases).
 	 */
 	public void testVisitInvalidCases(){
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		createHyPeerWeb(1); 
 		Node nodeZero = web.getNode(0);
 		
@@ -79,7 +79,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 	}
 	
 	public void testVisitValidCases(){
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		createHyPeerWeb(1);
 		Node nodeZero = web.getNode(0);
 		
@@ -164,7 +164,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 	}
 	
 	public void testIntermediateOperation(){
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		int size = 30;
 		createHyPeerWeb(size);
 		final int targetZero = 0;
@@ -224,7 +224,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 	}
 	
 	public void testTargetOperation(){
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		int size = 30;
 		createHyPeerWeb(size);
 		final int targetZero = 0;
@@ -279,7 +279,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 
 	private void createHyPeerWeb(int size){
 		clearAll();
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		
 		if(size > 0){
 			web.addToHyPeerWeb(new Node(0), null);
@@ -297,7 +297,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 	private void clearAll(){
 		allNodesSet.clear();
 		sentToNodesList.clear();
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		web.clear();
 	}
 }

@@ -1,18 +1,19 @@
 package hypeerweb;
 
+import hypeerweb.database.HyPeerWebDatabase;
+import hypeerweb.node.ExpectedResult;
+import hypeerweb.node.Node;
+import hypeerweb.node.NodeTests;
+import hypeerweb.node.SimplifiedNodeDomain;
+
 import java.util.Random;
 
 import junit.framework.TestCase;
-import node.ExpectedResult;
-import node.Node;
-import node.NodeTests;
-import node.SimplifiedNodeDomain;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import database.HyPeerWebDatabase;
 
 /**
  * JUnit Test cases for the HyPeerWeb class
@@ -20,12 +21,12 @@ import database.HyPeerWebDatabase;
  */
 public class HyPeerWebTests extends TestCase{
 	
-	private HyPeerWeb web = HyPeerWeb.getSingleton();
+	private HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 	private Node nodes[] = new Node[8];
 	
 	@Before
 	public void setUp() {
-		web = HyPeerWeb.getSingleton();
+		web = HyPeerWebSegment.getSingleton();
 		
 		nodes[0] = new Node(0,0);
 		nodes[1] = new Node(1,1);
@@ -76,7 +77,7 @@ public class HyPeerWebTests extends TestCase{
 	
 	@Test
 	public void testGetSingleton(){
-		assertNotNull(HyPeerWeb.getSingleton());
+		assertNotNull(HyPeerWebSegment.getSingleton());
 	}
 	
 	@Test
@@ -194,7 +195,7 @@ public class HyPeerWebTests extends TestCase{
 	
 	@Test
 	public void testAddToHyPeerWeb(){
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		web.clear();
 		
 		Random generator = new Random();
@@ -226,7 +227,7 @@ public class HyPeerWebTests extends TestCase{
 	
 	@Test
 	public void testRemoveFromHyPeerWeb(){
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		web.clear();
 		
 		final int TEST_SIZE = 32;
@@ -252,7 +253,7 @@ public class HyPeerWebTests extends TestCase{
 	
 	@Test
 	public void testAddToHyPeerWebExp(){
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
         web.clear();
         
         final int HYPEERWEB_SIZE = 32;

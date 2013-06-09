@@ -1,8 +1,9 @@
 package hypeerweb.identification;
-import hypeerweb.communicator.MachineAddress;
-import hypeerweb.communicator.PortNumber;
 
 import java.net.InetAddress;
+
+import communicator.MachineAddress;
+import communicator.PortNumber;
 
 
 /**

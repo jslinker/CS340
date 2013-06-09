@@ -1,6 +1,6 @@
 package hypeerweb.broadcast;
 
-import node.Node;
+import hypeerweb.node.Node;
 
 public interface Visitor {
 	

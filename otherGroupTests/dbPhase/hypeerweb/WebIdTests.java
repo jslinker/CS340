@@ -1,6 +1,6 @@
 package dbPhase.hypeerweb;
 
-import node.WebId;
+import hypeerweb.node.WebId;
 import junit.framework.TestCase;
 
 public class WebIdTests extends TestCase {

@@ -1,7 +1,7 @@
 package dbPhase.hypeerweb;
 
 import static org.junit.Assert.*;
-import hypeerweb.HyPeerWeb;
+import hypeerweb.HyPeerWebSegment;
 
 import org.junit.*;
 
@@ -21,7 +21,7 @@ import utilities.BitManipulation;
 public class NZWhiteBoxHomework {
 	private static Node baseNode;
 	private Node testNode;
-	private HyPeerWeb web;
+	private HyPeerWebSegment web;
 	
 	@BeforeClass
 	public static void setupClass(){
@@ -30,7 +30,7 @@ public class NZWhiteBoxHomework {
 	
 	@Before
 	public void setup(){
-		web = HyPeerWeb.getSingleton();
+		web = HyPeerWebSegment.getSingleton();
 		web.clear();
 
 		baseNode = new Node(0);

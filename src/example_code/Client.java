@@ -1,11 +1,12 @@
 package example_code;
-import hypeerweb.communicator.PeerCommunicator;
-import hypeerweb.communicator.PortNumber;
 import hypeerweb.identification.GlobalObjectId;
 import hypeerweb.identification.LocalObjectId;
 import hypeerweb.identification.ObjectDB;
 
 import java.net.InetAddress;
+
+import communicator.PeerCommunicator;
+import communicator.PortNumber;
 
 
 public class Client {

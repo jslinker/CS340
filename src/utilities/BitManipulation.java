@@ -1,6 +1,6 @@
 package utilities;
 
-import node.Node;
+import hypeerweb.node.Node;
 
 /**
  * The functions included are made for convenient bit manipulation of webId's in the 

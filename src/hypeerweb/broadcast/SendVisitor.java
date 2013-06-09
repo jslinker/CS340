@@ -1,7 +1,7 @@
 package hypeerweb.broadcast;
 
+import hypeerweb.node.Node;
 import utilities.BitManipulation;
-import node.Node;
 
 /**
  * Used to send a message from a source node to a target node.

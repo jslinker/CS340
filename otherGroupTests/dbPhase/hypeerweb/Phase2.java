@@ -1,12 +1,12 @@
 package dbPhase.hypeerweb;
 
-import hypeerweb.HyPeerWeb;
-import node.ExpectedResult;
-import node.Node;
-import node.SimplifiedNodeDomain;
+import hypeerweb.HyPeerWebSegment;
+import hypeerweb.node.ExpectedResult;
+import hypeerweb.node.Node;
+import hypeerweb.node.SimplifiedNodeDomain;
 
 public class Phase2 {
-    public static HyPeerWeb hypeerweb = HyPeerWeb.getSingleton();
+    public static HyPeerWebSegment hypeerweb = HyPeerWebSegment.getSingleton();
     private static final int HYPEERWEB_SIZE = 32;
     private static final boolean VERBOSE = false;
     private static final int PHASE_2_TEST_COUNT = 10912;

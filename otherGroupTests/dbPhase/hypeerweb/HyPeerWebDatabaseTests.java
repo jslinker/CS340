@@ -3,7 +3,7 @@ package dbPhase.hypeerweb;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import hypeerweb.HyPeerWeb;
+import hypeerweb.HyPeerWebSegment;
 
 import java.awt.List;
 import java.lang.reflect.Constructor;

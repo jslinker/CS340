@@ -2,10 +2,11 @@ package dbPhase.hypeerweb;
 
 import static org.junit.Assert.*;
 
+import hypeerweb.node.SimplifiedNodeDomain;
+
 import java.sql.ResultSet;
 import java.util.HashSet;
 
-import node.SimplifiedNodeDomain;
 
 import org.junit.Test;
 import org.junit.experimental.theories.suppliers.TestedOn;

@@ -1,7 +1,8 @@
 package example_code;
 
-import hypeerweb.communicator.Command;
-import hypeerweb.communicator.PeerCommunicator;
+import communicator.Command;
+import communicator.PeerCommunicator;
+
 import hypeerweb.identification.GlobalObjectId;
 import hypeerweb.identification.LocalObjectId;
 

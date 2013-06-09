@@ -9,13 +9,13 @@ import java.util.TreeMap;
 import org.junit.*;
 import org.junit.runners.JUnit4;
 
-import hypeerweb.HyPeerWeb;
+import hypeerweb.HyPeerWebSegment;
 
 public class NZWhiteBoxConnectionsTests {
 	
 	private static Node[] nodes;
 	private Node testNode;
-	private HyPeerWeb web;
+	private HyPeerWebSegment web;
 	
 	@BeforeClass
 	public static void setupClass(){
@@ -29,7 +29,7 @@ public class NZWhiteBoxConnectionsTests {
 	
 	@Before
 	public void setup(){
-		web = HyPeerWeb.getSingleton();
+		web = HyPeerWebSegment.getSingleton();
 		web.clear();
 		web.addToHyPeerWeb(nodes[0], Node.NULL_NODE);
 		web.addToHyPeerWeb(nodes[1], nodes[0]);

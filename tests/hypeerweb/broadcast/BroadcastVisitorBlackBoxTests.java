@@ -1,13 +1,13 @@
 package hypeerweb.broadcast;
 
-import hypeerweb.HyPeerWeb;
+import hypeerweb.HyPeerWebSegment;
+import hypeerweb.node.Node;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
 import junit.framework.TestCase;
-import node.Node;
 
 /**
  * Tests the specifications for the BroadcastVisitor class.
@@ -35,7 +35,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 	 * 3. null, parameters
 	 */
 	public void testVisitInvalidCases(){
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		createHyPeerWeb(1); 
 		Node nodeZero = web.getNode(0);
 		
@@ -90,7 +90,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 	 * Note that the upper bound for HyPeerWebs is too large to test.
 	 */
 	public void testVisitValidCases(){
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		
 		//Checks that each node is only visited once and that the node is in the HyPeerWeb.
 		BroadcastVisitor broadcastFindAllNodes = new BroadcastVisitor(){
@@ -182,7 +182,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 	 * testVisitValidCases() method.
 	 */
 	public void testOperation(){
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		createHyPeerWeb(1);
 		final Node nodeZero = web.getNode(0);
 		
@@ -223,7 +223,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		assert (size >= 0);
 		
 		clearAll();
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		
 		if(size > 0){
 			web.addToHyPeerWeb(new Node(0), null);
@@ -244,7 +244,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 	private void clearAll(){
 		allNodesSet.clear();
 		broadcastedToNodesList.clear();
-		HyPeerWeb web = HyPeerWeb.getSingleton();
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		web.clear();
 	}
 }
