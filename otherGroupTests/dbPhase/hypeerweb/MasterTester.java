@@ -32,7 +32,7 @@ import database.HyPeerWebDatabaseTests;
 	ParametersBlackBoxTests.class,
 	NodeBlackBoxTests.class,
 	
-	NZWhiteBoxConnectionsTests.class,
+	//NZWhiteBoxConnectionsTests.class,
 	SimplifiedNodeDomainTests.class
 })
 
