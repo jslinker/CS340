@@ -1,12 +1,46 @@
 Error Report:
 
 *HypeerWebDatabase
-	-Database locks during testing. Added close statements to all the unclosed statements in HyPeerWebDatabase
+	-Database locks sometimes during testing. Added close statements to all the unclosed statements in HyPeerWebDatabase and that seemed to help, 
+		might be computer dependent 
 	-Height is not being stored in the database even though there is a column for it, reconstructs incorrect node as a result
 	
 *NodeCore	
 	-Calling constructSimplifiedWebDomain on Null_Node generates null pointer
 	-Calling setWebId on Null_Node generates null pointer
 	-Calling equals using null pointer generates null pointer exception, should return false
-	-Newly constructed NodeCore does not have itself as its fold.  Post condition from spec => (fold = this)
+	-Newly constructed NodeCore does not have itself as its fold.  Post condition on constructor from spec => (fold = this)
 	-Adding down pointer to node and then calling constructSimplifiedNodeDomain and getting downpointers returns empty set. 
+	
+*NodeCore/Connection
+	-Got into infinite loop several times when trying to find a node on these two lines, might just be me not calling code correctly
+		at dbPhase.hypeerweb.Connection.getNode(Connection.java:204)
+		at dbPhase.hypeerweb.NodeCore.getNode(NodeCore.java:341)
+		****UPDATE****
+		This problem happened when attempting to add nodes to the HyPeerWeb that already had some existing connections
+	
+*HyPeerWeb
+	-HypeerWeb.reload does not restore full HyPeerWeb.
+		added 15 nodes (15 = size)
+		assertEquals(size,web.size());
+		
+		web.saveToDatabase();
+
+		web.clear();
+		assertEquals(0,web.size());
+		
+		web.reload();
+		assertEquals(size,web.size());    <======== Fails on this line.  web.size() returns 1
+		
+	-Not really a bug, but saveToDatabase doesn't allow for custom database name whereas reload does.
+	
+	-getAllNodes doesn't return list of correct size
+		web.addToHyPeerWeb(new NodeCore(0), NodeCore.getNullNode());
+		web.addToHyPeerWeb(new NodeCore(1), NodeCore.getNullNode());
+		web.addToHyPeerWeb(new NodeCore(2), NodeCore.getNullNode());
+		
+		web.saveToDatabase();
+		
+		assertEquals(3, web.getHyPeerWebDatabase().getSingleton().getAllNodes().size());  <==== .size() returns 1
+	
+		

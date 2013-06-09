@@ -169,7 +169,6 @@ public class NodeBlackBoxTests extends TestCase{
 		//Tests valid special case (setting to NULL_NODE)
 		existingNode.setFold(NodeCore.getNullNode());
 		existingNodeDomain = existingNode.constructSimplifiedNodeDomain();
-		System.out.println("FOLD " +existingNodeDomain.getFold());
 		assertTrue(existingNodeDomain.getFold() == -1);
 	}
 	
