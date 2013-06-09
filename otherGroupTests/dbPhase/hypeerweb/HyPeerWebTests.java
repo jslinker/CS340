@@ -3,16 +3,10 @@ package dbPhase.hypeerweb;
 import java.util.Random;
 
 import junit.framework.TestCase;
-import node.ExpectedResult;
-import node.Node;
-import node.NodeTests;
-import node.SimplifiedNodeDomain;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import database.HyPeerWebDatabase;
 
 /**
  * JUnit Test cases for the HyPeerWeb class
@@ -21,20 +15,20 @@ import database.HyPeerWebDatabase;
 public class HyPeerWebTests extends TestCase{
 	
 	private HyPeerWeb web = HyPeerWeb.getSingleton();
-	private Node nodes[] = new Node[8];
+	private NodeCore nodes[] = new NodeCore[8];
 	
 	@Before
 	public void setUp() {
 		web = HyPeerWeb.getSingleton();
 		
-		nodes[0] = new Node(0,0);
-		nodes[1] = new Node(1,1);
-		nodes[2] = new Node(2,2);
-		nodes[3] = new Node(3,2);
-		nodes[4] = new Node(4,3);
-		nodes[5] = new Node(5,3);
-		nodes[6] = new Node(6,3);
-		nodes[7] = new Node(7,3);
+		nodes[0] = new NodeCore(0,0);
+		nodes[1] = new NodeCore(1,1);
+		nodes[2] = new NodeCore(2,2);
+		nodes[3] = new NodeCore(3,2);
+		nodes[4] = new NodeCore(4,3);
+		nodes[5] = new NodeCore(5,3);
+		nodes[6] = new NodeCore(6,3);
+		nodes[7] = new NodeCore(7,3);
 		
 		nodes[0].addNeighbor(nodes[1]);
 		nodes[0].addNeighbor(nodes[2]);
@@ -134,7 +128,7 @@ public class HyPeerWebTests extends TestCase{
 	public void testReload(){
 		
 		for(Node n : nodes) {
-			web.addNode(n);
+			web.addToHyPeerWeb(n, NodeCore.getNullNode());
 		}
 		
 		assertEquals(nodes.length,web.size());
@@ -152,10 +146,13 @@ public class HyPeerWebTests extends TestCase{
 	public void testReloadWithName(){
 		
 		final String dbName = "testing.db";
-		HyPeerWebDatabase.initHyPeerWebDatabase(dbName);
+		HyPeerWebDatabase db = web.getHyPeerWebDatabase();
+		db.startTransaction(dbName);
+		db.dropTables();
+		db.createTables();
 		
 		for(Node n : nodes) {
-			web.addNode(n);
+			web.addToHyPeerWeb(n, NodeCore.getNullNode());
 		}
 		
 		assertEquals(nodes.length,web.size());
@@ -167,6 +164,8 @@ public class HyPeerWebTests extends TestCase{
 		
 		web.reload(dbName);
 		assertEquals(nodes.length,web.size());
+		
+		db.endTransaction(true);
 	}
 	
 	@Test
@@ -189,7 +188,7 @@ public class HyPeerWebTests extends TestCase{
 		
 		web.saveToDatabase();
 		
-		assertEquals(3, web.getHyPeerWebDatabase().getSingleton().getAllWebIds().size());
+		assertEquals(3, web.getHyPeerWebDatabase().getSingleton().getAllNodes().size());
 	}
 	
 	@Test
@@ -203,10 +202,10 @@ public class HyPeerWebTests extends TestCase{
 		Node startNode = null;
 		Node newNode = null;
 		for(int i = 0; i < numberOfNodes; i++){
-			newNode = new Node(generator.nextInt(10000));
+			newNode = new NodeCore(generator.nextInt(10000));
 			
 			if(i == 0){
-				startNode = Node.NULL_NODE;
+				startNode = NodeCore.getNullNode();
 			}
 			else{
 				startNode = web.getNode(generator.nextInt(i));
@@ -231,10 +230,10 @@ public class HyPeerWebTests extends TestCase{
 		
 		final int TEST_SIZE = 32;
 		
-		web.addToHyPeerWeb(nodes[0], Node.NULL_NODE);
+		web.addToHyPeerWeb(nodes[0], NodeCore.getNullNode());
 		
 		for(int i = 1; i < TEST_SIZE; i++){
-			web.addToHyPeerWeb(new Node(i), nodes[0]);
+			web.addToHyPeerWeb(new NodeCore(i), nodes[0]);
 		}
 		
 		int max = TEST_SIZE - 1;
@@ -245,7 +244,7 @@ public class HyPeerWebTests extends TestCase{
 				assertEquals(expected, web.getNode(i).constructSimplifiedNodeDomain());
 			}
 		
-			web.removeFromHyPeerWeb(web.getNode(max));
+			web.deleteFromHyPeerWeb(web.getNode(max),web.getNode(0));
 			max--;
 		}
 	}
@@ -259,7 +258,7 @@ public class HyPeerWebTests extends TestCase{
         
         for (int size = 1; size <= HYPEERWEB_SIZE; size++) {
             web.clear();
-            Node node0 = new Node(0);
+            NodeCore node0 = new NodeCore(0);
             web.addToHyPeerWeb(node0, null);
             Node firstNode = web.getNode(0);
             SimplifiedNodeDomain simplifiedNodeDomain = firstNode.constructSimplifiedNodeDomain();
@@ -272,15 +271,15 @@ public class HyPeerWebTests extends TestCase{
             
             for (int startNodeId = 0; startNodeId < size - 1; startNodeId++) {
                 web.clear();
-                Node nodeZero = new Node(0);
+                NodeCore nodeZero = new NodeCore(0);
                 web.addToHyPeerWeb(nodeZero, null);
 
                 for (int i = 1; i < size-1; i++) {
-                    Node node = new Node(0);
+                	NodeCore node = new NodeCore(0);
                     web.addToHyPeerWeb(node, nodeZero);
                 }
                 
-                Node node = new Node(0);
+                NodeCore node = new NodeCore(0);
                 Node startNode = web.getNode(startNodeId);
                 web.addToHyPeerWeb(node, startNode);
                 
@@ -302,29 +301,33 @@ public class HyPeerWebTests extends TestCase{
 	public void testCloseReload(){
 		web.clear();
 		int size = 14;
-		HyPeerWebDatabase.clear();
-		assertEquals(web.getHyPeerWebDatabase().getAllWebIds().size(), 0);
+		HyPeerWebDatabase db = web.getHyPeerWebDatabase();
+		db.startTransaction();
+		db.dropTables();
+		db.createTables();
+		assertEquals(web.getHyPeerWebDatabase().getAllNodes().size(), 0);
 		makeWeb(size);
 		for(int i = 0; i < size; i++){
 			assertEquals(new ExpectedResult(size, i), web.getNode(i).constructSimplifiedNodeDomain());
 		}
 		
-		web.close();
 		web.clear();
 		web.reload();
-		assertEquals(size,web.getHyPeerWebDatabase().getAllWebIds().size());
+		assertEquals(size,web.getHyPeerWebDatabase().getAllNodes().size());
 		for(int i = 0; i < size; i++){
 			assertEquals(new ExpectedResult(size, i), web.getNode(i).constructSimplifiedNodeDomain());
 		}
+		
+		db.endTransaction(true);
 	}
 	
 	private void makeWeb(int size){
 		web.clear();
-		Node node0 = new Node(0);
-		web.addToHyPeerWeb(node0, Node.NULL_NODE);
+		NodeCore node0 = new NodeCore(0);
+		web.addToHyPeerWeb(node0, NodeCore.getNullNode());
 		
 		for(int i = 1; i < size; i++){
-			web.addToHyPeerWeb(new Node(i), node0);
+			web.addToHyPeerWeb(new NodeCore(i), node0);
 		}
 	}
 }

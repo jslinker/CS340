@@ -443,7 +443,7 @@ public class NodeCore implements Node {
 		if (this.equals(NodeCore.getNullNode())) {
 			return "Null Node";
 		}
-		return Integer.toBinaryString(this.getWebIdValue());
+		return "WebIdVal = " + Integer.toBinaryString(this.getWebIdValue()) + ", height = " + getHeight();
 	}
 
 	public void accept(Visitor visitor, Parameters parameters) {

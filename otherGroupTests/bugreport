@@ -1,0 +1,12 @@
+Error Report:
+
+*HypeerWebDatabase
+	-Database locks during testing. Added close statements to all the unclosed statements in HyPeerWebDatabase
+	-Height is not being stored in the database even though there is a column for it, reconstructs incorrect node as a result
+	
+*NodeCore	
+	-Calling constructSimplifiedWebDomain on Null_Node generates null pointer
+	-Calling setWebId on Null_Node generates null pointer
+	-Calling equals using null pointer generates null pointer exception, should return false
+	-Newly constructed NodeCore does not have itself as its fold.  Post condition from spec => (fold = this)
+	-Adding down pointer to node and then calling constructSimplifiedNodeDomain and getting downpointers returns empty set. 

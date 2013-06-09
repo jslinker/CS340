@@ -57,7 +57,6 @@ public class ExpectedResult extends SimplifiedNodeDomain {
         fold = expectedFold();
         surrogateFold = expectedSurrogateFold();
         inverseSurrogateFold = expectedInverseSurrogateFold(webId);
-        state = expectedState();
     }
 
     // Queries
@@ -261,22 +260,22 @@ public class ExpectedResult extends SimplifiedNodeDomain {
      * |upPointers| > 0 &rArr; result = UpPointingNodeState.STATE_ID AND<br>
      * webId = hyPeerWebSize - 1 AND hyPeerWebSize = cubeSize &rArr; result = HypercubeCapState.STATE_ID
      */
-    private int expectedState() {
-        int result = NodeState.STANDARD.STATE_ID;
-        
-        if(webId == 0 && height == 0) {
-            result = NodeState.CAP.STATE_ID;
-        } /*else if (webId > lastIdOfEmbeddedHyperCube && everyNeighborIsSmallerThan(webId)) {
-            //result = NodeState.TERMINAL.STATE_ID;
-        }*/ else if(downPointers.size() > 0) {
-            result = NodeState.DOWN_POINTING.STATE_ID;
-        } else if(upPointers.size() > 0) {
-            result = NodeState.UP_POINTING.STATE_ID;
-        } else if (webId == hyPeerWebSize-1 && utilities.BitManipulation.isCapNodeWebId(webId)) {
-            result = NodeState.CAP.STATE_ID;
-        }
-        return result;
-    }
+//    private int expectedState() {
+//        int result = NodeState.STANDARD.STATE_ID;
+//        
+//        if(webId == 0 && height == 0) {
+//            result = NodeState.CAP.STATE_ID;
+//        } /*else if (webId > lastIdOfEmbeddedHyperCube && everyNeighborIsSmallerThan(webId)) {
+//            //result = NodeState.TERMINAL.STATE_ID;
+//        }*/ else if(downPointers.size() > 0) {
+//            result = NodeState.DOWN_POINTING.STATE_ID;
+//        } else if(upPointers.size() > 0) {
+//            result = NodeState.UP_POINTING.STATE_ID;
+//        } else if (webId == hyPeerWebSize-1 && utilities.BitManipulation.isCapNodeWebId(webId)) {
+//            result = NodeState.CAP.STATE_ID;
+//        }
+//        return result;
+//    }
     
     /**
      * Determines whether all of the neighbors are smaller the the given webId.

@@ -5,12 +5,6 @@ import hypeerweb.broadcast.ContentsBlackBoxTests;
 import hypeerweb.broadcast.ParametersBlackBoxTests;
 import hypeerweb.broadcast.SendVisitorBlackBoxTests;
 import junit.framework.TestCase;
-import node.NZWhiteBoxConnectionsTests;
-import node.NodeBlackBoxTests;
-import node.NodeStateTests;
-import node.NodeTests;
-import node.SimplifiedNodeDomainTests;
-import node.WebIdTests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

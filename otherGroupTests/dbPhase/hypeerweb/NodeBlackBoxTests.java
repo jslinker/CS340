@@ -11,7 +11,7 @@ public class NodeBlackBoxTests extends TestCase{
 	public void testConstructSimplifiedNodeDomain(){
 		//Test default values.
 		int webId = 5264;
-		Node aNode = new Node(webId);
+		Node aNode = new NodeCore(webId);
 		SimplifiedNodeDomain aNodeDomain = aNode.constructSimplifiedNodeDomain();
 		assertTrue(aNodeDomain != null);
 		assertTrue(aNodeDomain.getWebId() == webId);
@@ -24,7 +24,7 @@ public class NodeBlackBoxTests extends TestCase{
 		
 		//Test setting some values.
 		int someWebId = 3;
-		Node someNode = new Node(someWebId);
+		Node someNode = new NodeCore(someWebId);
 		aNode.setFold(someNode);
 		aNode.setSurrogateFold(someNode);
 		aNode.setInverseSurrogateFold(someNode);
@@ -37,7 +37,7 @@ public class NodeBlackBoxTests extends TestCase{
 		assertTrue(aNodeDomain.getFold() == someWebId);
 		assertTrue(aNodeDomain.getSurrogateFold() == someWebId);
 		assertTrue(aNodeDomain.getInverseSurrogateFold() == someWebId);
-		assertTrue(aNodeDomain.getDownPointers().size() == 1);
+		assertEquals(aNodeDomain.getDownPointers().size(), 1);
 		assertTrue(aNodeDomain.getUpPointers().size() == 1);
 		assertTrue(aNodeDomain.getNeighbors().size() == 1);
 		assertTrue(aNodeDomain.getDownPointers().contains(someWebId));
@@ -47,7 +47,7 @@ public class NodeBlackBoxTests extends TestCase{
 	
 	public void testConstructor(){
 		int webId = 5264;
-		Node aNode = new Node(webId);
+		Node aNode = new NodeCore(webId);
 		SimplifiedNodeDomain aNodeDomain = aNode.constructSimplifiedNodeDomain();
 		assertTrue(aNodeDomain.getWebId() == webId);
 		assertTrue(aNodeDomain.getFold() == webId);
@@ -70,10 +70,10 @@ public class NodeBlackBoxTests extends TestCase{
 		Random generator = new Random();
 		int size = 139;
 		
-		nodes.add(new Node(0));
+		nodes.add(new NodeCore(0));
 		
 		for(int i = 1; i < size; i++){
-			nodes.add(new Node(generator.nextInt(10000)));
+			nodes.add(new NodeCore(generator.nextInt(10000)));
 		}
 		
 		ExpectedResult expectedNodeZero = new ExpectedResult(1, 0);
@@ -90,7 +90,7 @@ public class NodeBlackBoxTests extends TestCase{
 			for(int j = 0; j <= i; j++){
 				ExpectedResult expectedNodeDomain = new ExpectedResult(i+1, j);
 				SimplifiedNodeDomain actualNodeDomain = nodes.get(j).constructSimplifiedNodeDomain();
-				assertTrue(actualNodeDomain.equals(expectedNodeDomain));
+				assertEquals(actualNodeDomain,expectedNodeDomain);
 			}
 		}
 	}
@@ -98,9 +98,9 @@ public class NodeBlackBoxTests extends TestCase{
 	
 	public void testAddDownPointer(){
 		//Tests a valid case.
-		Node existingNode = new Node(2345);
+		Node existingNode = new NodeCore(2345);
 		int newNodeWebId = 256;
-		Node newNode = new Node(newNodeWebId);
+		Node newNode = new NodeCore(newNodeWebId);
 		
 		existingNode.addDownPointer(newNode);
 		
@@ -112,9 +112,9 @@ public class NodeBlackBoxTests extends TestCase{
 	
 	public void testAddUpPointer(){
 		//Tests a valid case.
-		Node existingNode = new Node(2345);
+		Node existingNode = new NodeCore(2345);
 		int newNodeWebId = 256;
-		Node newNode = new Node(newNodeWebId);
+		Node newNode = new NodeCore(newNodeWebId);
 		
 		existingNode.addUpPointer(newNode);
 		
@@ -126,9 +126,9 @@ public class NodeBlackBoxTests extends TestCase{
 	
 	public void testAddNeighbor(){
 		//Tests a valid case.
-		Node existingNode = new Node(2345);
+		Node existingNode = new NodeCore(2345);
 		int newNodeWebId = 256;
-		Node newNode = new Node(newNodeWebId);
+		Node newNode = new NodeCore(newNodeWebId);
 		
 		existingNode.addNeighbor(newNode);
 		
@@ -140,26 +140,26 @@ public class NodeBlackBoxTests extends TestCase{
 	
 	public void testChangeFold(){
 		//Tests a valid case.
-		Node existingNode = new Node(2345);
+		Node existingNode = new NodeCore(2345);
 		int newFoldWebId = 256;
-		Node newFold = new Node(newFoldWebId);
+		Node newFold = new NodeCore(newFoldWebId);
 		
-		existingNode.changeFold(newFold);
+		existingNode.setFold(newFold);
 		
 		SimplifiedNodeDomain existingNodeDomain = existingNode.constructSimplifiedNodeDomain();
 		assertTrue(existingNodeDomain.getFold() == newFoldWebId);
 		
 		//Tests valid special case (changing to NULL_NODE)
-		existingNode.changeFold(Node.NULL_NODE);
+		existingNode.setFold(NodeCore.getNullNode());
 		existingNodeDomain = existingNode.constructSimplifiedNodeDomain();
 		assertTrue(existingNodeDomain.getFold() == -1);
 	}
 	
 	public void testSetFold(){
 		//Tests a valid case.
-		Node existingNode = new Node(2345);
+		Node existingNode = new NodeCore(2345);
 		int newFoldWebId = 256;
-		Node newFold = new Node(newFoldWebId);
+		Node newFold = new NodeCore(newFoldWebId);
 		
 		existingNode.setFold(newFold);
 		
@@ -167,16 +167,17 @@ public class NodeBlackBoxTests extends TestCase{
 		assertTrue(existingNodeDomain.getFold() == newFoldWebId);
 		
 		//Tests valid special case (setting to NULL_NODE)
-		existingNode.setFold(Node.NULL_NODE);
+		existingNode.setFold(NodeCore.getNullNode());
 		existingNodeDomain = existingNode.constructSimplifiedNodeDomain();
+		System.out.println("FOLD " +existingNodeDomain.getFold());
 		assertTrue(existingNodeDomain.getFold() == -1);
 	}
 	
 	public void testSetSurrogateFold(){
 		//Tests a valid case.
-		Node existingNode = new Node(2345);
+		Node existingNode = new NodeCore(2345);
 		int newSFWebId = 256;
-		Node newSF = new Node(newSFWebId);
+		Node newSF = new NodeCore(newSFWebId);
 		
 		existingNode.setSurrogateFold(newSF);
 		
@@ -184,16 +185,16 @@ public class NodeBlackBoxTests extends TestCase{
 		assertTrue(existingNodeDomain.getSurrogateFold() == newSFWebId);
 		
 		//Tests valid special case (setting to NULL_NODE)
-		existingNode.setSurrogateFold(Node.NULL_NODE);
+		existingNode.setSurrogateFold(NodeCore.getNullNode());
 		existingNodeDomain = existingNode.constructSimplifiedNodeDomain();
 		assertTrue(existingNodeDomain.getSurrogateFold() == -1);
 	}
 	
 	public void testSetInverseSurrogateFold(){
 		//Tests a valid case.
-		Node existingNode = new Node(2345);
+		Node existingNode = new NodeCore(2345);
 		int newISFWebId = 256;
-		Node newISF = new Node(newISFWebId);
+		Node newISF = new NodeCore(newISFWebId);
 		
 		existingNode.setInverseSurrogateFold(newISF);
 		
@@ -201,13 +202,13 @@ public class NodeBlackBoxTests extends TestCase{
 		assertTrue(existingNodeDomain.getInverseSurrogateFold() == newISFWebId);
 		
 		//Tests valid special case (setting to NULL_NODE)
-		existingNode.setInverseSurrogateFold(Node.NULL_NODE);
+		existingNode.setInverseSurrogateFold(NodeCore.getNullNode());
 		existingNodeDomain = existingNode.constructSimplifiedNodeDomain();
 		assertTrue(existingNodeDomain.getInverseSurrogateFold() == -1);
 	}
 	
 	public void testSetWebId(){
-		Node aNode = new Node(0);
+		Node aNode = new NodeCore(0);
 		SimplifiedNodeDomain aNodeDomain = aNode.constructSimplifiedNodeDomain();
 		assertTrue(aNodeDomain.getWebId() == 0);
 		
@@ -220,12 +221,12 @@ public class NodeBlackBoxTests extends TestCase{
 	
 	public void testRemoveDownPointer(){
 		//Tests a valid case.
-		Node existingNode = new Node(2345);
+		Node existingNode = new NodeCore(2345);
 		SimplifiedNodeDomain existingNodeDomain = existingNode.constructSimplifiedNodeDomain();
 		assertTrue(existingNodeDomain.getDownPointers().size() == 0);
 		
 		int newNodeWebId = 234;
-		Node newNode = new Node(newNodeWebId);
+		Node newNode = new NodeCore(newNodeWebId);
 		
 		existingNode.addDownPointer(newNode);
 		existingNodeDomain = existingNode.constructSimplifiedNodeDomain();
@@ -239,12 +240,12 @@ public class NodeBlackBoxTests extends TestCase{
 	
 	public void testRemoveUpPointer(){
 		//Tests a valid case.
-		Node existingNode = new Node(2345);
+		Node existingNode = new NodeCore(2345);
 		SimplifiedNodeDomain existingNodeDomain = existingNode.constructSimplifiedNodeDomain();
 		assertTrue(existingNodeDomain.getUpPointers().size() == 0);
 		
 		int newNodeWebId = 234;
-		Node newNode = new Node(newNodeWebId);
+		Node newNode = new NodeCore(newNodeWebId);
 		
 		existingNode.addUpPointer(newNode);
 		existingNodeDomain = existingNode.constructSimplifiedNodeDomain();
@@ -258,12 +259,12 @@ public class NodeBlackBoxTests extends TestCase{
 	
 	public void testRemoveNeighbor(){
 		//Tests a valid case.
-		Node existingNode = new Node(2345);
+		Node existingNode = new NodeCore(2345);
 		SimplifiedNodeDomain existingNodeDomain = existingNode.constructSimplifiedNodeDomain();
 		assertTrue(existingNodeDomain.getNeighbors().size() == 0);
 		
 		int newNodeWebId = 234;
-		Node newNode = new Node(newNodeWebId);
+		Node newNode = new NodeCore(newNodeWebId);
 		
 		existingNode.addNeighbor(newNode);
 		existingNodeDomain = existingNode.constructSimplifiedNodeDomain();
@@ -276,7 +277,7 @@ public class NodeBlackBoxTests extends TestCase{
 	}
 	
 	public void testGetContents(){
-		Node aNode = new Node(0);
+		Node aNode = new NodeCore(0);
 		assertTrue(aNode.getContents() != null);
 	}
 }

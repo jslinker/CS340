@@ -40,8 +40,11 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		Node nodeZero = web.getNode(0);
 		
 		BroadcastVisitor broadcastNothing = new BroadcastVisitor(){
-			public void operation(Node node, Parameters parameters){
-				//do nothing
+			@Override
+			protected void operation(dbPhase.hypeerweb.Node node,
+					Parameters parameters) {
+				// TODO Auto-generated method stub
+				
 			}
 		};
 		
