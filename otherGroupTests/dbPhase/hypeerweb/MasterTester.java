@@ -27,7 +27,7 @@ import org.junit.runners.Suite;
 	ParametersBlackBoxTests.class,
 	NodeBlackBoxTests.class,
 	
-	NZWhiteBoxConnectionsTests.class,
+	//NZWhiteBoxConnectionsTests.class,
 	SimplifiedNodeDomainTests.class
 })
 
