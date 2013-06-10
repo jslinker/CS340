@@ -1,7 +1,5 @@
 package dbPhase.hypeerweb;
 
-
-
 import junit.framework.TestCase;
 
 import org.junit.runner.RunWith;
@@ -18,6 +16,8 @@ import org.junit.runners.Suite;
 	BroadcastVisitorBlackBoxTests.class,
 	ParametersBlackBoxTests.class,
 	ContentsBlackBoxTests.class,
+	HyPeerWebBlackBox.class,
+	HyPeerWebDatabaseBlackBox.class,
 	NodeBlackBoxTests.class
 })
 

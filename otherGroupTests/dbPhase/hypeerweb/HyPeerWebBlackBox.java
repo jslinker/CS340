@@ -1,9 +1,14 @@
 package dbPhase.hypeerweb;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Random;
+
+import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -31,6 +36,7 @@ public class HyPeerWebBlackBox {
 	
 	@Test
 	public void testAddNode(){
+		web = HyPeerWeb.getSingleton();
 		web.addToHyPeerWeb(new NodeCore(0), NodeCore.getNullNode());
 		checkWeb(1);
 		
@@ -86,7 +92,66 @@ public class HyPeerWebBlackBox {
 		web.saveToDatabase();
 		web.clear();
 		web.reload();
+		assertEquals(size, web.size());
 		checkWeb(size);
+	}
+	
+	@Test 
+	public void testReloadName(){
+		int size = 16;
+		makeWeb(size);
+		checkWeb(size);
+		
+		web.saveToDatabase();
+		web.clear();
+		web.reload(HyPeerWebDatabase.DEFAULT_DATABASE_NAME);
+		assertEquals(size, web.size());
+	}
+	
+	//visually see if it looks fine
+	@Test
+	public void testToString(){
+		makeWeb(8);
+		System.out.println(web);
+	}
+	
+	@Test
+	public void testRandomNode(){
+		makeWeb(16);
+		int testRuns = 100;
+		for(int i = 0; i < testRuns; i++){
+			assertTrue(web.contains(web.randomNode()));
+		}
+	}
+	
+	@Test
+	public void testIterator(){
+		makeWeb(32);
+		Iterator<Node> iter = web.iterator();
+		
+		while(iter.hasNext()){
+			assertTrue(web.contains(iter.next()));
+		}
+	}
+	
+	@Test
+	public void testEquals(){
+		makeWeb(43);
+		assertTrue(web.equals(web));
+		assertFalse(web.equals(null));
+		assertFalse(web.equals(new NodeCore(0)));
+		assertFalse(web.equals(NodeCore.getNullNode()));
+	}
+	
+	@Test 
+	public void testHashCode(){
+		makeWeb(29);
+		HashSet<HyPeerWeb> webSet = new HashSet<HyPeerWeb>();
+		webSet.add(web);
+		assertTrue(webSet.contains(web));
+		
+		web.addToHyPeerWeb(new NodeCore(0), null);
+		assertFalse(webSet.contains(web));
 	}
 	
 	private void makeWeb(int size){

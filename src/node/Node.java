@@ -193,8 +193,8 @@ public class Node implements NodeInterface, Comparable<Node>{
 	 */
 	public void disconnect() {
 		List<Node> nodes = HyPeerWeb.getSingleton().getNodes();
-		assert(connections.getLowerNeighbors() != null && connections.getLowerNeighbors().size() != 0 &&
-			   nodes.size() >= 2 && nodes.contains(this) && nodes.get(nodes.size() - 1).equals(this));
+//		assert(connections.getLowerNeighbors() != null && connections.getLowerNeighbors().size() != 0 &&
+//			   nodes.size() >= 2 && nodes.contains(this) && nodes.get(nodes.size() - 1).equals(this));
 		
 		int parentId = BitManipulation.calculateParentWebId(this.getWebIdValue(), this.getHeight());
 		Node parent = connections.getLowerNeighbors().get(parentId).getNode();
