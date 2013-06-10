@@ -1,7 +1,7 @@
 package example_code;
-import hypeerweb.identification.GlobalObjectId;
-import hypeerweb.identification.LocalObjectId;
-import hypeerweb.identification.ObjectDB;
+import identification.GlobalObjectId;
+import identification.LocalObjectId;
+import identification.ObjectDB;
 
 import java.net.InetAddress;
 

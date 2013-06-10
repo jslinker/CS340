@@ -52,7 +52,7 @@ public class Broadcaster extends BroadcastVisitor {
 	 * Required format: "Broadcasting '" parameters.get(MESSAGE_ID) "' to node " node.getWebId() ".\n"
 	 */
 	protected void operation(Node node, Parameters parameters) {
-		//TODO Phase 5 -- implement this method so that it satisfies the post condition.
+		//Phase 5 -- implement this method so that it satisfies the post condition.
 		String result = "";
 		if(node.getWebIdValue() == 0){
 			result += "----------------------------------------\n";
@@ -61,7 +61,7 @@ public class Broadcaster extends BroadcastVisitor {
 		}
 		
 		result += String.format("Broadcasting '%s' to node %s.\n", parameters.get(MESSAGE_KEY), node.getWebId());
-		GUI gui = GUI.getSingleton(HyPeerWebSegment.getSingleton());
+		GUI gui = GUI.getSingleton();
 		gui.printToTracePanel(result);
 	}
 	

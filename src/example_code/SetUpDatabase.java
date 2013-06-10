@@ -1,6 +1,6 @@
 package example_code;
 
-import hypeerweb.identification.ObjectDB;
+import identification.ObjectDB;
 
 public class SetUpDatabase {
 	public static void main(String[] args){

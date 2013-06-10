@@ -1,6 +1,7 @@
 package gui.menuItems;
 
 import gui.GUI;
+import gui.newWindows.JoinWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,8 +45,7 @@ public class JoinSessionMenuItem extends JMenuItem implements ActionListener{
 	 * Action when menu item is pressed
 	 */
 	public void actionPerformed(ActionEvent e) {
-		// TODO Phase 6 -- provide functionality for joining an existing HyPeerWeb
-		
+		JoinWindow joinWindow = new JoinWindow(main, "Join HyPeerWebSegment");
 	}
 
 }

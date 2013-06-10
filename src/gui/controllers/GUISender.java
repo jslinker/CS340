@@ -53,7 +53,7 @@ public class GUISender extends SendVisitor {
 	 */
 	protected void targetOperation(Node node, Parameters parameters){
 		String result = "Target node = " + node.getWebId() + ", message = '" + parameters.get(MESSAGE_KEY) + "'.\n";
-		GUI gui = GUI.getSingleton(HyPeerWebSegment.getSingleton());
+		GUI gui = GUI.getSingleton();
 		gui.printToTracePanel(result);
 	}
 	
@@ -67,7 +67,7 @@ public class GUISender extends SendVisitor {
 	 */	
 	protected void intermediateOperation(Node node, Parameters parameters) {
 		String result = "Sending message to node = " + parameters.get(TARGET_KEY) + ", currently at node " + node.getWebId() + ".\n";
-		GUI gui = GUI.getSingleton(HyPeerWebSegment.getSingleton());
+		GUI gui = GUI.getSingleton();
 		gui.printToTracePanel(result);
 	}
 	

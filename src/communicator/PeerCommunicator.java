@@ -1,6 +1,6 @@
 package communicator;
-import hypeerweb.identification.GlobalObjectId;
-import hypeerweb.identification.ObjectDB;
+import identification.GlobalObjectId;
+import identification.ObjectDB;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

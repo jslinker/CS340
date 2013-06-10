@@ -50,7 +50,7 @@ public class ObserverMenuItem extends JMenuItem implements ActionListener {
 		remoteViewer = new RemoteViewer(main, "");
 		//TODO Phase 6 -- Provide functionality for observing a node in the HyPeerWeb.
 		//Get the index of the most recently selected item in the nodeListing;
-		//If the index is less than the size of the nodeListing, get the correspoinding node from the HyPeerWeb.
+		//If the index is less than the size of the nodeListing, get the corresponding node from the HyPeerWeb.
 		//If there isn't one print an appropriate error message.
 		//Otherwise get a representation of the node, and call the print operation on the content of the remoteViewer.
 		//It is then setVisible ("remoteViewer.setVisible(true);")

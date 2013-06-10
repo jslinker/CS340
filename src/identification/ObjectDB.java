@@ -1,4 +1,4 @@
-package hypeerweb.identification;
+package identification;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

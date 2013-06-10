@@ -67,6 +67,6 @@ public class DebugFileMenu extends JMenu{
 	 */
 	public void destroy()	{
 		//TODO Phase 5 -- clean up before exiting the program
-		main.getHyPeerWeb().close();
+		main.shutdown();
 	}
 }

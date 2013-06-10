@@ -1,5 +1,5 @@
 package example_code;
-import hypeerweb.identification.LocalObjectId;
+import identification.LocalObjectId;
 
 import java.io.Serializable;
 

@@ -102,6 +102,7 @@ public class NodeListing extends JPanel {
 	 */
 	public void initList()
 	{
+		nodeListModel.clear();
 		listSize = main.getHyPeerWeb().size();
 		for(int i = 0; i < MAX_NUMBER_OF_NODES; i++){
 			if(i >= listSize){
@@ -126,10 +127,6 @@ public class NodeListing extends JPanel {
 	
 	private void clearButtonPressed(){
 		main.getHyPeerWeb().clear();
-		for(int i = 1; i < listSize; i++){
-			nodeListModel.set(i,"");
-		}
-		listSize = 1;
 	}
 	
 	/**

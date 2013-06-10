@@ -1,6 +1,6 @@
 package communicator;
-import hypeerweb.identification.LocalObjectId;
-import hypeerweb.identification.ObjectDB;
+import identification.LocalObjectId;
+import identification.ObjectDB;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;

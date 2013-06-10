@@ -1,4 +1,4 @@
-package hypeerweb.identification;
+package identification;
 
 import java.net.InetAddress;
 

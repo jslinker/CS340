@@ -1,11 +1,9 @@
 package gui;
 
-import gui.controllers.BroadcastArgs;
-import gui.controllers.BroadcastWindowController;
 import gui.mapper.NodeListing;
 import gui.printer.DebugPrinter;
 import hypeerweb.HyPeerWebSegment;
-import hypeerweb.node.Node;
+import hypeerweb.NullHyPeerWebSegment;
 
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
@@ -17,6 +15,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+
+import communicator.PeerCommunicator;
+import communicator.PortNumber;
 
 
 
@@ -31,7 +32,10 @@ import javax.swing.SwingUtilities;
 @SuppressWarnings("serial")
 public class GUI extends JFrame implements Observer
 {
+	private static final PortNumber DEFAULT_GUI_PORT_NUMBER = new PortNumber(49201);
+	
 	private static GUI singleton = null;
+	private GUIFacade facade = null;
 	
 	/** Main Debugger Panel**/
 	private HyPeerWebDebugger debugger;
@@ -42,16 +46,16 @@ public class GUI extends JFrame implements Observer
 	/**
 	 * Creates and initializes the GUI as being the root
 	 */
-	public GUI(HyPeerWebSegment hypeerweb){
-		this.hypeerweb = hypeerweb;
-		//TODO allow for reloading of HyPeerWeb segment from the database.
-		hypeerweb.reload();
+	public GUI(){
+		this.facade = new GUIFacade(this);
+		this.hypeerweb = new NullHyPeerWebSegment();
+		PeerCommunicator.createPeerCommunicator(DEFAULT_GUI_PORT_NUMBER);
+		
 		this.setTitle("HyPeerWeb DEBUGGER V 1.1");
 
 		this.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent we) {
 				shutdown();
-			    System.exit(0);
 			  }
 			});
 		
@@ -64,21 +68,21 @@ public class GUI extends JFrame implements Observer
 		this.pack();
 	}
 	
-	private void shutdown(){
-		hypeerweb.close();
+	public void shutdown(){
+		//hypeerweb.close();
+		System.exit(0);
 	}
 	
-	public static GUI getSingleton(HyPeerWebSegment hypeerweb){
+	public static GUI getSingleton(){
 		if(singleton == null){
 			try{
-				singleton = new GUI(hypeerweb);
+				singleton = new GUI();
 				singleton.setVisible(true);
 			}
 			catch(Exception e)	{
 				JOptionPane.showMessageDialog(null, e.getMessage(),
 						"ERROR",JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
-				hypeerweb.close();
 				System.exit(1);
 			}
 		}
@@ -93,7 +97,7 @@ public class GUI extends JFrame implements Observer
 			@Override
 			public void run() {
 
-				GUI gui = GUI.getSingleton(HyPeerWebSegment.getSingleton());
+				GUI gui = GUI.getSingleton();
 				gui.setVisible(true);
 			}
 		});
@@ -111,6 +115,14 @@ public class GUI extends JFrame implements Observer
 		return hypeerweb;
 	}
 	
+	public void setHyPeerWeb(HyPeerWebSegment segment){
+		this.hypeerweb = segment;
+	}
+	
+	public GUIFacade getFacade(){
+		return this.facade;
+	}
+	
 	public void printToTracePanel(Object msg){
 		debugger.getTracePanel().print(msg);
 	}
@@ -125,7 +137,6 @@ public class GUI extends JFrame implements Observer
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		update(arg0, arg1);
 	}
 	
 	public NodeListing getNodeListing(){
@@ -134,5 +145,14 @@ public class GUI extends JFrame implements Observer
 	
 	public DebugPrinter getTracePanel(){
 		return debugger.getTracePanel();
+	}
+
+	public boolean isConnectedToHyPeerWeb() {
+		if(hypeerweb instanceof NullHyPeerWebSegment){
+			return false;
+		}
+		else{
+			return true;
+		}
 	}
 }

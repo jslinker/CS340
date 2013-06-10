@@ -8,6 +8,8 @@ import hypeerweb.broadcast.Contents;
 import hypeerweb.broadcast.Parameters;
 import hypeerweb.broadcast.Visitor;
 
+import java.io.ObjectStreamException;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +21,8 @@ import utilities.BitManipulation;
 /**
  * @author Joseph
  */
-public class Node implements NodeInterface, Comparable<Node>{
+public class Node implements NodeInterface, Comparable<Node>, Serializable{
+	private static final long serialVersionUID = -8116887139991043435L;
 	
 	private WebId webId = null;
 	private int height = -1;
@@ -28,6 +31,8 @@ public class Node implements NodeInterface, Comparable<Node>{
 	private Contents contents = new Contents();
 	
 	public static final Node NULL_NODE = new Node(){
+		private static final long serialVersionUID = -4818395442433123461L;
+		
 		@Override public void addDownPointer(Node downPointer){ return; }
 		@Override public void addNeighbor(Node neighbor){ return; }
 		@Override public void addUpPointer(Node upPointer){ return; }
@@ -44,6 +49,9 @@ public class Node implements NodeInterface, Comparable<Node>{
 			child.setConnections(new Connections());
 			child.setFold(child);
 			child.setState(NodeState.CAP);
+		}
+		@Override public void addToHyPeerWeb(Node newNode){
+			this.addChild(newNode);
 		}
 		@Override public Node findNode(int webId){
 			return this;
@@ -606,5 +614,14 @@ public class Node implements NodeInterface, Comparable<Node>{
 		node.setConnections(connections);
 		node.setState(this.state);
 		return node;
+	}
+	
+	public Object writeReplace() throws ObjectStreamException{
+		return Node.NULL_NODE;
+	}
+	
+	public Object readResolve() throws ObjectStreamException{
+		//TODO move to proxy class
+		return Node.NULL_NODE;
 	}
 }

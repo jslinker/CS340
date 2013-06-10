@@ -1,10 +1,10 @@
 package example_code;
 
+import identification.GlobalObjectId;
+import identification.LocalObjectId;
 import communicator.Command;
 import communicator.PeerCommunicator;
 
-import hypeerweb.identification.GlobalObjectId;
-import hypeerweb.identification.LocalObjectId;
 
 public class TestClassProxy
     extends TestClass

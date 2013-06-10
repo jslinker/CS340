@@ -32,7 +32,6 @@ public class SendWindowPanel
     private SendWindowController controller;
 
     public SendWindowPanel(GUI main) {
-        //super(new GridBagLayout());
     	super(new GridLayout(3, 1));
     	this.main = main;
     	

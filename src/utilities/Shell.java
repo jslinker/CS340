@@ -1,4 +1,4 @@
-package example_code;
+package utilities;
 import java.io.IOException;
 
 /**
@@ -9,20 +9,11 @@ import java.io.IOException;
  *
  */
 public class Shell {
-	public void executeCommand(String command){
+	public static void executeCommand(String command){
 		try {
 			Runtime.getRuntime().exec(command);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public Shell(){}
-	
-	public static void main(String[] args){
-		System.out.println("Begin");
-		Shell shell = new Shell();
-		shell.executeCommand("ssh woodfiel@woodfiel.cs.byu.edu ls > t");
-		System.out.println("End");
 	}
 }

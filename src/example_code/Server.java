@@ -1,8 +1,8 @@
 package example_code;
 
+import identification.ObjectDB;
 import communicator.PeerCommunicator;
 
-import hypeerweb.identification.ObjectDB;
 
 public class Server {	
 	public static void main(String[] args){
