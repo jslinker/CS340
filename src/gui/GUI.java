@@ -35,7 +35,6 @@ public class GUI extends JFrame implements Observer
 	private static final PortNumber DEFAULT_GUI_PORT_NUMBER = new PortNumber(49201);
 	
 	private static GUI singleton = null;
-	private GUIFacade facade = null;
 	
 	/** Main Debugger Panel**/
 	private HyPeerWebDebugger debugger;
@@ -47,7 +46,6 @@ public class GUI extends JFrame implements Observer
 	 * Creates and initializes the GUI as being the root
 	 */
 	public GUI(){
-		this.facade = new GUIFacade(this);
 		this.hypeerweb = new NullHyPeerWebSegment();
 		PeerCommunicator.createPeerCommunicator(DEFAULT_GUI_PORT_NUMBER);
 		
@@ -119,10 +117,6 @@ public class GUI extends JFrame implements Observer
 		this.hypeerweb = segment;
 	}
 	
-	public GUIFacade getFacade(){
-		return this.facade;
-	}
-	
 	public void printToTracePanel(Object msg){
 		debugger.getTracePanel().print(msg);
 	}
@@ -135,8 +129,31 @@ public class GUI extends JFrame implements Observer
 		debugger.setDebugContent(newContent);
 	}
 
+	/**
+	 * Arguments for arg1 are strings as follows: cleared, shutdown, addedNode, removedNode
+	 */
 	@Override
-	public void update(Observable arg0, Object arg1) {
+	public void update(Observable arg0, Object arg1){
+		if(arg1 instanceof String){
+			String notification = (String) arg1;
+			switch(notification){
+				case "cleared": 
+					getNodeListing().clear();
+					break;
+				case "shutdown": 
+					setHyPeerWeb(new NullHyPeerWebSegment());
+					getNodeListing().clear();
+					break;
+				case "addedNode": 
+					getNodeListing().increaseListSize();
+					break;
+				case "removedNode": 
+					getNodeListing().decreaseListSize();
+					break;
+				default: 
+					break;
+			}
+		}
 	}
 	
 	public NodeListing getNodeListing(){

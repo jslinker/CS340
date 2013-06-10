@@ -113,6 +113,11 @@ public class NodeListing extends JPanel {
 		}
 	}
 	
+	public void clear(){
+		nodeListModel.clear();
+		listSize = 0;
+	}
+	
 	public void increaseListSize(){
 		nodeListModel.set(listSize,Integer.toString(listSize));
 		listSize++;

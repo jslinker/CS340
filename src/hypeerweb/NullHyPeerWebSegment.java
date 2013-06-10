@@ -92,15 +92,24 @@ public class NullHyPeerWebSegment extends HyPeerWebSegment{
 	}
 
 	@Override
-	public void registerObserver(HyPeerWebObserver observer) {
-	}
-
-	@Override
-	public void unregisterObserver(HyPeerWebObserver observer) {
-	}
-
-	@Override
 	public void fireNodeAdded(int webId) {
 	}
+
+	@Override
+	public void fireNodeRemoved(int webId) {
+	}
+
+	@Override
+	public void fireCleared() {
+	}
+
+	@Override
+	public void fireShutdown() {
+	}
+
+	@Override
+	public void kill() {
+	}
+	
 	
 }

@@ -24,19 +24,19 @@ public class SessionController {
 	public void joinHyPeerWebSegment(GlobalObjectId hypeerwebSegmentId){
 		//TODO create HyPeerWebProxy
 		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
-		web.registerObserver(main.getFacade());
+		web.addObserver(main);
 		main.setHyPeerWeb(web);
 		main.getNodeListing().initList();
 	}
 	
 	public void leaveHyPeerWebSegment(){
-		main.getHyPeerWeb().unregisterObserver(main.getFacade());
+		main.getHyPeerWeb().deleteObserver(main);
 		main.getNodeListing().initList();
 		main.setHyPeerWeb(new NullHyPeerWebSegment());
 	}
 	
 	public void endHyPeerWebSegment(){
-		main.getHyPeerWeb().shutdown();
+		main.getHyPeerWeb().kill();
 		main.setHyPeerWeb(new NullHyPeerWebSegment());
 	}
 }

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 
 import communicator.PeerCommunicator;
 import communicator.PortNumber;
@@ -17,15 +18,13 @@ import communicator.PortNumber;
 /**
  * @author Jason Robertson
  */
-public class HyPeerWebSegment {
+public class HyPeerWebSegment extends Observable{
 	
 	private static HyPeerWebSegment singleton = null;
 	private List<Node> nodes = null;
-	private HashSet<HyPeerWebObserver> observers = null;
 	
 	protected HyPeerWebSegment(){
 		this.nodes = new ArrayList<Node>();
-		this.observers = new HashSet<HyPeerWebObserver>();
 	}
 	
 	public static HyPeerWebSegment getSingleton(){
@@ -287,47 +286,33 @@ public class HyPeerWebSegment {
 	
 	
 	/**
-	 * Registers the given observer to receive updates to changes in this HyPeerWebSegment.
-	 * @param observer The HyPeerWebObserver to be registered.
-	 * @pre None.
-	 * @post observer in observers.
-	 */
-	public void registerObserver(HyPeerWebObserver observer){
-		observers.add(observer);
-	}
-	
-	/**
-	 * Unregisters the given observer to no longer receive updates.
-	 * @param observer The HyPeerWebObserver to remove.
-	 * @pre None.
-	 * @post If observer in guiRegister, then observer not in guiRegister.
-	 */
-	public void unregisterObserver(HyPeerWebObserver observer){
-		observers.remove(observer);
-	}
-	
-	/**
 	 * Used to trigger a notification to all listening GUIs.
 	 * @param webId The webId of the node that was added.
 	 * @pre The node with the given webId must be in the HyPeerWeb.
 	 * @post The GUIs have all been notified of the addition.
 	 */
 	public void fireNodeAdded(int webId){
-		for(HyPeerWebObserver observer: observers){
-			observer.notifyNodeAdded(webId);
-		}
+		setChanged();
+		this.notifyObservers("addedNode");
+		clearChanged();
 	}
 	
 	public void fireNodeRemoved(int webId){
-		for(HyPeerWebObserver observer: observers){
-			observer.notifyNodeRemoved(webId);
-		}
+		setChanged();
+		this.notifyObservers("removedNode");
+		clearChanged();
 	}
 	
 	public void fireCleared(){
-		for(HyPeerWebObserver observer: observers){
-			observer.notifyCleared();
-		}
+		setChanged();
+		this.notifyObservers("clear");
+		clearChanged();
+	}
+	
+	public void fireShutdown(){
+		setChanged();
+		this.notifyObservers("shutdown");
+		clearChanged();
 	}
 	
 	/**
@@ -338,10 +323,9 @@ public class HyPeerWebSegment {
 	 *  then this segment is destroyed. If this is the last segment then the nodes are stored in
 	 *   the database. Disconnects any observers.
 	 */
-	public void shutdown(){
-		for(HyPeerWebObserver observer: observers){
-			observer.notifyHyPeerWebSegmentShutdown();
-		}
+	public void kill(){
+		this.fireShutdown();
+		
 		//TODO distribute this segments nodes to the other segments
 		//ensure the segments are connected properly
 		
