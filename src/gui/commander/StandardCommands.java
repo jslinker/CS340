@@ -150,29 +150,39 @@ public class StandardCommands extends JPanel
 	 * Inserts a Node into the HyPeerWeb
 	 */
 	public void insertButtonPressed()	{
-		NodeListing listing = main.getHyPeerWebDebugger().getMapper().getNodeListing();
-		if(listing.listSize() > listing.MAX_NUMBER_OF_NODES) {
-			setDebugContent(String.format("Node list size is at its maximum size (%d), please remove nodes before" +
+		if(!main.isConnectedToHyPeerWeb()){
+			setDebugContent("Not connected to a HyPeerWebSegment.");
+			return;
+		}
+
+		setDebugContent("");
+		
+		NodeListing listing = main.getNodeListing();
+		if(listing.listSize() >= NodeListing.MAX_NUMBER_OF_NODES) {
+			setDebugContent(String.format("Node list size is at its maximum size (%d), please remove nodes before " +
 										 "attempting to insert more.", listing.listSize()));
 		} else {
 			int insertIndex = listing.getSelectedIndex();
-			main.setDebugContent("");
-			HyPeerWebSegment hypeerweb = HyPeerWebSegment.getSingleton();
-			Node startNode = hypeerweb.getNode(insertIndex);
-			Node newNode = new Node(10,10);
-			if(startNode != null && startNode != Node.NULL_NODE) {
+			HyPeerWebSegment hypeerweb = main.getHyPeerWeb();
+			
+			
+			if(insertIndex < 0 && hypeerweb.size() > 0){
+				setDebugContent("Please select a valid node to perform insertion.");
+			}
+			else{
+				Node newNode = new Node(0);
+				
+				Node startNode = Node.NULL_NODE;
+				if(insertIndex >= 0){
+					startNode = hypeerweb.getNode(insertIndex);
+				}
+				
 				hypeerweb.addToHyPeerWeb(newNode, startNode);
-				listing.increaseListSize();
-			} else if (insertIndex == -1 && hypeerweb.size() == 0) {
-				hypeerweb.addToHyPeerWeb(newNode, Node.NULL_NODE);
-				listing.increaseListSize();
-			} else {
-				setDebugContent("Please select a valid node to perform insertion");
 			}
 		}
 		
 		
-		//TODO Phase 5 -- Add functionality for inserting a node.
+		//Phase 5 -- Add functionality for inserting a node.
 		//I. Get the size of the "nodeListing" component.
 		//II. If the size is greater than or equal to the max number of nodes allowed in a NodeListing
 		//		(see constant in class NodeListing) print an error in the the "debugStatus" component.
@@ -189,18 +199,28 @@ public class StandardCommands extends JPanel
 	 *  Removes a node from the HyPeerWeb
 	 */
 	public void removeButtonPressed() {
+		if(!main.isConnectedToHyPeerWeb()){
+			setDebugContent("Not connected to a HyPeerWebSegment.");
+			return;
+		}
+		
+		setDebugContent("");
+		
 		NodeListing listing = main.getHyPeerWebDebugger().getMapper().getNodeListing();
 		if(listing.listSize() == 1) {
 			setDebugContent("Node Listing size = 1, can't remove another node");
 		} else {
-			int insertIndex = listing.getSelectedIndex();
-			HyPeerWebSegment hypeerweb = HyPeerWebSegment.getSingleton();
-			Node startNode = hypeerweb.getNode(insertIndex);
-			if(startNode != null && startNode != Node.NULL_NODE) {
-				hypeerweb.removeFromHyPeerWeb(startNode);
-				listing.decreaseListSize();
+			int listIndex = listing.getSelectedIndex();
+			if(listIndex < 0){
+				setDebugContent("Please select a node to delete.");
 			} else {
-				setDebugContent("Please select a node to delete");
+				HyPeerWebSegment hypeerweb = HyPeerWebSegment.getSingleton();
+				Node removeNode = hypeerweb.getNode(listIndex);
+				if(removeNode != null && removeNode != Node.NULL_NODE) {
+					hypeerweb.removeFromHyPeerWeb(removeNode);
+				} else {
+					setDebugContent("Please select a node to delete");
+				}
 			}
 		}
 		//TODO Phase 5 -- Add functionality for removing a node.
