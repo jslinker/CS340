@@ -5,8 +5,11 @@ import hypeerweb.HyPeerWeb;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import junit.framework.TestCase;
 import node.Node;
+
+import dbPhase.hypeerweb.NodeCore;
+
+import junit.framework.TestCase;
 
 /**
  * Tests the specifications for the SendVisitor class.

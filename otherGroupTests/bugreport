@@ -42,5 +42,8 @@ Error Report:
 		web.saveToDatabase();
 		
 		assertEquals(3, web.getHyPeerWebDatabase().getSingleton().getAllNodes().size());  <==== .size() returns 1
+		
+*Broadcast
+	-Calling broadcast.visit on null reference gives null pointer exception
 	
 		
