@@ -61,7 +61,7 @@ public class Broadcaster extends BroadcastVisitor {
 		}
 		
 		result += String.format("Broadcasting '%s' to node %s.\n", parameters.get(MESSAGE_KEY), node.getWebId());
-		GUI gui = GUI.getSingleton();
+		GUI gui = GUI.getSingleton(null);
 		gui.printToTracePanel(result);
 	}
 	

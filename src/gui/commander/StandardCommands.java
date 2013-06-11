@@ -166,14 +166,14 @@ public class StandardCommands extends JPanel
 			HyPeerWebSegment hypeerweb = main.getHyPeerWeb();
 			
 			
-			if(insertIndex < 0 && hypeerweb.size() > 0){
+			if((insertIndex < 0 || insertIndex >= listing.listSize()) && listing.listSize() > 0){
 				setDebugContent("Please select a valid node to perform insertion.");
 			}
 			else{
 				Node newNode = new Node(0);
 				
 				Node startNode = Node.NULL_NODE;
-				if(insertIndex >= 0){
+				if(insertIndex >= 0 && insertIndex < listing.listSize()){
 					startNode = hypeerweb.getNode(insertIndex);
 				}
 				
@@ -206,12 +206,12 @@ public class StandardCommands extends JPanel
 		
 		setDebugContent("");
 		
-		NodeListing listing = main.getHyPeerWebDebugger().getMapper().getNodeListing();
+		NodeListing listing = main.getNodeListing();
 		if(listing.listSize() == 1) {
 			setDebugContent("Node Listing size = 1, can't remove another node");
 		} else {
 			int listIndex = listing.getSelectedIndex();
-			if(listIndex < 0){
+			if(listIndex < 0 || listIndex >= listing.listSize()){
 				setDebugContent("Please select a node to delete.");
 			} else {
 				HyPeerWebSegment hypeerweb = HyPeerWebSegment.getSingleton();

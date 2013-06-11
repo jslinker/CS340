@@ -1,4 +1,4 @@
-package proxies;
+package utilities;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -283,6 +283,6 @@ public class ProxyConstructor {
     }
 	
 	public static void main(String[] args){
-		create("hypeerweb.HyPeerWebSegment");
+		create("hypeerweb.node.Node");
 	}
 }

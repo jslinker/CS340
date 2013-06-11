@@ -35,6 +35,7 @@ public class GUI extends JFrame implements Observer
 	private static final PortNumber DEFAULT_GUI_PORT_NUMBER = new PortNumber(49201);
 	
 	private static GUI singleton = null;
+	private GUIFacade facade = null;
 	
 	/** Main Debugger Panel**/
 	private HyPeerWebDebugger debugger;
@@ -45,8 +46,9 @@ public class GUI extends JFrame implements Observer
 	/**
 	 * Creates and initializes the GUI as being the root
 	 */
-	public GUI(){
-		this.hypeerweb = new NullHyPeerWebSegment();
+	public GUI(HyPeerWebSegment hypeerweb){
+		this.hypeerweb = hypeerweb;
+		this.facade = new GUIFacade(this);
 		PeerCommunicator.createPeerCommunicator(DEFAULT_GUI_PORT_NUMBER);
 		
 		this.setTitle("HyPeerWeb DEBUGGER V 1.1");
@@ -70,10 +72,10 @@ public class GUI extends JFrame implements Observer
 		System.exit(0);
 	}
 	
-	public static GUI getSingleton(){
+	public static GUI getSingleton(HyPeerWebSegment hypeerweb){
 		if(singleton == null){
 			try{
-				singleton = new GUI();
+				singleton = new GUI(hypeerweb);
 				singleton.setVisible(true);
 			}
 			catch(Exception e)	{
@@ -94,7 +96,7 @@ public class GUI extends JFrame implements Observer
 			@Override
 			public void run() {
 
-				GUI gui = GUI.getSingleton();
+				GUI gui = GUI.getSingleton(new NullHyPeerWebSegment());
 				gui.setVisible(true);
 			}
 		});
@@ -169,5 +171,9 @@ public class GUI extends JFrame implements Observer
 		else{
 			return true;
 		}
+	}
+	
+	public GUIFacade getFacade(){
+		return this.facade;
 	}
 }

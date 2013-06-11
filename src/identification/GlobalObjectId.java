@@ -54,6 +54,17 @@ public class GlobalObjectId {
 	}
 	
 	/**
+	 * Constructs a GlobalObjectId using this machines address and port information, the user must
+	 *  provide a valid LocalObjectId.
+	 * @param localId
+	 */
+	public GlobalObjectId(LocalObjectId localId){
+		machineAddr = MachineAddress.getThisMachinesInetAddress();
+		portNumber = PortNumber.getApplicationsPortNumber();
+		localObjectId = localId;
+	}
+	
+	/**
 	 * Copy Constructor.
 	 * 
 	 * @param globalObjectId the globalObjectId we will make a copy of.

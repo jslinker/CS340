@@ -43,6 +43,7 @@ public class HyPeerWebSegment extends Observable{
 	 */
 	public void addToHyPeerWeb(Node newNode, Node startNode){
 		assert (newNode != null && newNode != Node.NULL_NODE);
+		assert ((startNode != null && startNode != Node.NULL_NODE) || nodes.isEmpty());
 		
 		if(nodes.isEmpty()){
 			getForeignNode().addToHyPeerWeb(newNode);
@@ -105,6 +106,26 @@ public class HyPeerWebSegment extends Observable{
 		
 		Node result = nodes.get(index);
 		return result;
+	}
+	
+	public Node getANode(){
+		if(nodes.isEmpty()){
+			return getForeignNode();
+		}
+		else{
+			return nodes.get(0);
+		}
+	}
+	
+	/**
+	 * Gets a node from a connected HyPeerWeb.
+	 * @return A NodeProxy that is in another HyPeerWeb.
+	 * @pre None.
+	 * @post A NodeProxy from any other HyPeerWeb; NULL_NODE if no other node can be found.
+	 */
+	public Node getForeignNode(){
+		//TODO implement this method so it gets a NodeProxy from another HyPeerWebSegement
+		return Node.NULL_NODE;
 	}
 	
 	/**
@@ -264,17 +285,6 @@ public class HyPeerWebSegment extends Observable{
 	}
 	
 	/**
-	 * Gets a node from a connected HyPeerWeb.
-	 * @return A NodeProxy that is in another HyPeerWeb.
-	 * @pre None.
-	 * @post A NodeProxy from any other HyPeerWeb; NULL_NODE if no other node can be found.
-	 */
-	public Node getForeignNode(){
-		//TODO implement this method so it gets a NodeProxy from another HyPeerWebSegement
-		return Node.NULL_NODE;
-	}
-	
-	/**
 	 * This method is being called from the GUI.
 	 * @author Jason Robertson
 	 */
@@ -305,7 +315,7 @@ public class HyPeerWebSegment extends Observable{
 	
 	public void fireCleared(){
 		setChanged();
-		this.notifyObservers("clear");
+		this.notifyObservers("cleared");
 		clearChanged();
 	}
 	

@@ -2,6 +2,7 @@ package communicator;
 import identification.GlobalObjectId;
 import identification.ObjectDB;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -231,9 +232,10 @@ public class PeerCommunicator
         ObjectOutputStream oos = null;
         ObjectInputStream ois = null;
         Object result = null;
+        Socket socket = null;
         try {
           //open a socket connection
-          Socket socket = new Socket(globalObjectId.getMachineAddr(), globalObjectId.getPortNumber().getValue());
+          socket = new Socket(globalObjectId.getMachineAddr(), globalObjectId.getPortNumber().getValue());
           //O streams for objects
           oos = new ObjectOutputStream(socket.getOutputStream());
           ois = new ObjectInputStream(socket.getInputStream());
@@ -249,7 +251,15 @@ public class PeerCommunicator
         } catch(Exception e) {
           System.err.println(e.getMessage());
   		  System.err.println(e.getStackTrace());
-        }  
+        } finally{
+        	if(socket != null){
+        		try{
+        			socket.close();
+        		}
+        		catch(IOException e){
+        		}
+        	}
+        }
 
         return result;
     }
@@ -270,9 +280,10 @@ public class PeerCommunicator
     public void sendASynchronous(GlobalObjectId globalObjectId, Command command) {
         ObjectOutputStream oos = null;
         ObjectInputStream ois = null;
+        Socket socket = null;
         try {
           //open a socket connection
-          Socket socket = new Socket(globalObjectId.getMachineAddr(), globalObjectId.getPortNumber().getValue());
+          socket = new Socket(globalObjectId.getMachineAddr(), globalObjectId.getPortNumber().getValue());
           //O streams for objects
           oos = new ObjectOutputStream(socket.getOutputStream());
           ois = new ObjectInputStream(socket.getInputStream());
@@ -285,6 +296,14 @@ public class PeerCommunicator
         } catch(Exception e) {
           System.out.println(e.getMessage());
   		  System.err.println(e.getStackTrace());
+        } finally{
+        	if(socket != null){
+        		try{
+        			socket.close();
+        		}
+        		catch(IOException e){
+        		}
+        	}
         }
     }
 }

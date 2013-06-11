@@ -1,12 +1,12 @@
 package gui.controllers;
 
-import communicator.PortNumber;
-
-import utilities.Shell;
 import gui.GUI;
-import hypeerweb.HyPeerWebSegment;
+import hypeerweb.HyPeerWebSegmentProxy;
 import hypeerweb.NullHyPeerWebSegment;
 import identification.GlobalObjectId;
+import utilities.Shell;
+
+import communicator.PortNumber;
 
 public class SessionController {
 
@@ -17,15 +17,16 @@ public class SessionController {
 	}
 	
 	public void newHyPeerWebSegment(){
-		//Shell.executeCommand("java HyPeerWebSegment "+PortNumber.DEFAULT_PORT_NUMBER);
+		Shell.executeCommand("java HyPeerWebSegment "+PortNumber.DEFAULT_PORT_NUMBER.getValue());
 		this.joinHyPeerWebSegment(new GlobalObjectId("localhost", PortNumber.DEFAULT_PORT_NUMBER, null));
 	}
 	
 	public void joinHyPeerWebSegment(GlobalObjectId hypeerwebSegmentId){
 		//TODO create HyPeerWebProxy
-		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
-		web.addObserver(main);
-		main.setHyPeerWeb(web);
+		//HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
+		HyPeerWebSegmentProxy proxy = new HyPeerWebSegmentProxy(hypeerwebSegmentId);
+		proxy.addObserver(main.getFacade());
+		main.setHyPeerWeb(proxy);
 		main.getNodeListing().initList();
 	}
 	
