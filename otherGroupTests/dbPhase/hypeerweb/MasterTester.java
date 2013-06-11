@@ -1,22 +1,11 @@
 package dbPhase.hypeerweb;
 
-import hypeerweb.broadcast.BroadcastVisitorBlackBoxTests;
-import hypeerweb.broadcast.ContentsBlackBoxTests;
-import hypeerweb.broadcast.ParametersBlackBoxTests;
-import hypeerweb.broadcast.SendVisitorBlackBoxTests;
 import junit.framework.TestCase;
-import node.NZWhiteBoxConnectionsTests;
-import node.NodeBlackBoxTests;
-import node.NodeStateTests;
-import node.NodeTests;
-import node.SimplifiedNodeDomainTests;
-import node.WebIdTests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import utilities.BitManipulationTests;
-import database.HyPeerWebDatabaseTests;
+
 
 /**
  * Run as JUnit Test. Runs all of the tests for the HyPeerWeb Project.
@@ -38,7 +27,7 @@ import database.HyPeerWebDatabaseTests;
 	ParametersBlackBoxTests.class,
 	NodeBlackBoxTests.class,
 	
-	NZWhiteBoxConnectionsTests.class,
+	//NZWhiteBoxConnectionsTests.class,
 	SimplifiedNodeDomainTests.class
 })
 

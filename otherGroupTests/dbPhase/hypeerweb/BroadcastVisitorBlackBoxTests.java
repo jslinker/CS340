@@ -1,13 +1,10 @@
 package dbPhase.hypeerweb;
 
-import hypeerweb.HyPeerWeb;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
 import junit.framework.TestCase;
-import node.Node;
 
 /**
  * Tests the specifications for the BroadcastVisitor class.
@@ -40,8 +37,11 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		Node nodeZero = web.getNode(0);
 		
 		BroadcastVisitor broadcastNothing = new BroadcastVisitor(){
-			public void operation(Node node, Parameters parameters){
-				//do nothing
+			@Override
+			protected void operation(dbPhase.hypeerweb.Node node,
+					Parameters parameters) {
+				// TODO Auto-generated method stub
+				
 			}
 		};
 		
@@ -226,12 +226,12 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		HyPeerWeb web = HyPeerWeb.getSingleton();
 		
 		if(size > 0){
-			web.addToHyPeerWeb(new Node(0), null);
+			web.addToHyPeerWeb(new NodeCore(0), null);
 			Node nodeZero = web.getNode(0);
 			allNodesSet.add(nodeZero);
 			
 			for(int i = 1; i < size; i++){
-				Node newNode = new Node(i);
+				Node newNode = new NodeCore(i);
 				nodeZero.addToHyPeerWeb(newNode);
 				allNodesSet.add(newNode);
 			}

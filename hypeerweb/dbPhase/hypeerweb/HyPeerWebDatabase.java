@@ -60,7 +60,7 @@ public class HyPeerWebDatabase {
 		// fixed in order to work.
 
 		try {
-			connection = DriverManager.getConnection("jdbc:sqlite:./"
+			connection = DriverManager.getConnection("jdbc:sqlite:"
 					+ DATABASE_DIRECTORY + "/" + dbName);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -93,6 +93,7 @@ public class HyPeerWebDatabase {
 			sql = "CREATE TABLE IF NOT EXISTS Connections(firstWebID integer, secondWebID integer, connType text, FOREIGN KEY (firstWebID) REFERENCES Nodes(webID), FOREIGN KEY (secondWebID) REFERENCES Nodes(webID));";
 			pStmt = connection.prepareStatement(sql);
 			pStmt.execute();
+			pStmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -112,6 +113,7 @@ public class HyPeerWebDatabase {
 			sql = "DROP TABLE IF EXISTS Connections";
 			pStmt = connection.prepareStatement(sql);
 			pStmt.executeUpdate();
+			pStmt.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -186,6 +188,7 @@ public class HyPeerWebDatabase {
 			pStmt.setInt(2, node.getInverseSurrogateFold().getWebIdValue());
 			pStmt.setString(3, "Inverse Surrogate Fold");
 			pStmt.executeUpdate();
+			pStmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -305,6 +308,9 @@ public class HyPeerWebDatabase {
 				}
 
 				nodes.add(node);
+				tmpRS.close();
+				rs.close();
+				pStmt.close();
 			}
 			return nodes;
 		} catch (SQLException e) {
@@ -325,7 +331,7 @@ public class HyPeerWebDatabase {
 	 */
 	public SimplifiedNodeDomain getNode(int webId) {
 		try {
-			String sql = "SELECT secondWebID FROM Connections WHERE webID = ? AND connType = ?;";
+			String sql = "SELECT secondWebID FROM Connections WHERE firstwebID = ? AND connType = ?;";
 			PreparedStatement pStmt = connection.prepareStatement(sql);
 
 			pStmt.setInt(1, webId);
@@ -379,6 +385,8 @@ public class HyPeerWebDatabase {
 			SimplifiedNodeDomain node = new SimplifiedNodeDomain(webId, height,
 					neighbors, upPointers, downPointers, fold, surrogateFold,
 					inverseSurrogateFold, state);
+			rs.close();
+			pStmt.close();
 
 			return node;
 		} catch (SQLException e) {

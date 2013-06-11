@@ -17,60 +17,54 @@ public class NodeStateTests extends TestCase{
 		//Test invalid states.
 		//Loop testing for zero times.
 		try{
-			NodeState.getNodeState(-1);
-			fail();
+			assertTrue(null == NodeState.stateFromInt(-1));
+			//fail();
 		}
 		catch(IllegalArgumentException e){
-			assertTrue(true);
+			fail();
 		}
 		try{
-			NodeState.getNodeState(0);
-			fail();
+			assertTrue(NodeState.NodeZeroState == NodeState.stateFromInt(0));
 		}
 		catch(IllegalArgumentException e){
-			assertTrue(true);
+			fail();
 		}
 		try{
-			NodeState.getNodeState(5);
-			fail();
+			assertTrue(null == NodeState.stateFromInt(5));
 		}
 		catch(IllegalArgumentException e){
-			assertTrue(true);
+			fail();
 		}
 		
 		//Test valid states.
 		//Loop testing for one cycle.
-		NodeState standard = NodeState.getNodeState(1);
-		assertTrue(standard == NodeState.STANDARD);
+		NodeState standard = NodeState.stateFromInt(1);
+		assertTrue(standard == NodeState.StandardNodeState);
 		//Loop testing for two cycles.
-		NodeState upPointing = NodeState.getNodeState(2);
-		assertTrue(upPointing == NodeState.UP_POINTING);
-		NodeState downPointing = NodeState.getNodeState(3);
-		assertTrue(downPointing == NodeState.DOWN_POINTING);
-		NodeState cap = NodeState.getNodeState(4);
-		assertTrue(cap == NodeState.CAP);
+		NodeState insert = NodeState.stateFromInt(2);
+		assertTrue(insert == NodeState.InsertionPointState);
 	}
 	
 	/**
 	 * Only tests an illegal squeeze call.
 	 */
-	public void testSqueezeStandard(){
-		//Test illegal squeeze call.
-		try{
-			NodeState.STANDARD.squeeze(null);
-			fail();
-		}
-		catch(UnsupportedOperationException e){
-			assertTrue(true);
-		}
-	}
+//	public void testSqueezeStandard(){
+//		//Test illegal squeeze call.
+//		try{
+//			NodeState.STANDARD.squeeze(null);
+//			fail();
+//		}
+//		catch(UnsupportedOperationException e){
+//			assertTrue(true);
+//		}
+//	}
 	
 	/**
 	 * Tests the setNodeState(NodeInterface) method.
 	 */
-	public void testSetNodeState(){
-		NodeInterface iNode = new Neighbor(new Node(0));
-		NodeState.setNodeState(iNode);
-		assertTrue(iNode.getNode().getState() == NodeState.CAP);
-	}
+//	public void testSetNodeState(){
+//		NodeInterface iNode = new Neighbor(new Node(0));
+//		NodeState.setNodeState(iNode);
+//		assertTrue(iNode.getNode().getState() == NodeState.CAP);
+//	}
 }
