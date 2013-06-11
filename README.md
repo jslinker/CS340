@@ -26,6 +26,9 @@ UML Diagram - Everyone - May 8
 
 Create PERT Charts - Joseph
 
+Below is the PERTT chart for project 6.  Colored tasks are related by milestone.  Node sizes are estimates of task difficulty.  No hard due dates have been set.  Assignments will be updated as progress is made.
+![Final PERTT Chart](/extra_content/ProjectSixChart.jpg "Final PERTT Chart")
+
 The Following Are The Required Use Cases:
 Name: Add Node
 Description: The requirements and results of requesting to add a node to the HyPeerWeb.  Regardless of the source of the request, requirements and outcomes are the same.
