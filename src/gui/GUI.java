@@ -67,7 +67,6 @@ public class GUI extends JFrame implements Observer
 	}
 	
 	public void shutdown(){
-		//hypeerweb.close();
 		System.exit(0);
 	}
 	
@@ -136,22 +135,21 @@ public class GUI extends JFrame implements Observer
 	public void update(Observable arg0, Object arg1){
 		if(arg1 instanceof String){
 			String notification = (String) arg1;
-			switch(notification){
-				case "cleared": 
-					getNodeListing().clear();
-					break;
-				case "shutdown": 
-					setHyPeerWeb(new NullHyPeerWebSegment());
-					getNodeListing().clear();
-					break;
-				case "addedNode": 
-					getNodeListing().increaseListSize();
-					break;
-				case "removedNode": 
-					getNodeListing().decreaseListSize();
-					break;
-				default: 
-					break;
+			if(notification.equals("cleared")){
+				getNodeListing().clear();
+			}
+			else if(notification.equals("shutdown")){
+				setHyPeerWeb(new NullHyPeerWebSegment());
+				getNodeListing().clear();
+			}
+			else if(notification.equals("addedNode")){
+				getNodeListing().increaseListSize();
+			}
+			else if(notification.equals("removedNode")){
+				getNodeListing().decreaseListSize();
+			}
+			else{
+				//do nothing
 			}
 		}
 	}
