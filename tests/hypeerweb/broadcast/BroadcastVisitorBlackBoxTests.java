@@ -229,9 +229,10 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 			web.addToHyPeerWeb(new Node(0), null);
 			Node nodeZero = web.getNode(0);
 			allNodesSet.add(nodeZero);
-			
+			web.addNode(nodeZero);
 			for(int i = 1; i < size; i++){
 				Node newNode = new Node(i);
+				web.addNode(newNode);
 				nodeZero.addToHyPeerWeb(newNode);
 				allNodesSet.add(newNode);
 			}

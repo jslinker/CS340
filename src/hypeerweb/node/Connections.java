@@ -11,7 +11,6 @@ import hypeerweb.node.roles.*;
  * Holds connections for a single node.
  * 
  * @author Nathan Zabriskie
- *
  */
 public class Connections {
 	private TreeMap<Integer,NodeInterface> downPointers = new TreeMap<Integer,NodeInterface>();
@@ -76,11 +75,6 @@ public class Connections {
 		}
 	}
 
-	/**
-	 * Get this Connection's upPointers.
-	 * @pre 
-	 * @post 
-	 */
 	public Map<Integer,NodeInterface> getUpPointers() {
 		return upPointers;
 	}

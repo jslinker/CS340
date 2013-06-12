@@ -38,17 +38,6 @@ public class NodeProxy extends Node{
         return (Integer)result;
     }
 
-    @Override
-    public volatile int compareTo(hypeerweb.node.Node p0){
-        String[] parameterTypeNames = new String[1];
-        parameterTypeNames[0] = "java.lang.Object";
-        Object[] actualParameters = new Object[1];
-        actualParameters[0] = p0;
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "compareTo", parameterTypeNames, actualParameters, true);
-        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (Integer)result;
-    }
-
     public int compareTo(hypeerweb.node.Node p0){
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "hypeerweb.node.Node";
@@ -81,6 +70,23 @@ public class NodeProxy extends Node{
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "writeReplace", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (java.lang.Object)result;
+    }
+    
+    public identification.LocalObjectId getLocalObjectId(){
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "getLocalObjectId", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (identification.LocalObjectId)result;
+    }
+    
+    public void setLocalObjectId(identification.LocalObjectId p0){
+        String[] parameterTypeNames = new String[1];
+        parameterTypeNames[0] = "identification.LocalObjectId";
+        Object[] actualParameters = new Object[1];
+        actualParameters[0] = p0;
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "setLocalObjectId", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
     public void accept(hypeerweb.broadcast.Visitor p0, hypeerweb.broadcast.Parameters p1){

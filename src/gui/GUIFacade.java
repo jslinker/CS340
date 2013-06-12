@@ -5,6 +5,7 @@ import identification.LocalObjectId;
 import identification.ObjectDB;
 
 import java.io.ObjectStreamException;
+import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -14,7 +15,7 @@ import java.util.Observer;
  * @author Craig Jacobson
  *
  */
-public class GUIFacade implements Observer{
+public class GUIFacade implements Observer, Serializable{
 
 	private GUI main = null;
 	private LocalObjectId localId = null;

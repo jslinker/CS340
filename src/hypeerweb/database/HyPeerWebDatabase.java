@@ -30,9 +30,23 @@ public class HyPeerWebDatabase {
 	private static HyPeerWebDatabase singleton = null;
 	
 	private Connection connection = null;
+	private String url;
 	
-	public Connection getConnection(){
-		assert connection != null;
+	private Connection getConnection(){
+		try {
+			if(connection == null || connection.isClosed()){
+				try {
+					connection = DriverManager.getConnection(url);
+					connection.setAutoCommit(true);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 	
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return this.connection;
 	}
 	
@@ -47,20 +61,14 @@ public class HyPeerWebDatabase {
 	 * @author Craig Jacobson
 	 */
 	private HyPeerWebDatabase(String dbName){
-		try{
+		try {
 			Class.forName(SQLITE_DRIVER);
-			String url = SQLITE_DRIVER_URL_PREFIX + ":" + DATABASE_DIRECTORY + dbName;
-			connection = DriverManager.getConnection(url);
-			connection.setAutoCommit(true);
-			
-			initHyPeerWebTables();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		catch(ClassNotFoundException e){
-			System.out.println(e);
-		}
-		catch(SQLException e){
-			System.out.println(e);
-		}
+		url = SQLITE_DRIVER_URL_PREFIX + ":" + DATABASE_DIRECTORY + dbName;
+		initHyPeerWebTables();
 	}
 	
 	private static final String CREATE_TABLE_NODES = "CREATE TABLE IF NOT EXISTS " + tableNames[0] + "("+
@@ -102,6 +110,7 @@ public class HyPeerWebDatabase {
 			createTable.executeUpdate(CREATE_TABLE_UP_POINTERS);
 			createTable.executeUpdate(CREATE_TABLE_DOWN_POINTERS);
 			createTable.close();
+			closeConnection();
 		}
 		catch(SQLException e){
 			System.out.println(e);
@@ -128,6 +137,7 @@ public class HyPeerWebDatabase {
 	 * @author Craig Jacobson
 	 */
 	public static void initHyPeerWebDatabase(String dbName){
+		singleton = null;
 		if(dbName == null || dbName.length() == 0){
 			File databaseDirectory = new File(DATABASE_DIRECTORY);
 			databaseDirectory.mkdirs();
@@ -204,6 +214,7 @@ public class HyPeerWebDatabase {
 			
 			rs.close();
 			stmt.close();
+			closeConnection();
 		}
 		catch(SQLException e) {
 			System.out.println(e);
@@ -233,6 +244,7 @@ public class HyPeerWebDatabase {
 			
 			rs.close();
 			stmt.close();
+			closeConnection();
 		}
 		catch (SQLException e) {
 			System.out.println(e);
@@ -260,6 +272,7 @@ public class HyPeerWebDatabase {
 			}
 			rs.close();
 			stmt.close();
+			closeConnection();
 		}
 		catch(SQLException e) {
 			System.out.println(e);
@@ -337,6 +350,7 @@ public class HyPeerWebDatabase {
 			}
 
 			stmt.close();
+			closeConnection();
 		}
 		catch (SQLException e){
 			e.printStackTrace();
@@ -359,15 +373,17 @@ public class HyPeerWebDatabase {
 				stmt.executeUpdate(sql);
 			}
 			stmt.close();
+			getSingleton().closeConnection();
 		}
 		catch (SQLException e){
 			e.printStackTrace();
 		}
 	}
 	
-	public static void closeConnection(){
+	private void closeConnection(){
 		try {
-			getSingleton().getConnection().close();
+			connection.close();
+			connection = null;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -6,7 +6,10 @@ import identification.GlobalObjectId;
 import communicator.Command;
 import communicator.PeerCommunicator;
 
-public class HyPeerWebSegmentProxy extends HyPeerWebSegment{
+public class HyPeerWebSegmentProxy extends HyPeerWebSegment {
+	
+	private static final long serialVersionUID = 5361113117L;
+	
     private GlobalObjectId globalObjectId;
 
     public HyPeerWebSegmentProxy(GlobalObjectId globalObjectId){
@@ -62,6 +65,23 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment{
         actualParameters[0] = p0;
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "removeNode", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public void connectSegment(hypeerweb.HyPeerWebSegment p0){
+        String[] parameterTypeNames = new String[1];
+        parameterTypeNames[0] = "hypeerweb.HyPeerWebSegment";
+        Object[] actualParameters = new Object[1];
+        actualParameters[0] = p0;
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "connectSegment", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+
+    public hypeerweb.HyPeerWebSegment getSegment(){
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "getSegment", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (hypeerweb.HyPeerWebSegment)result;
     }
 
     public void fireCleared(){
@@ -201,7 +221,7 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment{
 
     public synchronized void addObserver(java.util.Observer p0){
         String[] parameterTypeNames = new String[1];
-        parameterTypeNames[0] = "interface java.util.Observer";
+        parameterTypeNames[0] = "java.util.Observer";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
         Command command = new Command(globalObjectId.getLocalObjectId(), "java.util.Observable", "addObserver", parameterTypeNames, actualParameters, false);
@@ -242,7 +262,7 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment{
 
     public synchronized void deleteObserver(java.util.Observer p0){
         String[] parameterTypeNames = new String[1];
-        parameterTypeNames[0] = "interface java.util.Observer";
+        parameterTypeNames[0] = "java.util.Observer";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
         Command command = new Command(globalObjectId.getLocalObjectId(), "java.util.Observable", "deleteObserver", parameterTypeNames, actualParameters, false);

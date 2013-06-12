@@ -10,9 +10,11 @@ import identification.ObjectDB;
 import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Set;
 
 import communicator.PeerCommunicator;
 import communicator.PortNumber;
@@ -26,6 +28,7 @@ public class HyPeerWebSegment extends Observable{
 	private static HyPeerWebSegment singleton = null;
 	private List<Node> nodes = null;
 	private LocalObjectId localId = null;
+	private Set<HyPeerWebSegment> connectedSegments;
 	
 	protected HyPeerWebSegment(){
 		this.nodes = new ArrayList<Node>();
@@ -35,6 +38,7 @@ public class HyPeerWebSegment extends Observable{
 		}
 		System.out.println("localId: "+localId);
 		ObjectDB.getSingleton().store(localId, this);
+		connectedSegments = new HashSet<HyPeerWebSegment>();
 		assert(ObjectDB.getSingleton().getValue(localId) == this);
 	}
 	
@@ -88,6 +92,7 @@ public class HyPeerWebSegment extends Observable{
 	
 	public void addNode(Node node){
 		this.nodes.add(node);
+		ObjectDB.getSingleton().store(node.getLocalObjectId(), node);
 	}
 	
 	public void clear(){
@@ -99,6 +104,14 @@ public class HyPeerWebSegment extends Observable{
 	
 	public boolean contains(Node node){
 		return this.nodes.contains(node);
+	}
+	
+	public void connectSegment(HyPeerWebSegment segment){
+		connectedSegments.add(segment);
+	}
+	
+	public HyPeerWebSegment getSegment(){
+		return this;
 	}
 	
 	public HyPeerWebDatabase getHyPeerWebDatabase(){
@@ -138,8 +151,15 @@ public class HyPeerWebSegment extends Observable{
 	 * @post A NodeProxy from any other HyPeerWeb; NULL_NODE if no other node can be found.
 	 */
 	public Node getForeignNode(){
-		//TODO implement this method so it gets a NodeProxy from another HyPeerWebSegement
-		return Node.NULL_NODE;
+		Node foreignNode = Node.NULL_NODE;
+		
+		for(HyPeerWebSegment segment: connectedSegments){
+			if(segment.size() > 1){
+				foreignNode = segment.getANode();
+			}
+		}
+		
+		return foreignNode;
 	}
 	
 	/**
@@ -304,7 +324,6 @@ public class HyPeerWebSegment extends Observable{
 	 */
 	public void close() {
 		saveToDatabase();
-		HyPeerWebDatabase.closeConnection();
 		clear();
 	}
 	
@@ -361,7 +380,7 @@ public class HyPeerWebSegment extends Observable{
 			try{
 				System.out.println("Starting on port "+args[0]);
 				int portNumber = Integer.parseInt(args[0]);
-				HyPeerWebSegment.getSingleton();
+				HyPeerWebSegment.getSingleton().addToHyPeerWeb(new Node(0), Node.NULL_NODE);
 				PeerCommunicator.createPeerCommunicator(new PortNumber(portNumber));
 			}
 			catch(NumberFormatException e){
