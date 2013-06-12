@@ -29,9 +29,7 @@ import java.lang.reflect.Method;
  * 
  * @author Scott Woodfield
  */
-public class Command
-    implements Serializable
-{
+public class Command implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	/**
@@ -137,8 +135,8 @@ public class Command
 			Object target = null;
 			if(localObjectId != null){
 			    target = ObjectDB.getSingleton().getValue(localObjectId);
-			    System.err.println("target: "+target.toString());//TODO remove
 			}
+			System.out.println("Executing method: "+methodName+" parameters: "+actualParameters+" localId: "+localObjectId);//TODO remove
 			if(isSynchronous){
 				result = method.invoke(target, actualParameters);
 			} else {

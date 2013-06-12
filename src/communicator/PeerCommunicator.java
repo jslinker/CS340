@@ -293,6 +293,7 @@ public class PeerCommunicator
           oos.close();
           ois.close();
         } catch(Exception e) {
+        	e.printStackTrace(System.err);
           System.out.println(e.getMessage());
   		  System.err.println(e.getStackTrace());
         } finally{

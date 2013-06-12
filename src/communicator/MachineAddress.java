@@ -1,4 +1,5 @@
 package communicator;
+import java.io.Serializable;
 import java.net.InetAddress;
 
 /**
@@ -10,8 +11,10 @@ import java.net.InetAddress;
  * </div>
  * @author Scott Woodfield
  */
-public class MachineAddress {
-//Class Domain
+public class MachineAddress implements Serializable{
+	private static final long serialVersionUID = -7813477064626741759L;
+	
+	//Class Domain
 	/**
 	 * The machineAddress.
 	 */

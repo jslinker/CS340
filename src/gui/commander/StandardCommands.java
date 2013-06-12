@@ -170,14 +170,12 @@ public class StandardCommands extends JPanel
 				setDebugContent("Please select a valid node to perform insertion.");
 			}
 			else{
-				Node newNode = new Node(0);
-				
-				Node startNode = Node.NULL_NODE;
+				int startNodeIndex = -1;
 				if(insertIndex >= 0 && insertIndex < listing.listSize()){
-					startNode = hypeerweb.getNode(insertIndex);
+					startNodeIndex = insertIndex;
 				}
 				
-				hypeerweb.addToHyPeerWeb(newNode, startNode);
+				hypeerweb.addNode(startNodeIndex);
 			}
 		}
 		

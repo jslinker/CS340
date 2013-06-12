@@ -4,6 +4,8 @@ import gui.mapper.NodeListing;
 import gui.printer.DebugPrinter;
 import hypeerweb.HyPeerWebSegment;
 import hypeerweb.NullHyPeerWebSegment;
+import identification.LocalObjectId;
+import identification.ObjectDB;
 
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
@@ -32,7 +34,7 @@ import communicator.PortNumber;
 @SuppressWarnings("serial")
 public class GUI extends JFrame implements Observer
 {
-	private static final PortNumber DEFAULT_GUI_PORT_NUMBER = new PortNumber(49201);
+	public static final PortNumber DEFAULT_GUI_PORT_NUMBER = new PortNumber(49201);
 	
 	private static GUI singleton = null;
 	private GUIFacade facade = null;
@@ -48,7 +50,12 @@ public class GUI extends JFrame implements Observer
 	 */
 	public GUI(HyPeerWebSegment hypeerweb){
 		this.hypeerweb = hypeerweb;
+		
+		LocalObjectId facadeLocalId = LocalObjectId.getFirstId();
 		this.facade = new GUIFacade(this);
+		facade.setLocalId(facadeLocalId);
+		ObjectDB.getSingleton().store(facadeLocalId, this.facade);
+		
 		PeerCommunicator.createPeerCommunicator(DEFAULT_GUI_PORT_NUMBER);
 		
 		this.setTitle("HyPeerWeb DEBUGGER V 1.1");

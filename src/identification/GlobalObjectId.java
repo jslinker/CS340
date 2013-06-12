@@ -2,7 +2,6 @@ package identification;
 
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import communicator.MachineAddress;
 import communicator.PortNumber;
@@ -24,7 +23,9 @@ import communicator.PortNumber;
  * @author Scott Woodfield
  */
 public class GlobalObjectId implements Serializable{
-//Domain Implementation
+	private static final long serialVersionUID = 9177467906519740355L;
+
+	//Domain Implementation
 	/**
 	 * The machineAddr of the GlobalObjectId
 	 */
@@ -50,12 +51,7 @@ public class GlobalObjectId implements Serializable{
 	 *       localObjectId = new LocalObjectId()
 	 */
 	public GlobalObjectId(){
-		try {
-			this.machineAddr = InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		machineAddr = MachineAddress.getThisMachinesInetAddress();
 		portNumber = PortNumber.getApplicationsPortNumber();
 		localObjectId = new LocalObjectId();
 	}
@@ -66,12 +62,7 @@ public class GlobalObjectId implements Serializable{
 	 * @param localId
 	 */
 	public GlobalObjectId(LocalObjectId localId){
-		try {
-			this.machineAddr = InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		machineAddr = MachineAddress.getThisMachinesInetAddress();
 		portNumber = PortNumber.getApplicationsPortNumber();
 		localObjectId = localId;
 	}

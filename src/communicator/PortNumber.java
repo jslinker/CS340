@@ -22,9 +22,10 @@ import java.io.Serializable;
  * @author Scott Woodfield
  */
 public class PortNumber implements Serializable{
-//Class Domain Implementation
+	private static final long serialVersionUID = 3089326518034979781L;
+
+	//Class Domain Implementation
 	/**
-	 * 
 	 * The default port number that an application listens on.
 	 */
 	public final static PortNumber DEFAULT_PORT_NUMBER = generateDefaultPortNumber();
@@ -147,8 +148,6 @@ public class PortNumber implements Serializable{
 	 * The maximum legal value for a PortNumber.
 	 */
 	public final int MAX_PORT_NUMBER = 65535;
-	
-	private static final long serialVersionUID = 90127L;
 
 	//Methods
 	/**

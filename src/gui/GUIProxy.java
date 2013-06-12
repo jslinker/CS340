@@ -2,10 +2,12 @@ package gui;
 
 import identification.GlobalObjectId;
 
+import java.io.Serializable;
+
 import communicator.Command;
 import communicator.PeerCommunicator;
 
-public class GUIProxy extends GUIFacade{
+public class GUIProxy extends GUIFacade implements Serializable{
     private GlobalObjectId globalObjectId;
 
     public GUIProxy(GlobalObjectId globalObjectId){
