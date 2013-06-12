@@ -22,9 +22,7 @@ import java.io.Serializable;
  *     
  * @author Scott Woodfield
  */
-public class LocalObjectId 
-    implements Serializable
-{
+public class LocalObjectId implements Serializable{
 //Class Methods
 	/**
 	 * Gets the nextId.  Used primarily for saving the value of the nextId in a serialized database when closing down
@@ -36,6 +34,18 @@ public class LocalObjectId
 	 */
 	public static int getNextId(){
 		return nextId;
+	}
+	
+	/**
+	 * Creates the first/initial ID, ensuring that the nextId value gets incremented.
+	 * @return
+	 */
+	public static LocalObjectId getFirstId(){
+		LocalObjectId firstId = new LocalObjectId();
+		if(firstId.getId() != LocalObjectId.INITIAL_ID){
+			firstId = new LocalObjectId(LocalObjectId.INITIAL_ID);
+		}
+		return firstId;
 	}
 
 	/**

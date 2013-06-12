@@ -1,4 +1,7 @@
 package communicator;
+
+import java.io.Serializable;
+
 /**
  * The defines a port number used for interprocess communication.  For any service such as the HyPeerWeb there may be one
  * or more application instances running on one or more machines.  A machine may have one or more instances running on the
@@ -18,8 +21,10 @@ package communicator;
  * </pre>
  * @author Scott Woodfield
  */
-public class PortNumber {
-//Class Domain Implementation
+public class PortNumber implements Serializable{
+	private static final long serialVersionUID = 3089326518034979781L;
+
+	//Class Domain Implementation
 	/**
 	 * The default port number that an application listens on.
 	 */

@@ -2,11 +2,15 @@ package hypeerweb.node;
 
 import identification.GlobalObjectId;
 
+import java.io.Serializable;
+
 import communicator.Command;
 import communicator.PeerCommunicator;
 
-public class ConnectionsProxy extends Connections{
-    private GlobalObjectId globalObjectId;
+public class ConnectionsProxy extends Connections implements Serializable{
+	private static final long serialVersionUID = -1192775836734396276L;
+	
+	private GlobalObjectId globalObjectId;
 
     public ConnectionsProxy(GlobalObjectId globalObjectId){
         this.globalObjectId = globalObjectId;

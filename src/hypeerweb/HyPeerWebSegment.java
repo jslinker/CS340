@@ -8,6 +8,7 @@ import identification.LocalObjectId;
 import identification.ObjectDB;
 
 import java.io.ObjectStreamException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,21 +22,24 @@ import communicator.PortNumber;
 /**
  * @author Jason Robertson
  */
-public class HyPeerWebSegment extends Observable{
+public class HyPeerWebSegment extends Observable implements Serializable{
 	
 	private static HyPeerWebSegment singleton = null;
 	private List<Node> nodes = null;
 	private LocalObjectId localId = null;
 	
+	/**
+	 * Makes sure that this class is registered in the ObjectDB.
+	 */
+	static{
+		LocalObjectId localObjectId = LocalObjectId.getFirstId();
+		HyPeerWebSegment singleton = HyPeerWebSegment.getSingleton();
+		singleton.setLocalId(localObjectId);
+		ObjectDB.getSingleton().store(localObjectId, singleton);
+	}
+	
 	protected HyPeerWebSegment(){
 		this.nodes = new ArrayList<Node>();
-		localId = new LocalObjectId();
-		if(localId.getId() != LocalObjectId.INITIAL_ID){
-			localId = new LocalObjectId(LocalObjectId.INITIAL_ID);
-		}
-		System.out.println("localId: "+localId);
-		ObjectDB.getSingleton().store(localId, this);
-		assert(ObjectDB.getSingleton().getValue(localId) == this);
 	}
 	
 	public static HyPeerWebSegment getSingleton(){
@@ -52,7 +56,7 @@ public class HyPeerWebSegment extends Observable{
 	 * @pre newNode is not null/NULL_NODE
 	 * @post newNode is in nodes and is connected to the HyPeerWeb
 	 */
-	public void addToHyPeerWeb(Node newNode, Node startNode){
+	public synchronized void addToHyPeerWeb(Node newNode, Node startNode){
 		assert (newNode != null && newNode != Node.NULL_NODE);
 		assert ((startNode != null && startNode != Node.NULL_NODE) || nodes.isEmpty());
 		
@@ -77,7 +81,7 @@ public class HyPeerWebSegment extends Observable{
 	 * @pre removeNode is not null/NULL_NODE and is in the HyPeerWeb;
 	 * @post removeNode has been removed from HyPeerWeb.  Web has N-1 nodes and connections are updated.
 	 */
-	public void removeFromHyPeerWeb(Node removeNode){
+	public synchronized void removeFromHyPeerWeb(Node removeNode){
 		assert (removeNode != null && removeNode != Node.NULL_NODE);
 		assert (this.getNodeByWebId(removeNode.getWebIdValue()).getWebIdValue() == removeNode.getWebIdValue());
 		
@@ -86,11 +90,25 @@ public class HyPeerWebSegment extends Observable{
 		this.fireNodeRemoved(removeNode.getWebIdValue());
 	}
 	
-	public void addNode(Node node){
+	public synchronized void addNode(Node node){
 		this.nodes.add(node);
 	}
 	
-	public void clear(){
+	/**
+	 * Created for simple GUI-HyPeerWeb communication.
+	 * @param startNodeIndex The index of the node to start at.
+	 * @pre 0 <= startNodeIndex < nodes.size(), OR startNodeIndex == -1 if nodes is empty
+	 * @post A new node is added to the HyPeerWebSegment.
+	 */
+	public synchronized void addNode(int startNodeIndex){
+		Node startNode = Node.NULL_NODE;
+		if(startNodeIndex != -1){
+			startNode = this.getNode(startNodeIndex);
+		}
+		this.addToHyPeerWeb(new Node(0), startNode);
+	}
+	
+	public synchronized void clear(){
 		this.nodes.clear();
 		assert (nodes.isEmpty());
 		
@@ -265,7 +283,7 @@ public class HyPeerWebSegment extends Observable{
 	 * references) back into the database.
 	 * @author Jason Robertson
 	 */
-	public void saveToDatabase(){
+	public synchronized void saveToDatabase(){
 		HyPeerWebDatabase.clear();
 		
 		for(Node n : nodes){
@@ -347,7 +365,7 @@ public class HyPeerWebSegment extends Observable{
 	 *  then this segment is destroyed. If this is the last segment then the nodes are stored in
 	 *   the database. Disconnects any observers.
 	 */
-	public void kill(){
+	public synchronized void kill(){
 		this.fireShutdown();
 		
 		//TODO distribute this segments nodes to the other segments
@@ -361,17 +379,34 @@ public class HyPeerWebSegment extends Observable{
 			try{
 				System.out.println("Starting on port "+args[0]);
 				int portNumber = Integer.parseInt(args[0]);
-				HyPeerWebSegment.getSingleton();
+				
+				Class.forName("hypeerweb.HyPeerWebSegment");//ensures that the static block is executed
 				PeerCommunicator.createPeerCommunicator(new PortNumber(portNumber));
 			}
 			catch(NumberFormatException e){
-				System.out.println(e);
+				e.printStackTrace(System.err);
+			}
+			catch(ClassNotFoundException e){
+				e.printStackTrace(System.err);
 			}
 		}
 	}
 	
+	private void setLocalId(LocalObjectId localId) {
+		this.localId = localId;
+	}
+
+	/**
+	 * Replaces this object with a Proxy when serializing to prevent sending the entire segment.
+	 * @return
+	 * @throws ObjectStreamException
+	 */
 	public Object writeReplace() throws ObjectStreamException{
-		GlobalObjectId globalId = new GlobalObjectId(new LocalObjectId(LocalObjectId.INITIAL_ID));
+		GlobalObjectId globalId = new GlobalObjectId(this.getLocalId());
 		return new HyPeerWebSegmentProxy(globalId);
+	}
+
+	private LocalObjectId getLocalId(){
+		return this.localId;
 	}
 }

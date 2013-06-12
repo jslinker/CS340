@@ -1,9 +1,14 @@
 package hypeerweb.node;
 
+import identification.GlobalObjectId;
+import identification.LocalObjectId;
+
+import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+import hypeerweb.HyPeerWebSegmentProxy;
 import hypeerweb.node.roles.*;
 
 
@@ -497,5 +502,17 @@ public class Connections {
 		con.setInverseSurrogateFold(inverseSurrogateFold.getNode().deepCopy());
 		
 		return con;		
+	}
+	
+	/**
+	 * There should be no need to used a ConnectionsProxy, but since the NodeProxy extends Node it
+	 *  gets a Connections field it needs to serialize.
+	 * @return
+	 * @throws ObjectStreamException
+	 */
+	public Object writeReplace() throws ObjectStreamException{
+		LocalObjectId localId = null;//TODO just for consistency, add each connection object to ObjectDB
+		GlobalObjectId globalId = new GlobalObjectId(localId);
+		return new ConnectionsProxy(globalId);
 	}
 }

@@ -1,5 +1,7 @@
 package hypeerweb.node;
 
+import java.io.Serializable;
+
 import utilities.BitManipulation;
 
 /**
@@ -8,7 +10,7 @@ import utilities.BitManipulation;
  * @author Craig Jacobson
  *
  */
-public enum NodeState{
+public enum NodeState implements Serializable{
 	STANDARD(1){
 		@Override
 		public String toString(){

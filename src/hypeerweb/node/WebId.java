@@ -1,5 +1,7 @@
 package hypeerweb.node;
 
+import java.io.Serializable;
+
 /**
  * The id of a node in the HyPeerWeb.<br>
  * <br>
@@ -22,11 +24,13 @@ package hypeerweb.node;
  * 
  * @author Scott Woodfield
  */
-public class WebId {
+public class WebId implements Serializable{
+	private static final long serialVersionUID = -8175144794757855161L;
+	
     //I don't know why the previous line shows as yellow in the coverage report.  It is not even
     //an executable statement much less a boolean expression.
-    
-    // Domain Implementation
+
+	// Domain Implementation
     /**
      * The value for this webId.
      */
