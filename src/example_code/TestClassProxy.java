@@ -18,7 +18,7 @@ public class TestClassProxy
     public java.lang.String toString(){
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
-        Command command = new Command(globalObjectId.getLocalObjectId(), "TestClass", "toString", parameterTypeNames, actualParameters, true);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "example_code.TestClass", "toString", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (java.lang.String)result;
     }
@@ -26,7 +26,7 @@ public class TestClassProxy
     public java.lang.String getName(){
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
-        Command command = new Command(globalObjectId.getLocalObjectId(), "TestClass", "getName", parameterTypeNames, actualParameters, true);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "example_code.TestClass", "getName", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (java.lang.String)result;
     }
@@ -36,7 +36,7 @@ public class TestClassProxy
         parameterTypeNames[0] = "java.lang.String";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
-        Command command = new Command(globalObjectId.getLocalObjectId(), "TestClass", "setName", parameterTypeNames, actualParameters, false);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "example_code.TestClass", "setName", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
@@ -45,7 +45,7 @@ public class TestClassProxy
         parameterTypeNames[0] = "int";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
-        Command command = new Command(globalObjectId.getLocalObjectId(), "TestClass", "setAge", parameterTypeNames, actualParameters, false);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "example_code.TestClass", "setAge", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
@@ -54,7 +54,7 @@ public class TestClassProxy
         parameterTypeNames[0] = "[I";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
-        Command command = new Command(globalObjectId.getLocalObjectId(), "TestClass", "testMethod", parameterTypeNames, actualParameters, true);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "example_code.TestClass", "testMethod", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (int[])result;
     }
@@ -62,7 +62,7 @@ public class TestClassProxy
     public int getAge(){
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
-        Command command = new Command(globalObjectId.getLocalObjectId(), "TestClass", "getAge", parameterTypeNames, actualParameters, true);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "example_code.TestClass", "getAge", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (Integer)result;
     }
@@ -70,7 +70,7 @@ public class TestClassProxy
     public LocalObjectId getLocalObjectId(){
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
-        Command command = new Command(globalObjectId.getLocalObjectId(), "TestClass", "getLocalObjectId", parameterTypeNames, actualParameters, true);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "example_code.TestClass", "getLocalObjectId", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (LocalObjectId)result;
     }

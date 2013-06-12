@@ -2,7 +2,6 @@ package hypeerweb.node;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import hypeerweb.node.roles.*;

@@ -29,13 +29,12 @@ public class Client {
 				                  );
 			TestClassProxy proxy = new TestClassProxy(testClassGlobalObjectId);
 			proxy.setAge(60);
-			/*int[] a = new int[3];
+			int[] a = new int[3];
 			a[0] = 1;
 			a[1] = 2;
 			a[2] = 3;
 			int[] result = proxy.testMethod(a);
 			System.out.println("result[0] = " + result[0] + ", result[1] = " + result[1] + ", result[2] = " + result[2]);
-			*/
 			System.out.println("Proxy's age = " + proxy.getAge());
 
 			PeerCommunicator.stopConnection(serverGlobalObjectId);

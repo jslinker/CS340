@@ -4,6 +4,7 @@ import gui.GUI;
 import hypeerweb.HyPeerWebSegmentProxy;
 import hypeerweb.NullHyPeerWebSegment;
 import identification.GlobalObjectId;
+import identification.LocalObjectId;
 import utilities.Shell;
 
 import communicator.PortNumber;
@@ -17,8 +18,10 @@ public class SessionController {
 	}
 	
 	public void newHyPeerWebSegment(){
-		Shell.executeCommand("java HyPeerWebSegment "+PortNumber.DEFAULT_PORT_NUMBER.getValue());
-		this.joinHyPeerWebSegment(new GlobalObjectId("localhost", PortNumber.DEFAULT_PORT_NUMBER, null));
+		Shell.executeCommand("java -cp C:/Users/V/Documents/GitHub/CS340/bin hypeerweb.HyPeerWebSegment "+PortNumber.DEFAULT_PORT_NUMBER.getValue());
+		this.joinHyPeerWebSegment(new GlobalObjectId("localhost", 
+														PortNumber.DEFAULT_PORT_NUMBER, 
+														new LocalObjectId(LocalObjectId.INITIAL_ID)));
 	}
 	
 	public void joinHyPeerWebSegment(GlobalObjectId hypeerwebSegmentId){

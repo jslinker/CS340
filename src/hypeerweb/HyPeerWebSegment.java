@@ -3,10 +3,13 @@ package hypeerweb;
 import hypeerweb.database.HyPeerWebDatabase;
 import hypeerweb.node.Node;
 import hypeerweb.node.SimplifiedNodeDomain;
+import identification.GlobalObjectId;
+import identification.LocalObjectId;
+import identification.ObjectDB;
 
+import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -22,9 +25,17 @@ public class HyPeerWebSegment extends Observable{
 	
 	private static HyPeerWebSegment singleton = null;
 	private List<Node> nodes = null;
+	private LocalObjectId localId = null;
 	
 	protected HyPeerWebSegment(){
 		this.nodes = new ArrayList<Node>();
+		localId = new LocalObjectId();
+		if(localId.getId() != LocalObjectId.INITIAL_ID){
+			localId = new LocalObjectId(LocalObjectId.INITIAL_ID);
+		}
+		System.out.println("localId: "+localId);
+		ObjectDB.getSingleton().store(localId, this);
+		assert(ObjectDB.getSingleton().getValue(localId) == this);
 	}
 	
 	public static HyPeerWebSegment getSingleton(){
@@ -271,7 +282,7 @@ public class HyPeerWebSegment extends Observable{
 	 * Finds the size of the entire HyPeerWeb.
 	 * @return The size of the entire HyPeerWeb.
 	 * @pre None.
-	 * @post Deletion point webId + 1.
+	 * @post result = deletion point webId + 1.
 	 */
 	public int sizeOfHyPeerWeb(){
 		Node deletionPoint = Node.NULL_NODE;
@@ -345,12 +356,19 @@ public class HyPeerWebSegment extends Observable{
 	public static void main(String[] args){
 		if(args.length == 1){
 			try{
+				System.out.println("Starting on port "+args[0]);
 				int portNumber = Integer.parseInt(args[0]);
+				HyPeerWebSegment.getSingleton();
 				PeerCommunicator.createPeerCommunicator(new PortNumber(portNumber));
 			}
 			catch(NumberFormatException e){
 				System.out.println(e);
 			}
 		}
+	}
+	
+	public Object writeReplace() throws ObjectStreamException{
+		GlobalObjectId globalId = new GlobalObjectId(new LocalObjectId(LocalObjectId.INITIAL_ID));
+		return new HyPeerWebSegmentProxy(globalId);
 	}
 }

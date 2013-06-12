@@ -17,6 +17,10 @@ public class MachineAddress {
 	 */
 	private static InetAddress machineAddress = null;
 	
+	static{
+		setMachineAddress("localhost");
+	}
+	
 //Class Methods
 	/**
 	 * Sets the address of the current machine.

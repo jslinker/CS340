@@ -3,7 +3,7 @@ package communicator;
  * The defines a port number used for interprocess communication.  For any service such as the HyPeerWeb there may be one
  * or more application instances running on one or more machines.  A machine may have one or more instances running on the
  * machine.  Each application instance running on a machine listens for incoming messages on a port.  All application
- * instances on a given machine must listen on a different port. 
+ * instances on a given machine must listen on a different port.
  * 
  * <pre>
  * <b>Class Domain:</b>

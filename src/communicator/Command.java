@@ -137,6 +137,7 @@ public class Command
 			Object target = null;
 			if(localObjectId != null){
 			    target = ObjectDB.getSingleton().getValue(localObjectId);
+			    System.err.println("target: "+target.toString());//TODO remove
 			}
 			if(isSynchronous){
 				result = method.invoke(target, actualParameters);
@@ -145,6 +146,7 @@ public class Command
 			}
 		}catch(Throwable t){
 			result = t;
+			t.printStackTrace(System.err);//TODO used for debugging, remove when finished
 		}
 		return result;
 	}

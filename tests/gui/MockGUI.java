@@ -5,6 +5,6 @@ package gui;
  * @author Craig Jacobson
  *
  */
-public class MockGUI extends GUI{
-
+public class MockGUI extends GUIFacade{
+	
 }

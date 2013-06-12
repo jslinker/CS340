@@ -59,7 +59,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		@Override public void accept(Visitor visitor, Parameters parameters){ return; }
 	};
 	
-	private Node(){
+	protected Node(){
 		webId = WebId.NULL_WEB_ID;
 		connections = new Connections();
 		connections.setFold(this);

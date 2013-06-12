@@ -54,7 +54,7 @@ public class PeerCommunicator
      * before "PeerCommunicator". For instance, if this is in the package x.y.z the parameter "PeerCommunicator" would become "x.y.z.PeerCommunicator".
      * This should be the same package name in all instantiations of PeerCommunicator on any machine.
 	 */
-	private static Command NO_OP = new Command(null, "PeerCommunicator", "noop", new String[0], new Object[0], false);
+	private static Command NO_OP = new Command(null, "communicator.PeerCommunicator", "noop", new String[0], new Object[0], false);
 
 	/**
 	 * The GlobalObjectId of the PeerCommunicator. The port number of this GlobalObjectId is the port number the PeerCommunicator will listen on.
@@ -135,7 +135,7 @@ public class PeerCommunicator
      */
     public static void stopConnection(GlobalObjectId globalObjectId){
     	Command command = 
-    		new Command(null, "PeerCommunicator", "stopThisConnection", new String[0], new Object[0], false);
+    		new Command(null, "communicator.PeerCommunicator", "stopThisConnection", new String[0], new Object[0], false);
     	singleton.sendASynchronous(globalObjectId, command);
     }
     
@@ -249,8 +249,7 @@ public class PeerCommunicator
           ois.close();
 
         } catch(Exception e) {
-          System.err.println(e.getMessage());
-  		  System.err.println(e.getStackTrace());
+          e.printStackTrace(System.err);
         } finally{
         	if(socket != null){
         		try{

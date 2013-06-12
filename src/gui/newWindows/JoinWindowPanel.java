@@ -5,6 +5,7 @@ import gui.controllers.SendArgs;
 import gui.controllers.SendWindowController;
 import gui.controllers.SessionController;
 import identification.GlobalObjectId;
+import identification.LocalObjectId;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -43,6 +44,8 @@ public class JoinWindowPanel
 
     	hypeerwebHost = new JTextField(15);
     	hypeerwebPort = new JTextField(5);
+    	hypeerwebHost.setText("localhost");
+    	hypeerwebPort.setText("49200");
         
 		//Build the send button
 		joinButton = new JButton("Join");
@@ -72,7 +75,7 @@ public class JoinWindowPanel
     	try {
     		main.setDebugContent("");
     		PortNumber port = new PortNumber(Integer.parseInt(hypeerwebPort.getText()));
-    		GlobalObjectId id = new GlobalObjectId(hypeerwebHost.getText(), port, null);
+    		GlobalObjectId id = new GlobalObjectId(hypeerwebHost.getText(), port, new LocalObjectId(LocalObjectId.INITIAL_ID));
     		SessionController controller = new SessionController(main);
     		controller.joinHyPeerWebSegment(id);
     	} catch(NumberFormatException e){

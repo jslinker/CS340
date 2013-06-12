@@ -16,4 +16,8 @@ public class Shell {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void main(String[] args){
+		executeCommand("java -cp C:/Users/V/Documents/GitHub/CS340/bin hypeerweb.HyPeerWebSegment 49200");
+	}
 }

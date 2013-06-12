@@ -42,6 +42,7 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment{
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "size", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        System.out.println("Result: "+result);
         return (Integer)result;
     }
 
