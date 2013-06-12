@@ -1,5 +1,6 @@
 package identification;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 
 import communicator.MachineAddress;
@@ -21,8 +22,10 @@ import communicator.PortNumber;
  * 
  * @author Scott Woodfield
  */
-public class GlobalObjectId {
-//Domain Implementation
+public class GlobalObjectId implements Serializable{
+	private static final long serialVersionUID = 9177467906519740355L;
+
+	//Domain Implementation
 	/**
 	 * The machineAddr of the GlobalObjectId
 	 */

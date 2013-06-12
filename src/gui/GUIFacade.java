@@ -5,8 +5,12 @@ import identification.LocalObjectId;
 import identification.ObjectDB;
 
 import java.io.ObjectStreamException;
+import java.io.Serializable;
+import java.net.InetAddress;
 import java.util.Observable;
 import java.util.Observer;
+
+import communicator.PortNumber;
 
 /**
  * Prevents the ProxyConstructor from creating proxy methods for every inherited method in the GUI.
@@ -14,10 +18,10 @@ import java.util.Observer;
  * @author Craig Jacobson
  *
  */
-public class GUIFacade implements Observer{
+public class GUIFacade implements Observer, Serializable{
 
 	private GUI main = null;
-	private LocalObjectId localId = null;
+	private LocalObjectId localId = LocalObjectId.getFirstId();
 	
 	protected GUIFacade(){
 	}
@@ -33,7 +37,19 @@ public class GUIFacade implements Observer{
 		main.update(arg0, arg1);
 	}
 	
+	/**
+	 * Replaces this object with a Proxy when serializing.
+	 * @return
+	 * @throws ObjectStreamException
+	 */
 	public Object writeReplace() throws ObjectStreamException{
-		return new GUIProxy(new GlobalObjectId(localId));
+		String machineAddress = "localhost";
+		PortNumber portNumber = new PortNumber(GUI.DEFAULT_GUI_PORT_NUMBER);
+		GlobalObjectId globalId = new GlobalObjectId(machineAddress, portNumber, localId);
+		return new GUIProxy(globalId);
+	}
+
+	public void setLocalId(LocalObjectId localId) {
+		this.localId = localId;
 	}
 }

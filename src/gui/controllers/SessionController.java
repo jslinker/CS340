@@ -18,10 +18,11 @@ public class SessionController {
 	}
 	
 	public void newHyPeerWebSegment(){
-		Shell.executeCommand("java -cp C:/Users/V/Documents/GitHub/CS340/bin hypeerweb.HyPeerWebSegment "+PortNumber.DEFAULT_PORT_NUMBER.getValue());
+		//TODO get this to create a separate process on the
+		//Shell.executeCommand("java -cp C:/Users/V/Documents/GitHub/CS340/bin hypeerweb.HyPeerWebSegment "+PortNumber.DEFAULT_PORT_NUMBER.getValue());
 		this.joinHyPeerWebSegment(new GlobalObjectId("localhost", 
 														PortNumber.DEFAULT_PORT_NUMBER, 
-														new LocalObjectId(LocalObjectId.INITIAL_ID)));
+														LocalObjectId.getFirstId()));
 	}
 	
 	public void joinHyPeerWebSegment(GlobalObjectId hypeerwebSegmentId){
@@ -34,7 +35,7 @@ public class SessionController {
 	}
 	
 	public void leaveHyPeerWebSegment(){
-		main.getHyPeerWeb().deleteObserver(main);
+		main.getHyPeerWeb().deleteObserver(main.getFacade());
 		main.getNodeListing().initList();
 		main.setHyPeerWeb(new NullHyPeerWebSegment());
 	}

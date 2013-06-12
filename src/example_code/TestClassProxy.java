@@ -9,7 +9,9 @@ import communicator.PeerCommunicator;
 public class TestClassProxy
     extends TestClass
 {
-    private GlobalObjectId globalObjectId;
+	private static final long serialVersionUID = -5326803669501627720L;
+	
+	private GlobalObjectId globalObjectId;
 
     public TestClassProxy(GlobalObjectId globalObjectId){
         this.globalObjectId = globalObjectId;

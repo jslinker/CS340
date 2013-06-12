@@ -42,7 +42,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 	public void testVisitInvalidCases(){
 		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		createHyPeerWeb(1); 
-		Node nodeZero = web.getNode(0);
+		Node nodeZero = web.getNodeByWebId(0);
 		
 		SendVisitor sendNothing = new SendVisitor(){
 			public void targetOperation(Node node, Parameters parameters){
@@ -81,7 +81,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 	public void testVisitValidCases(){
 		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		createHyPeerWeb(1);
-		Node nodeZero = web.getNode(0);
+		Node nodeZero = web.getNodeByWebId(0);
 		
 		final int targetZero = 0;
 		
@@ -112,7 +112,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 		createHyPeerWeb(2);
 		final int startNodeWebId = 1;
 		final int targetNodeWebId = 0;
-		Node startNode = web.getNode(startNodeWebId);
+		Node startNode = web.getNodeByWebId(startNodeWebId);
 		
 		SendVisitor sendFromOneToZero = new SendVisitor(){
 			public void intermediateOperation(Node node, Parameters parameters){
@@ -139,7 +139,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 		createHyPeerWeb(size);
 		final int startNodeWebId2 = 127;
 		final int targetNodeWebId2 = 0;
-		startNode = web.getNode(startNodeWebId2);
+		startNode = web.getNodeByWebId(startNodeWebId2);
 		
 		SendVisitor sendToNode = new SendVisitor(){
 			public void intermediateOperation(Node node, Parameters parameters){
@@ -168,7 +168,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 		int size = 30;
 		createHyPeerWeb(size);
 		final int targetZero = 0;
-		final Node startNode = web.getNode(29);
+		final Node startNode = web.getNodeByWebId(29);
 		
 		//Test that intermediateOperation is reached.
 		SendVisitor sendVisitorTestReached = new SendVisitor(){
@@ -228,7 +228,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 		int size = 30;
 		createHyPeerWeb(size);
 		final int targetZero = 0;
-		final Node startNode = web.getNode(29);
+		final Node startNode = web.getNodeByWebId(29);
 		
 		//Test that intermediateOperation is reached.
 		SendVisitor sendVisitorTestReached = new SendVisitor(){
@@ -283,7 +283,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 		
 		if(size > 0){
 			web.addToHyPeerWeb(new Node(0), null);
-			Node nodeZero = web.getNode(0);
+			Node nodeZero = web.getNodeByWebId(0);
 			allNodesSet.add(nodeZero);
 			
 			for(int i = 1; i < size; i++){

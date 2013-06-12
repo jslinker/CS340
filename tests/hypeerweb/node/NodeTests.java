@@ -427,9 +427,10 @@ public class NodeTests extends TestCase{
 		int webSize = random.nextInt(2000-100) + 101;
 		int expectedDeletionPoint = webSize - 1;
 		
+		web.addToHyPeerWeb(new Node(0), Node.NULL_NODE);
 		// Fill the web with nodes
-		for(int i = 0; i < webSize; i++) {
-			web.addToHyPeerWeb(new Node(i), Node.NULL_NODE);
+		for(int i = 1; i < webSize; i++) {
+			web.addToHyPeerWeb(new Node(i), web.getNodeByWebId(0));
 		}
 		
 		// Test findDeletionPoint from all the nodes in the web
@@ -472,9 +473,10 @@ public class NodeTests extends TestCase{
 		Random random = new Random();
 		int webSize = random.nextInt(2000-100) + 101;
 		
+		web.addToHyPeerWeb(new Node(0), Node.NULL_NODE);
 		// Fill the web with nodes
-		for(int i = 0; i < webSize; i++) {
-			web.addToHyPeerWeb(new Node(i), Node.NULL_NODE);
+		for(int i = 1; i < webSize; i++) {
+			web.addToHyPeerWeb(new Node(i), web.getNodeByWebId(0));
 		}
 		
 		Node rootNode = web.getNode(0);
@@ -494,9 +496,10 @@ public class NodeTests extends TestCase{
 		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		web.clear();
 		
-		int size = 5;		
-		for(int i = 0; i < size; i++){
-			web.addToHyPeerWeb(new Node(i), Node.NULL_NODE);
+		int size = 5;
+		web.addToHyPeerWeb(new Node(0), Node.NULL_NODE);
+		for(int i = 1; i < size; i++){
+			web.addToHyPeerWeb(new Node(i), web.getNodeByWebId(0));
 			checkWeb(web);
 		}
 				

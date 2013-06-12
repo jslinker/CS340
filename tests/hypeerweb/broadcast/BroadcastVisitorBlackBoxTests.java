@@ -37,7 +37,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 	public void testVisitInvalidCases(){
 		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		createHyPeerWeb(1); 
-		Node nodeZero = web.getNode(0);
+		Node nodeZero = web.getNodeByWebId(0);
 		
 		BroadcastVisitor broadcastNothing = new BroadcastVisitor(){
 			public void operation(Node node, Parameters parameters){
@@ -114,7 +114,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		Random generator = new Random();
 		//#2 Test HyPeerWeb of size two (boundary value analysis).
 		createHyPeerWeb(2);
-		Node startNode = web.getNode(0);
+		Node startNode = web.getNodeByWebId(0);
 		try{
 			broadcastFindAllNodes.visit(startNode, BroadcastVisitor.createInitialParameters());
 			assertTrue(2 == this.broadcastedToNodesList.size());
@@ -126,7 +126,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		//#3 Test a HyPeerWeb of size 32.
 		int size = 32;
 		createHyPeerWeb(size);
-		startNode = web.getNode(0);
+		startNode = web.getNodeByWebId(0);
 		try{
 			broadcastFindAllNodes.visit(startNode, BroadcastVisitor.createInitialParameters());
 			assertTrue(size == this.broadcastedToNodesList.size());
@@ -138,7 +138,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		//#4 Test a HyPeerWeb of size 32 starting at the last node.
 		size = 32;
 		createHyPeerWeb(size);
-		startNode = web.getNode(31);
+		startNode = web.getNodeByWebId(31);
 		try{
 			broadcastFindAllNodes.visit(startNode, BroadcastVisitor.createInitialParameters());
 			assertTrue(size == this.broadcastedToNodesList.size());
@@ -150,7 +150,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		//#5 Test a HyPeerWeb size 37, starting at node zero.
 		size = 37;
 		createHyPeerWeb(size);
-		startNode = web.getNode(0);
+		startNode = web.getNodeByWebId(0);
 		try{
 			broadcastFindAllNodes.visit(startNode, BroadcastVisitor.createInitialParameters());
 			assertTrue(size == this.broadcastedToNodesList.size());
@@ -163,7 +163,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		size = 37;
 		createHyPeerWeb(size);
 		int startNodeWebId = generator.nextInt(size-1) + 1;
-		startNode = web.getNode(startNodeWebId);
+		startNode = web.getNodeByWebId(startNodeWebId);
 		try{
 			broadcastFindAllNodes.visit(startNode, BroadcastVisitor.createInitialParameters());
 			assertTrue(size == this.broadcastedToNodesList.size());
@@ -184,7 +184,7 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 	public void testOperation(){
 		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		createHyPeerWeb(1);
-		final Node nodeZero = web.getNode(0);
+		final Node nodeZero = web.getNodeByWebId(0);
 		
 		//Testing for valid inputs.
 		BroadcastVisitor operationTestNotNull = new BroadcastVisitor(){
@@ -227,11 +227,12 @@ public class BroadcastVisitorBlackBoxTests extends TestCase{
 		
 		if(size > 0){
 			web.addToHyPeerWeb(new Node(0), null);
-			Node nodeZero = web.getNode(0);
+			Node nodeZero = web.getNodeByWebId(0);
 			allNodesSet.add(nodeZero);
-			
+			web.addNode(nodeZero);
 			for(int i = 1; i < size; i++){
 				Node newNode = new Node(i);
+				web.addNode(newNode);
 				nodeZero.addToHyPeerWeb(newNode);
 				allNodesSet.add(newNode);
 			}

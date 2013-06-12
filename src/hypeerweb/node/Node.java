@@ -2,11 +2,11 @@ package hypeerweb.node;
 
 
 import static utilities.BitManipulation.calculateChildWebId;
-
 import hypeerweb.HyPeerWebSegment;
 import hypeerweb.broadcast.Contents;
 import hypeerweb.broadcast.Parameters;
 import hypeerweb.broadcast.Visitor;
+import identification.LocalObjectId;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
@@ -29,6 +29,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	private Connections connections;
 	private NodeState state = NodeState.STANDARD;
 	private Contents contents = new Contents();
+	private LocalObjectId localObjectId = new LocalObjectId(); 
 	
 	public static final Node NULL_NODE = new Node(){
 		private static final long serialVersionUID = -4818395442433123461L;
@@ -199,7 +200,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * @pre |web| >= 2, web.contains(this), this.connections.lowerNeighbors != null, this.webId = web.maxWebId
 	 * @post web does not contain this.  Connections of surrounding nodes updated.
 	 */
-	private void disconnect() {
+	public void disconnect() {
 		List<Node> nodes = HyPeerWebSegment.getSingleton().getNodes();
 		assert(connections.getLowerNeighbors() != null && connections.getLowerNeighbors().size() != 0 &&
 			   nodes.size() >= 2 && nodes.contains(this) && nodes.get(nodes.size() - 1).equals(this));
@@ -464,6 +465,10 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		return connections.getUpperNeighbors();
 	}
 	
+	public LocalObjectId getLocalObjectId(){
+		return localObjectId;
+	}
+	
 	//------------------
 	//  S E T T E R S
 	//------------------
@@ -473,6 +478,10 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		connections.setFold(fold);
 		
 		NodeState.setNodeState(this);
+	}
+	
+	public void setLocalObjectId(LocalObjectId id){
+		localObjectId = id;
 	}
 	
 	public void setHeight(int height){

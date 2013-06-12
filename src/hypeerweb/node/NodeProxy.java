@@ -2,11 +2,15 @@ package hypeerweb.node;
 
 import identification.GlobalObjectId;
 
+import java.io.Serializable;
+
 import communicator.Command;
 import communicator.PeerCommunicator;
 
-public class NodeProxy extends Node{
-    private GlobalObjectId globalObjectId;
+public class NodeProxy extends Node implements Serializable{
+	private static final long serialVersionUID = 5621400300321251146L;
+	
+	private GlobalObjectId globalObjectId;
 
     public NodeProxy(GlobalObjectId globalObjectId){
         this.globalObjectId = globalObjectId;
@@ -39,19 +43,9 @@ public class NodeProxy extends Node{
     }
 
     @Override
-    public volatile int compareTo(hypeerweb.node.Node p0){
-        String[] parameterTypeNames = new String[1];
-        parameterTypeNames[0] = "java.lang.Object";
-        Object[] actualParameters = new Object[1];
-        actualParameters[0] = p0;
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "compareTo", parameterTypeNames, actualParameters, true);
-        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (Integer)result;
-    }
-
     public int compareTo(hypeerweb.node.Node p0){
         String[] parameterTypeNames = new String[1];
-        parameterTypeNames[0] = "hypeerweb.node.Node";
+        parameterTypeNames[0] = "java.lang.Object";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "compareTo", parameterTypeNames, actualParameters, true);

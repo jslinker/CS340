@@ -283,6 +283,6 @@ public class ProxyConstructor {
     }
 	
 	public static void main(String[] args){
-		create("hypeerweb.node.Node");
+		create("hypeerweb.HyPeerWebSegment");
 	}
 }
