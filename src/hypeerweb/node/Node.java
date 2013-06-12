@@ -146,7 +146,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * @post All pointers to this node will now be pointing to replacementNode
 	 */
 	public void replaceNode(Node replacementNode) {
-		if(this != replacementNode) {
+		if(!this.equals(replacementNode)) {
 			replacementNode.setWebId(this.webId);
 			replacementNode.setState(this.state);
 			
@@ -199,12 +199,12 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * @pre |web| >= 2, web.contains(this), this.connections.lowerNeighbors != null, this.webId = web.maxWebId
 	 * @post web does not contain this.  Connections of surrounding nodes updated.
 	 */
-	public void disconnect() {
+	private void disconnect() {
 		List<Node> nodes = HyPeerWebSegment.getSingleton().getNodes();
 		assert(connections.getLowerNeighbors() != null && connections.getLowerNeighbors().size() != 0 &&
 			   nodes.size() >= 2 && nodes.contains(this) && nodes.get(nodes.size() - 1).equals(this));
 		
-		int parentId = BitManipulation.calculateParentWebId(this.getWebIdValue(), this.getHeight());
+		int parentId = BitManipulation.calculateSurrogateWebId(getWebIdValue());
 		Node parent = connections.getLowerNeighbors().get(parentId).getNode();
 		parent.setHeight(parent.getHeight() - 1);
 		parent.getUpperNeighbors().remove(this.getWebIdValue());

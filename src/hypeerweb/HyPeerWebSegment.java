@@ -60,6 +60,9 @@ public class HyPeerWebSegment extends Observable{
 			getForeignNode().addToHyPeerWeb(newNode);
 		}
 		else{
+			if(startNode == Node.NULL_NODE){
+				startNode = nodes.get(0);
+			}
 			startNode.addToHyPeerWeb(newNode);
 		}
 		
@@ -78,8 +81,8 @@ public class HyPeerWebSegment extends Observable{
 		assert (removeNode != null && removeNode != Node.NULL_NODE);
 		assert (this.getNodeByWebId(removeNode.getWebIdValue()).getWebIdValue() == removeNode.getWebIdValue());
 		
-		removeNode.removeFromHyPeerWeb(removeNode);
-		nodes.remove(removeNode);
+		removeNode.removeFromHyPeerWeb(removeNode);		
+		nodes.remove(size()-1);
 		this.fireNodeRemoved(removeNode.getWebIdValue());
 	}
 	
