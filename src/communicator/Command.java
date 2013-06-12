@@ -134,7 +134,6 @@ public class Command implements Serializable{
 			Method method = targetClass.getDeclaredMethod(methodName, parameterTypes);
 			Object target = null;
 			if(localObjectId != null){
-				ObjectDB.getSingleton().dump();
 			    target = ObjectDB.getSingleton().getValue(localObjectId);
 			}
 			System.out.println("Executing method: "+methodName+" parameters: "+actualParameters+" localId: "+localObjectId);//TODO remove

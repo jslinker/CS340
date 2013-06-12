@@ -58,7 +58,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	 */
 	public synchronized void addToHyPeerWeb(Node newNode, Node startNode){
 		assert (newNode != null && newNode != Node.NULL_NODE);
-		assert ((startNode != null && startNode != Node.NULL_NODE) || nodes.isEmpty());
+		//assert ((startNode != null && startNode != Node.NULL_NODE) || nodes.isEmpty());
 		
 		if(nodes.isEmpty()){
 			getForeignNode().addToHyPeerWeb(newNode);
