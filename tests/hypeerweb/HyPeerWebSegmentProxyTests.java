@@ -17,16 +17,21 @@ public class HyPeerWebSegmentProxyTests extends TestCase{
 		LocalObjectId first = new LocalObjectId(LocalObjectId.INITIAL_ID);
 		
 		PeerCommunicator.createPeerCommunicator(new PortNumber(49153));
-		GlobalObjectId serverGlobalId = new GlobalObjectId(first);
+		GlobalObjectId serverGlobalId = new GlobalObjectId("localhost", new PortNumber(PortNumber.DEFAULT_PORT_NUMBER),first);
 		HyPeerWebSegmentProxy proxy = new HyPeerWebSegmentProxy(serverGlobalId);
-		
 		try{
-			assertTrue(proxy.size() == 0);
+			assertEquals(0, proxy.size());
 		}
 		catch(Exception e){
 			fail(e.getMessage());
 		}
-		System.out.println("here2");
+//		Node toAdd = new Node(0);
+//		ObjectDB.getSingleton().store(toAdd.getLocalObjectId(), toAdd);
+//		proxy.addToHyPeerWeb(toAdd, Node.NULL_NODE);
+//		assertEquals(1, proxy.size());
+		
+		proxy.addNode(-1);
+		assertEquals(1, proxy.size());
 		
 		PeerCommunicator.stopConnection(serverGlobalId);
 		PeerCommunicator.stopThisConnection();

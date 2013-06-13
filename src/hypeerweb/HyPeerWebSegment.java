@@ -29,6 +29,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	private static HyPeerWebSegment singleton = null;
 	private List<Node> nodes = null;
 	private LocalObjectId localId = null;
+	private Set<HyPeerWebSegment> connectedSegments;
 	
 	/**
 	 * Makes sure that this class is registered in the ObjectDB.
@@ -42,6 +43,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	
 	protected HyPeerWebSegment(){
 		this.nodes = new ArrayList<Node>();
+		connectedSegments = new HashSet<HyPeerWebSegment>();
 	}
 	
 	public static HyPeerWebSegment getSingleton(){
@@ -62,12 +64,14 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 		assert (newNode != null && newNode != Node.NULL_NODE);
 		//assert ((startNode != null && startNode != Node.NULL_NODE) || nodes.isEmpty());
 		
-		if(nodes.isEmpty()){
+		ObjectDB.getSingleton().store(newNode.getLocalObjectId(), newNode);
+
+		if(nodes.isEmpty()){			
 			getForeignNode().addToHyPeerWeb(newNode);
 		}
 		else{
 			if(startNode == Node.NULL_NODE){
-				startNode = nodes.get(0);
+				startNode = getANode();
 			}
 			startNode.addToHyPeerWeb(newNode);
 		}
@@ -122,7 +126,10 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	}
 	
 	public void connectSegment(HyPeerWebSegment segment){
-		connectedSegments.add(segment);
+		if(!connectedSegments.contains(segment)){
+			connectedSegments.add(segment);
+			segment.connectSegment(this);
+		}
 	}
 	
 	public HyPeerWebSegment getSegment(){
@@ -391,6 +398,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	}
 	
 	public static void main(String[] args){
+		
 		if(args.length == 1){
 			try{
 				System.out.println("Starting on port "+args[0]);

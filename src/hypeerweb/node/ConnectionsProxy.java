@@ -2,6 +2,7 @@ package hypeerweb.node;
 
 import identification.GlobalObjectId;
 
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 
 import communicator.Command;
@@ -13,6 +14,7 @@ public class ConnectionsProxy extends Connections implements Serializable{
 	private GlobalObjectId globalObjectId;
 
     public ConnectionsProxy(GlobalObjectId globalObjectId){
+    	super(globalObjectId);
         this.globalObjectId = globalObjectId;
     }
 
@@ -362,5 +364,12 @@ public class ConnectionsProxy extends Connections implements Serializable{
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (hypeerweb.node.Node)result;
     }
+    
+    public Object writeReplace() throws ObjectStreamException{
+		return this;
+    }
 
+    public java.lang.Object readResolve(){
+        return this;
+    }
 }

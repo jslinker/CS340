@@ -136,7 +136,7 @@ public class Command implements Serializable{
 			if(localObjectId != null){
 			    target = ObjectDB.getSingleton().getValue(localObjectId);
 			}
-			System.out.println("Executing method: "+methodName+" parameters: "+actualParameters+" localId: "+localObjectId);//TODO remove
+			System.out.println("Executing method: "+ methodName +" on target: " + target + " "+ " parameters: " + actualParameters+" localId: "+localObjectId + targetClass);//TODO remove
 			if(isSynchronous){
 				result = method.invoke(target, actualParameters);
 			} else {

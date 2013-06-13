@@ -6,6 +6,7 @@ import hypeerweb.HyPeerWebSegment;
 import hypeerweb.broadcast.Contents;
 import hypeerweb.broadcast.Parameters;
 import hypeerweb.broadcast.Visitor;
+import identification.GlobalObjectId;
 import identification.LocalObjectId;
 
 import java.io.ObjectStreamException;
@@ -60,7 +61,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		@Override public void accept(Visitor visitor, Parameters parameters){ return; }
 	};
 	
-	protected Node(){
+	private Node(){
 		webId = WebId.NULL_WEB_ID;
 		connections = new Connections();
 		connections.setFold(this);
@@ -87,6 +88,12 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		this.height = webId.getHeight();
 	}
 	
+	protected Node(GlobalObjectId globalObjectId) {
+		connections = null;
+		contents = null;
+		height = 0;
+	}
+
 	/**
 	 * Constructs a SimplifiedNodeDomain object from the attributes of this Node.
 	 * @return The created SimplifiedNodeDomain object.
@@ -222,7 +229,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 			parent.setInverseSurrogateFold(NULL_NODE);
 			parent.setSurrogateFold(NULL_NODE);
 		}
-		else if(parent.getConnections().hasSurrogateFold()){
+		else if(parent.hasSurrogateFold()){
 			parent.setFold(fold);
 			parent.setInverseSurrogateFold(NULL_NODE);
 			parent.setSurrogateFold(NULL_NODE);
@@ -239,6 +246,10 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		NodeState.setNodeState(fold);
 	}
 	
+	private boolean hasSurrogateFold() {
+		return connections.hasSurrogateFold();
+	}
+
 	/**
 	 * This is a greedy algorithm and only guarantees finding the largest node if the
 	 * HyPeerWeb is also a HyperCube; otherwise this algorithm only guarantees finding an edge node.
@@ -516,11 +527,10 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	/**
 	 * Sets this nodes connections. Should only need to be called by the {@code addChild} method.
 	 * @param connections This nodes new connections.
-	 * @pre connections is not null
+	 * @pre NONE
 	 * @post this.connections = connections
 	 */
-	private void setConnections(Connections connections){
-		assert connections != null;
+	protected void setConnections(Connections connections){
 		this.connections = connections;
 	}
 	
@@ -626,7 +636,8 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	}
 	
 	public Object writeReplace() throws ObjectStreamException{
-		return Node.NULL_NODE;
+
+		return new NodeProxy(new GlobalObjectId(this.getLocalObjectId()));
 	}
 	
 	public Object readResolve() throws ObjectStreamException{
