@@ -4,7 +4,6 @@ import identification.GlobalObjectId;
 import identification.LocalObjectId;
 
 import java.io.ObjectStreamException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -18,7 +17,7 @@ import hypeerweb.node.roles.*;
  * 
  * @author Nathan Zabriskie
  */
-public class Connections implements Serializable{
+public class Connections {
 	private TreeMap<Integer,NodeInterface> downPointers = new TreeMap<Integer,NodeInterface>();
 	private TreeMap<Integer,NodeInterface> upPointers = new TreeMap<Integer,NodeInterface>();
 	private TreeMap<Integer,NodeInterface> lowerNeighbors = new TreeMap<Integer,NodeInterface>();
@@ -28,25 +27,12 @@ public class Connections implements Serializable{
 	private NodeInterface surrogateFold = Node.NULL_NODE;
 	private NodeInterface inverseSurrogateFold = Node.NULL_NODE;
 	
-	private LocalObjectId localObjectId;
-	
 	/**
 	 * Default constructor
 	 * @pre NONE
 	 * @post result = initialized Connections
 	 */
 	public Connections(){
-		localObjectId = new LocalObjectId();
-	}
-	
-	protected Connections(GlobalObjectId id){
-		downPointers = null;
-		upPointers = null;
-		lowerNeighbors = null;
-		upperNeighbors = null;
-		fold = null;
-		surrogateFold = null;
-		inverseSurrogateFold = null;
 	}
 	
 	//--------------------
@@ -416,10 +402,6 @@ public class Connections implements Serializable{
 		return upPointers.size();
 	}
 	
-	public LocalObjectId getLocalObjectId(){
-		return localObjectId;
-	}
-	
 	public int getDownPointerCount() {
 		if(downPointers == null){
 			return 0;
@@ -523,7 +505,8 @@ public class Connections implements Serializable{
 	 * @throws ObjectStreamException
 	 */
 	public Object writeReplace() throws ObjectStreamException{
-		GlobalObjectId globalId = new GlobalObjectId(localObjectId);
+		LocalObjectId localId = null;//TODO just for consistency, add each connection object to ObjectDB
+		GlobalObjectId globalId = new GlobalObjectId(localId);
 		return new ConnectionsProxy(globalId);
 	}
 }

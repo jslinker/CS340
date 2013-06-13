@@ -1,6 +1,5 @@
 package hypeerweb.broadcast;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
 /**
@@ -10,7 +9,7 @@ import java.util.HashMap;
  * @author Jason Robertson, Craig Jacobson
  *
  */
-public class Contents implements Serializable{
+public class Contents{
 	
 	private HashMap<String, Object> contents = new HashMap<String, Object>();
 

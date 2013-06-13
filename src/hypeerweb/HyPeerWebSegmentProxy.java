@@ -64,15 +64,6 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment implements Serializa
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "addNode", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
-    
-    public void connectSegment(hypeerweb.HyPeerWebSegment p0){
-        String[] parameterTypeNames = new String[1];
-        parameterTypeNames[0] = "hypeerweb.HyPeerWebSegment";
-        Object[] actualParameters = new Object[1];
-        actualParameters[0] = p0;
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "connectSegment", parameterTypeNames, actualParameters, false);
-        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
-    }
 
     public void removeNode(hypeerweb.node.Node p0){
         String[] parameterTypeNames = new String[1];
@@ -156,14 +147,6 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment implements Serializa
         actualParameters[1] = p1;
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "addToHyPeerWeb", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
-    }
-    
-    public hypeerweb.node.Node getANode(){
-        String[] parameterTypeNames = new String[0];
-        Object[] actualParameters = new Object[0];
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "getANode", parameterTypeNames, actualParameters, true);
-        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (hypeerweb.node.Node)result;
     }
 
     public hypeerweb.node.Node getForeignNode(){

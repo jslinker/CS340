@@ -1,6 +1,5 @@
 package hypeerweb.node;
 
-import hypeerweb.HyPeerWebSegment;
 import identification.GlobalObjectId;
 
 import java.io.Serializable;
@@ -14,7 +13,6 @@ public class NodeProxy extends Node implements Serializable{
 	private GlobalObjectId globalObjectId;
 
     public NodeProxy(GlobalObjectId globalObjectId){
-    	super(globalObjectId);
         this.globalObjectId = globalObjectId;
     }
 
@@ -64,11 +62,19 @@ public class NodeProxy extends Node implements Serializable{
     }
 
     public java.lang.Object readResolve(){
-        return this;
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "readResolve", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (java.lang.Object)result;
     }
 
     public java.lang.Object writeReplace(){
-        return this;
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "writeReplace", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (java.lang.Object)result;
     }
 
     public void accept(hypeerweb.broadcast.Visitor p0, hypeerweb.broadcast.Parameters p1){
