@@ -44,11 +44,7 @@ public class GUIProxy extends GUIFacade implements Serializable{
     }
 
     public int hashCode(){
-        String[] parameterTypeNames = new String[0];
-        Object[] actualParameters = new Object[0];
-        Command command = new Command(globalObjectId.getLocalObjectId(), "java.lang.Object", "hashCode", parameterTypeNames, actualParameters, true);
-        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (Integer)result;
+        return globalObjectId.hashCode();
     }
 
 }

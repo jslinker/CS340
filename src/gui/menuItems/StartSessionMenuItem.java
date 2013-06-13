@@ -46,7 +46,6 @@ public class StartSessionMenuItem extends JMenuItem implements ActionListener{
 	 * Action when menu item is pressed
 	 */
 	public void actionPerformed(ActionEvent e) {
-		
 		// TODO Phase 6 -- provide functionality for starting a new session of the HyPeerWeb
 		SessionController controller = new SessionController(this.main);
 		controller.newHyPeerWebSegment();

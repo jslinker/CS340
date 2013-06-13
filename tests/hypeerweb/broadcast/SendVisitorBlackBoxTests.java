@@ -280,6 +280,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 	private void createHyPeerWeb(int size){
 		clearAll();
 		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
+		web.clear();
 		
 		if(size > 0){
 			web.addToHyPeerWeb(new Node(0), null);
@@ -288,7 +289,7 @@ public class SendVisitorBlackBoxTests extends TestCase{
 			
 			for(int i = 1; i < size; i++){
 				Node newNode = new Node(i);
-				nodeZero.addToHyPeerWeb(newNode);
+				web.addToHyPeerWeb(newNode, web.getNodeByWebId(0));
 				allNodesSet.add(newNode);
 			}
 		}

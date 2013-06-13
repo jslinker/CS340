@@ -1,6 +1,7 @@
 package gui.menuItems;
 
 import gui.GUI;
+import gui.controllers.SessionController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,7 +47,8 @@ public class LeaveSessionMenuItem extends JMenuItem implements ActionListener{
 	 */
 	public void actionPerformed(ActionEvent e) {
 		// TODO Phase 6 -- provide functionality for leaving a session but no terminate the session 
-		
+		SessionController controller = new SessionController(this.main);
+		controller.leaveHyPeerWebSegment();
 	}
 
 }

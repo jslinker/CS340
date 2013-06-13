@@ -157,6 +157,23 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment implements Serializa
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (hypeerweb.node.Node)result;
     }
+    
+    public void connectSegment(hypeerweb.HyPeerWebSegment p0){
+        String[] parameterTypeNames = new String[1];
+        parameterTypeNames[0] = "hypeerweb.HyPeerWebSegment";
+        Object[] actualParameters = new Object[1];
+        actualParameters[0] = p0;
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "connectSegment", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public hypeerweb.node.Node getANode(){
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "getANode", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (hypeerweb.node.Node)result;
+    }
 
     public void fireNodeAdded(int p0){
         String[] parameterTypeNames = new String[1];
@@ -297,11 +314,7 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment implements Serializa
     }
 
     public int hashCode(){
-        String[] parameterTypeNames = new String[0];
-        Object[] actualParameters = new Object[0];
-        Command command = new Command(globalObjectId.getLocalObjectId(), "java.lang.Object", "hashCode", parameterTypeNames, actualParameters, true);
-        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (Integer)result;
+        return globalObjectId.hashCode();
     }
 
 }

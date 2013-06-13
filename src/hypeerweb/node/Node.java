@@ -208,7 +208,8 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	public void disconnect() {
 		List<Node> nodes = HyPeerWebSegment.getSingleton().getNodes();
 		assert(connections.getLowerNeighbors() != null && connections.getLowerNeighbors().size() != 0 &&
-			   nodes.size() >= 2 && nodes.contains(this) && nodes.get(nodes.size() - 1).equals(this));
+			   nodes.size() >= 2);
+
 		
 		int parentId = BitManipulation.calculateSurrogateWebId(getWebIdValue());
 		Node parent = connections.getLowerNeighbors().get(parentId).getNode();
@@ -227,7 +228,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 			parent.setInverseSurrogateFold(NULL_NODE);
 			parent.setSurrogateFold(NULL_NODE);
 		}
-		else if(parent.getConnections().hasSurrogateFold()){
+		else if(parent.hasSurrogateFold()){
 			parent.setFold(fold);
 			parent.setInverseSurrogateFold(NULL_NODE);
 			parent.setSurrogateFold(NULL_NODE);
@@ -244,6 +245,10 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		NodeState.setNodeState(fold);
 	}
 	
+	private boolean hasSurrogateFold() {
+		return connections.hasSurrogateFold();
+	}
+
 	/**
 	 * This is a greedy algorithm and only guarantees finding the largest node if the
 	 * HyPeerWeb is also a HyperCube; otherwise this algorithm only guarantees finding an edge node.
@@ -644,7 +649,6 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		GlobalObjectId globalId = new GlobalObjectId(machineAddress, portNumber, localObjectId);
 		NodeProxy result = new NodeProxy(globalId);
 		result.setWebId(this.getWebId());
-		//result.setConnectionsToNull();
 		return result;
 	}
 }

@@ -63,6 +63,15 @@ public class NodeProxy extends Node implements Serializable{
         return (hypeerweb.node.NodeState)result;
     }
 
+
+    /**
+     * We want to send the node proxy across.
+     */
+    @Override
+    public Object writeReplace() throws ObjectStreamException{
+        return this;
+    }
+
     public void accept(hypeerweb.broadcast.Visitor p0, hypeerweb.broadcast.Parameters p1){
         String[] parameterTypeNames = new String[2];
         parameterTypeNames[0] = "hypeerweb.broadcast.Visitor";
@@ -408,14 +417,4 @@ public class NodeProxy extends Node implements Serializable{
     	
 		return result;
 	}
-    
-    /**
-     * If this method is not overridden then the node will be replaced in the ObjectDB.
-     * Additionally, the writeReplace() method in Node will be called recursively during 
-     * serialization.
-     */
-    @Override
-    public Object writeReplace() throws ObjectStreamException{
-    	return this;
-    }
 }

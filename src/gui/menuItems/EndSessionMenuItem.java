@@ -1,6 +1,7 @@
 package gui.menuItems;
 
 import gui.GUI;
+import gui.controllers.SessionController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,9 +44,9 @@ public class EndSessionMenuItem extends JMenuItem implements ActionListener{
 	 * Action when menu item is pressed
 	 */
 	public void actionPerformed(ActionEvent e) {
-		
 		// TODO Phase 6 -- provide functionality for terminating an existing HyPeerWeb
-		
+		SessionController controller = new SessionController(this.main);
+		controller.endHyPeerWebSegment();
 	}
 
 }
