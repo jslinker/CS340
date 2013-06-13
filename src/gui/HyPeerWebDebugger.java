@@ -8,8 +8,6 @@ import gui.printer.DebugPrinter;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;

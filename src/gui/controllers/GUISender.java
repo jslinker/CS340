@@ -1,6 +1,6 @@
 package gui.controllers;
 
-import gui.GUI;
+import gui.GUIFacade;
 import hypeerweb.broadcast.Parameters;
 import hypeerweb.broadcast.SendVisitor;
 import hypeerweb.node.Node;
@@ -15,14 +15,19 @@ import hypeerweb.node.Node;
  * </pre>
  */
 public class GUISender extends SendVisitor {
+	private static final long serialVersionUID = 6977992165046377881L;
+	
+	GUIFacade facade = null;
+	
 	/**
 	 * The default constructor. It does nothing but call the superclass's default constructor.
 	 * 
 	 * @pre <i>None</i>
 	 * @post super.post-condition
 	 */
-	public GUISender(){
+	public GUISender(GUIFacade facade){
 		super();
+		this.facade = facade;
 	}
 	
 	/**
@@ -52,8 +57,7 @@ public class GUISender extends SendVisitor {
 	 */
 	protected void targetOperation(Node node, Parameters parameters){
 		String result = "Target node = " + node.getWebId() + ", message = '" + parameters.get(MESSAGE_KEY) + "'.\n";
-		GUI gui = GUI.getSingleton(null);
-		gui.printToTracePanel(result);
+		facade.printToTracePanel(result);
 	}
 	
 	/**
@@ -66,8 +70,7 @@ public class GUISender extends SendVisitor {
 	 */	
 	protected void intermediateOperation(Node node, Parameters parameters) {
 		String result = "Sending message to node = " + parameters.get(TARGET_KEY) + ", currently at node " + node.getWebId() + ".\n";
-		GUI gui = GUI.getSingleton(null);
-		gui.printToTracePanel(result);
+		facade.printToTracePanel(result);
 	}
 	
 	/**

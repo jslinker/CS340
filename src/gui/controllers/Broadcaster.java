@@ -1,8 +1,6 @@
 package gui.controllers;
 
-import gui.GUI;
-import gui.printer.DebugPrinter;
-import hypeerweb.HyPeerWebSegment;
+import gui.GUIFacade;
 import hypeerweb.broadcast.BroadcastVisitor;
 import hypeerweb.broadcast.Parameters;
 import hypeerweb.node.Node;
@@ -17,13 +15,18 @@ import hypeerweb.node.Node;
  * </pre>
  */
 public class Broadcaster extends BroadcastVisitor {
+	private static final long serialVersionUID = -2914188563284995229L;
+
+	private GUIFacade facade = null;
+
 	/**
 	 * The default constructor. It does nothing but call the superclass's default constructor.
 	 * 
 	 * @pre <i>None</i>
 	 * @post super.post-condition
 	 */
-	public Broadcaster(){
+	public Broadcaster(GUIFacade facade){
+		this.facade = facade;
 	}
 
 	
@@ -61,8 +64,7 @@ public class Broadcaster extends BroadcastVisitor {
 		}
 		
 		result += String.format("Broadcasting '%s' to node %s.\n", parameters.get(MESSAGE_KEY), node.getWebId());
-		GUI gui = GUI.getSingleton(null);
-		gui.printToTracePanel(result);
+		this.facade.printToTracePanel(result);
 	}
 	
 	

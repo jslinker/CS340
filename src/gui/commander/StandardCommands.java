@@ -4,7 +4,6 @@ import gui.GUI;
 import gui.mapper.NodeListing;
 import gui.newWindows.BroadcastWindow;
 import gui.newWindows.SendWindow;
-import gui.printer.DebugPrinter;
 import hypeerweb.HyPeerWebSegment;
 import hypeerweb.node.Node;
 
@@ -214,7 +213,6 @@ public class StandardCommands extends JPanel
 			} else {
 				HyPeerWebSegment hypeerweb = main.getHyPeerWeb();
 				Node removeNode = hypeerweb.getNode(listIndex);
-				System.out.println("remove node: "+removeNode);//TODO remove
 				if(removeNode != null && removeNode != Node.NULL_NODE) {
 					hypeerweb.removeFromHyPeerWeb(removeNode);
 				} else {

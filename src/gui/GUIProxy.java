@@ -2,6 +2,7 @@ package gui;
 
 import identification.GlobalObjectId;
 
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 
 import communicator.Command;
@@ -22,6 +23,15 @@ public class GUIProxy extends GUIFacade implements Serializable{
         actualParameters[0] = p0;
         actualParameters[1] = p1;
         Command command = new Command(globalObjectId.getLocalObjectId(), "gui.GUIFacade", "update", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public void printToTracePanel(java.lang.String p0){
+        String[] parameterTypeNames = new String[1];
+        parameterTypeNames[0] = "java.lang.String";
+        Object[] actualParameters = new Object[1];
+        actualParameters[0] = p0;
+        Command command = new Command(globalObjectId.getLocalObjectId(), "gui.GUIFacade", "printToTracePanel", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
@@ -47,4 +57,8 @@ public class GUIProxy extends GUIFacade implements Serializable{
         return globalObjectId.hashCode();
     }
 
+    @Override
+    public Object writeReplace() throws ObjectStreamException{
+		return this;
+	}
 }

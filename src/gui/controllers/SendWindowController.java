@@ -2,7 +2,6 @@ package gui.controllers;
 
 import gui.GUI;
 import hypeerweb.broadcast.Parameters;
-import hypeerweb.broadcast.SendVisitor;
 import hypeerweb.node.Node;
 
 public class SendWindowController {
@@ -26,8 +25,9 @@ public class SendWindowController {
 			return;
 		}
 		
-		GUISender sender = new GUISender();		
+		GUISender sender = new GUISender(this.main.getFacade());		
 		Parameters param = GUISender.createInitialParameters(args.getTargetId(), args.getMessage());
-		sender.visit(startNode, param);
+		startNode.accept(sender, param);
+		//sender.visit(startNode, param);
 	}
 }

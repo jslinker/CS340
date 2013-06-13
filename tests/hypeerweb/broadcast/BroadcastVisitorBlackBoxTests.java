@@ -15,7 +15,6 @@ import junit.framework.TestCase;
  *
  */
 public class BroadcastVisitorBlackBoxTests extends TestCase{
-	
 	private final HashSet<Node> allNodesSet = new HashSet<Node>();
 	private final ArrayList<Node> broadcastedToNodesList = new ArrayList<Node>();
 	

@@ -1,14 +1,7 @@
 package gui.controllers;
 
 import gui.GUI;
-import gui.controllers.Broadcaster;
-import hypeerweb.broadcast.BroadcastVisitor;
-import hypeerweb.broadcast.Parameters;
 import hypeerweb.node.Node;
-
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
 
 
@@ -33,7 +26,7 @@ public class BroadcastWindowController  {
 			main.setDebugContent("Please select an existing webId as the start node");
 			return;
 		} else {
-			Broadcaster broadcaster = new Broadcaster();
+			Broadcaster broadcaster = new Broadcaster(this.main.getFacade());
 			
 			broadcaster.visit(startNode, Broadcaster.createInitialParameters(args.getMessage()));
 		}

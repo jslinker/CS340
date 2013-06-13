@@ -2,7 +2,9 @@ package hypeerweb.broadcast;
 
 import hypeerweb.node.Node;
 
-public interface Visitor {
+import java.io.Serializable;
+
+public interface Visitor extends Serializable{
 	
 	/**
 	 * The visit method for the visitor pattern.

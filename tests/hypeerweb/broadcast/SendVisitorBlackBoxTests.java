@@ -14,7 +14,6 @@ import junit.framework.TestCase;
  *
  */
 public class SendVisitorBlackBoxTests extends TestCase{
-	
 	private final HashSet<Node> allNodesSet = new HashSet<Node>();
 	private final ArrayList<Node> sentToNodesList = new ArrayList<Node>();
 

@@ -14,7 +14,8 @@ import utilities.BitManipulation;
  *
  */
 public abstract class BroadcastVisitor implements Visitor{
-
+	private static final long serialVersionUID = -5295241605183903482L;
+	
 	/** 
 	 * The key used to identify a key-value pair in the parameters list.
 	 * The actual value associated with the key can be any value including null.

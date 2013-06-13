@@ -13,6 +13,7 @@ import utilities.BitManipulation;
  * @author Jason Robertson, Craig Jacobson
  */
 public abstract class SendVisitor implements Visitor{
+	private static final long serialVersionUID = -8671980259552421681L;
 	
 	/** 
 	 * The key used in a key-value pair of the parameters to identify the target webId.

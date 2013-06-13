@@ -6,10 +6,10 @@ import identification.ObjectDB;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.net.InetAddress;
 import java.util.Observable;
 import java.util.Observer;
 
+import communicator.PeerCommunicator;
 import communicator.PortNumber;
 
 /**
@@ -33,7 +33,7 @@ public class GUIFacade implements Observer, Serializable{
 		db.store(localId, this);
 	}
 
-	public void update(Observable arg0, Object arg1) {
+	public synchronized void update(Observable arg0, Object arg1) {
 		main.update(arg0, arg1);
 	}
 	
@@ -44,12 +44,16 @@ public class GUIFacade implements Observer, Serializable{
 	 */
 	public Object writeReplace() throws ObjectStreamException{
 		String machineAddress = "localhost";
-		PortNumber portNumber = GUI.DEFAULT_GUI_PORT_NUMBER;
+		PortNumber portNumber = PeerCommunicator.getSingleton().getPortNumber();
 		GlobalObjectId globalId = new GlobalObjectId(machineAddress, portNumber, localId);
 		return new GUIProxy(globalId);
 	}
 
 	public void setLocalId(LocalObjectId localId) {
 		this.localId = localId;
+	}
+
+	public synchronized void printToTracePanel(String message) {
+		this.main.printToTracePanel(message);
 	}
 }
