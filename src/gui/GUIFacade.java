@@ -44,7 +44,7 @@ public class GUIFacade implements Observer, Serializable{
 	 */
 	public Object writeReplace() throws ObjectStreamException{
 		String machineAddress = "localhost";
-		PortNumber portNumber = new PortNumber(GUI.DEFAULT_GUI_PORT_NUMBER);
+		PortNumber portNumber = GUI.DEFAULT_GUI_PORT_NUMBER;
 		GlobalObjectId globalId = new GlobalObjectId(machineAddress, portNumber, localId);
 		return new GUIProxy(globalId);
 	}

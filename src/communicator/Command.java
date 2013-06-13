@@ -146,6 +146,7 @@ public class Command implements Serializable{
 			result = t;
 			t.printStackTrace(System.err);//TODO used for debugging, remove when finished
 		}
+		System.out.println("Returning from executing method: "+methodName);//TODO remove
 		return result;
 	}
 	

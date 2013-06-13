@@ -89,6 +89,7 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment implements Serializa
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
+    @Override
     public hypeerweb.node.Node getNode(int p0){
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "int";

@@ -103,11 +103,15 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	 * @post A new node is added to the HyPeerWebSegment.
 	 */
 	public synchronized void addNode(int startNodeIndex){
+		assert (startNodeIndex == -1 || (startNodeIndex >= 0 && startNodeIndex < nodes.size()));
+		
 		Node startNode = Node.NULL_NODE;
 		if(startNodeIndex != -1){
 			startNode = this.getNode(startNodeIndex);
 		}
-		this.addToHyPeerWeb(new Node(0), startNode);
+		Node newNode = new Node(0);
+		ObjectDB.getSingleton().store(newNode.getLocalObjectId(), newNode);
+		this.addToHyPeerWeb(newNode, startNode);
 	}
 	
 	public synchronized void clear(){
@@ -122,7 +126,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	}
 	
 	public void connectSegment(HyPeerWebSegment segment){
-		connectedSegments.add(segment);
+		//connectedSegments.add(segment);
 	}
 	
 	public HyPeerWebSegment getSegment(){
@@ -168,11 +172,11 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	public Node getForeignNode(){
 		Node foreignNode = Node.NULL_NODE;
 		
-		for(HyPeerWebSegment segment: connectedSegments){
+		/*for(HyPeerWebSegment segment: connectedSegments){
 			if(segment.size() > 1){
 				foreignNode = segment.getANode();
 			}
-		}
+		}*/
 		
 		return foreignNode;
 	}

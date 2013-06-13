@@ -108,6 +108,10 @@ public class PeerCommunicator
     		System.err.println(e.getStackTrace());
     	}
     }
+    
+    public PortNumber getPortNumber(){
+    	return new PortNumber(serverSocket.getLocalPort());
+    }
 
     /**
      * The command sent to a PeerCommunicator to stop it.  This sets the stop variable in the singleton to true but nothing will happen until the

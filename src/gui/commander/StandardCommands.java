@@ -212,8 +212,9 @@ public class StandardCommands extends JPanel
 			if(listIndex < 0 || listIndex >= listing.listSize()){
 				setDebugContent("Please select a node to delete.");
 			} else {
-				HyPeerWebSegment hypeerweb = HyPeerWebSegment.getSingleton();
+				HyPeerWebSegment hypeerweb = main.getHyPeerWeb();
 				Node removeNode = hypeerweb.getNode(listIndex);
+				System.out.println("remove node: "+removeNode);//TODO remove
 				if(removeNode != null && removeNode != Node.NULL_NODE) {
 					hypeerweb.removeFromHyPeerWeb(removeNode);
 				} else {

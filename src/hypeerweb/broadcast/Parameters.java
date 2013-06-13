@@ -1,5 +1,6 @@
 package hypeerweb.broadcast;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
@@ -8,7 +9,8 @@ import java.util.HashMap;
  * such that no two key-value pairs have the same key.
  * @author Jason Robertson, Craig Jacobson
  */
-public class Parameters{
+public class Parameters implements Serializable{
+	private static final long serialVersionUID = -4648781306628891458L;
 	
 	private HashMap<String, Object> parameters = new HashMap<String, Object>();
 

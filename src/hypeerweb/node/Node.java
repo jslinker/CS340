@@ -6,7 +6,9 @@ import hypeerweb.HyPeerWebSegment;
 import hypeerweb.broadcast.Contents;
 import hypeerweb.broadcast.Parameters;
 import hypeerweb.broadcast.Visitor;
+import identification.GlobalObjectId;
 import identification.LocalObjectId;
+import identification.ObjectDB;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
@@ -18,6 +20,9 @@ import java.util.TreeMap;
 
 import utilities.BitManipulation;
 
+import communicator.PeerCommunicator;
+import communicator.PortNumber;
+
 /**
  * @author Joseph
  */
@@ -26,7 +31,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	
 	private WebId webId = null;
 	private int height = -1;
-	private Connections connections;
+	private Connections connections = null;
 	private NodeState state = NodeState.STANDARD;
 	private Contents contents = new Contents();
 	private LocalObjectId localObjectId = new LocalObjectId(); 
@@ -519,9 +524,16 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * @pre connections is not null
 	 * @post this.connections = connections
 	 */
-	private void setConnections(Connections connections){
+	protected void setConnections(Connections connections){
 		assert connections != null;
 		this.connections = connections;
+	}
+	
+	/**
+	 * Used in serialization.
+	 */
+	protected void setConnectionsToNull(){
+		this.connections = null;
 	}
 	
 	@Override
@@ -626,11 +638,13 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	}
 	
 	public Object writeReplace() throws ObjectStreamException{
-		return Node.NULL_NODE;
-	}
-	
-	public Object readResolve() throws ObjectStreamException{
-		//TODO move to proxy class
-		return Node.NULL_NODE;
+		ObjectDB.getSingleton().store(localObjectId, this);
+		String machineAddress = "localhost";
+		PortNumber portNumber = PeerCommunicator.getSingleton().getPortNumber();
+		GlobalObjectId globalId = new GlobalObjectId(machineAddress, portNumber, localObjectId);
+		NodeProxy result = new NodeProxy(globalId);
+		result.setWebId(this.getWebId());
+		//result.setConnectionsToNull();
+		return result;
 	}
 }

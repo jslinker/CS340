@@ -117,7 +117,7 @@ public class NodeListing extends JPanel {
 			nodeListModel.set(i, "");
 		}
 		listSize = 0;
-		nodeList.clearSelection();
+		nodeList.setSelectedIndex(-1);
 	}
 	
 	public void increaseListSize(){

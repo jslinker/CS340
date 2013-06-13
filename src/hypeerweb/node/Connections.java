@@ -1,15 +1,23 @@
 package hypeerweb.node;
 
+import hypeerweb.node.roles.Fold;
+import hypeerweb.node.roles.InverseSurrogateFold;
+import hypeerweb.node.roles.InverseSurrogateNeighbor;
+import hypeerweb.node.roles.Neighbor;
+import hypeerweb.node.roles.SurrogateFold;
+import hypeerweb.node.roles.SurrogateNeighbor;
 import identification.GlobalObjectId;
 import identification.LocalObjectId;
+import identification.ObjectDB;
 
 import java.io.ObjectStreamException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-import hypeerweb.HyPeerWebSegmentProxy;
-import hypeerweb.node.roles.*;
+import communicator.PeerCommunicator;
+import communicator.PortNumber;
 
 
 /**
@@ -17,7 +25,7 @@ import hypeerweb.node.roles.*;
  * 
  * @author Nathan Zabriskie
  */
-public class Connections {
+public class Connections implements Serializable{
 	private TreeMap<Integer,NodeInterface> downPointers = new TreeMap<Integer,NodeInterface>();
 	private TreeMap<Integer,NodeInterface> upPointers = new TreeMap<Integer,NodeInterface>();
 	private TreeMap<Integer,NodeInterface> lowerNeighbors = new TreeMap<Integer,NodeInterface>();
@@ -26,6 +34,8 @@ public class Connections {
 	private NodeInterface fold = Node.NULL_NODE;
 	private NodeInterface surrogateFold = Node.NULL_NODE;
 	private NodeInterface inverseSurrogateFold = Node.NULL_NODE;
+	
+	private LocalObjectId localObjectId = new LocalObjectId();
 	
 	/**
 	 * Default constructor
@@ -505,8 +515,11 @@ public class Connections {
 	 * @throws ObjectStreamException
 	 */
 	public Object writeReplace() throws ObjectStreamException{
-		LocalObjectId localId = null;//TODO just for consistency, add each connection object to ObjectDB
-		GlobalObjectId globalId = new GlobalObjectId(localId);
-		return new ConnectionsProxy(globalId);
+		ObjectDB.getSingleton().store(localObjectId, this);
+		String machineAddress = "localhost";
+		PortNumber portNumber = PeerCommunicator.getSingleton().getPortNumber();
+		GlobalObjectId globalId = new GlobalObjectId(machineAddress, portNumber, localObjectId);
+		ConnectionsProxy result = new ConnectionsProxy(globalId);
+		return result;
 	}
 }
