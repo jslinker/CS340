@@ -69,12 +69,11 @@ public class NodeProxy extends Node implements Serializable{
         return (java.lang.Object)result;
     }
 
+    /**
+     * We want to send the node proxy across.
+     */
     public java.lang.Object writeReplace(){
-        String[] parameterTypeNames = new String[0];
-        Object[] actualParameters = new Object[0];
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "writeReplace", parameterTypeNames, actualParameters, true);
-        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (java.lang.Object)result;
+        return this;
     }
 
     public void accept(hypeerweb.broadcast.Visitor p0, hypeerweb.broadcast.Parameters p1){

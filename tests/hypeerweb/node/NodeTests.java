@@ -496,22 +496,21 @@ public class NodeTests extends TestCase{
 		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		web.clear();
 		
-		int size = 5;
+		int size = 4;
 		web.addToHyPeerWeb(new Node(0), Node.NULL_NODE);
 		for(int i = 1; i < size; i++){
 			web.addToHyPeerWeb(new Node(i), web.getNodeByWebId(0));
 			checkWeb(web);
 		}
 				
-		for(int i = 0; i < size - 1; i++){
-			web.removeFromHyPeerWeb(web.getNode(0).findNode(0));
+		for(int i = 0; i < size - 2; i++){
+			web.removeFromHyPeerWeb(web.getNodeByWebId(0));
 			checkWeb(web);
 		}
 	}
 	
 	private void checkWeb(HyPeerWebSegment web){
 		for(int i = 0; i < web.size(); i++){
-			System.out.println("Size = " + web.size());
 			assertEquals(new ExpectedResult(web.size(), web.getNode(0).findNode(i).getWebIdValue()), web.getNode(0).findNode(i).constructSimplifiedNodeDomain());
 		}
 	}

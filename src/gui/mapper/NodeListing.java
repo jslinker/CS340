@@ -102,7 +102,9 @@ public class NodeListing extends JPanel {
 	 */
 	public void initList()
 	{
+		nodeListModel.clear();
 		listSize = main.getHyPeerWeb().size();
+		System.out.println(listSize);
 		for(int i = 0; i < MAX_NUMBER_OF_NODES; i++){
 			if(i >= listSize){
 				nodeListModel.addElement("");

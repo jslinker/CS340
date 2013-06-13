@@ -29,6 +29,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	private static HyPeerWebSegment singleton = null;
 	private List<Node> nodes = null;
 	private LocalObjectId localId = null;
+	private Set<HyPeerWebSegment> connectedSegments;
 	
 	/**
 	 * Makes sure that this class is registered in the ObjectDB.
@@ -42,6 +43,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	
 	protected HyPeerWebSegment(){
 		this.nodes = new ArrayList<Node>();
+		this.connectedSegments = new HashSet<HyPeerWebSegment>();
 	}
 	
 	public static HyPeerWebSegment getSingleton(){
@@ -87,8 +89,9 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 		assert (removeNode != null && removeNode != Node.NULL_NODE);
 		assert (this.getNodeByWebId(removeNode.getWebIdValue()).getWebIdValue() == removeNode.getWebIdValue());
 		
+		nodes.remove(HyPeerWebSegment.getSingleton().getNodeByWebId(removeNode.getWebIdValue()));
 		removeNode.removeFromHyPeerWeb(removeNode);		
-		nodes.remove(size()-1);
+		
 		this.fireNodeRemoved(removeNode.getWebIdValue());
 	}
 	
@@ -193,7 +196,11 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 			existingNode = getForeignNode();
 		}
 		else{
-			existingNode = nodes.get(0);
+			for(int i = 0; i < nodes.size(); i++){
+				if(nodes.get(i).getWebIdValue() == webId){
+					existingNode = nodes.get(i);
+				}
+			}			
 		}
 		
 		return existingNode.findNode(webId);
@@ -405,7 +412,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 			catch(ClassNotFoundException e){
 				e.printStackTrace(System.err);
 			}
-		}
+		} 
 	}
 	
 	private void setLocalId(LocalObjectId localId) {

@@ -248,7 +248,7 @@ public class HyPeerWebTests extends TestCase{
 		while(max > 1){
 			for(int i = max; i > 0; i--){
 				SimplifiedNodeDomain expected = new ExpectedResult(max + 1, i);
-				assertEquals(expected, web.getNode(i).constructSimplifiedNodeDomain());
+				assertEquals(expected, web.getNodeByWebId(i).constructSimplifiedNodeDomain());
 			}
 		
 			web.removeFromHyPeerWeb(web.getNode(max));
