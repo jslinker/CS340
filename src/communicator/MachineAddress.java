@@ -1,6 +1,11 @@
 package communicator;
 import java.io.Serializable;
+import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 /**
  * The IP address of this machine on the internet.<br>
@@ -18,10 +23,31 @@ public class MachineAddress implements Serializable{
 	/**
 	 * The machineAddress.
 	 */
-	private static InetAddress machineAddress = null;
+	private static InetAddress machineInetAddress = null;
 	
 	static{
-		setMachineAddress("localhost");
+		try {
+			boolean foundMachineAddress = false;
+			
+			Enumeration networkInterfaces = NetworkInterface.getNetworkInterfaces();
+			while(networkInterfaces.hasMoreElements() && !foundMachineAddress)
+	        {
+	            NetworkInterface networkInterface = (NetworkInterface) networkInterfaces.nextElement();
+	            Enumeration addresses = networkInterface.getInetAddresses();
+	            while(addresses.hasMoreElements() && !foundMachineAddress)
+	            {
+	                InetAddress address = (InetAddress) addresses.nextElement();
+	                if(!address.isLoopbackAddress() && address instanceof Inet4Address){
+	                	machineInetAddress = address;
+	                	foundMachineAddress = true;
+	                	System.out.println(machineInetAddress);
+	                }
+	            }
+	        }
+		}
+		catch (SocketException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 //Class Methods
@@ -32,9 +58,9 @@ public class MachineAddress implements Serializable{
 	 * @post machineAddress = InetAddress.getByName(machineName)
 	 */
 	public static void setMachineAddress(String machineName){
-		assert MachineAddress.machineAddress == null;
+		assert MachineAddress.machineInetAddress == null;
 		try{
-			MachineAddress.machineAddress = InetAddress.getByName(machineName);
+			MachineAddress.machineInetAddress = InetAddress.getByName(machineName);
 		}catch(Exception e){
 			System.err.println("ERROR in MachineAddress::setMachineAddress(String):" +
 					           "    Machine name is not a valid machineName");
@@ -48,6 +74,6 @@ public class MachineAddress implements Serializable{
 	 * @result = machineAddress
 	 */
 	public static InetAddress getThisMachinesInetAddress(){
-		return machineAddress;
+		return machineInetAddress;
 	}
 }

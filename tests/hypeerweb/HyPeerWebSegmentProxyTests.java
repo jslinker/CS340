@@ -35,7 +35,7 @@ public class HyPeerWebSegmentProxyTests {
 		}//ensures that the static block is executed
 		
 		
-		serverGlobalId = new GlobalObjectId("192.168.168.69", new PortNumber(49200), first);
+		serverGlobalId = new GlobalObjectId("localhost", new PortNumber(49200), first);
 		proxy = new HyPeerWebSegmentProxy(serverGlobalId);
 		
 		web = HyPeerWebSegment.getSingleton();

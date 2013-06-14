@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 
+import communicator.MachineAddress;
 import communicator.PeerCommunicator;
 import communicator.PortNumber;
 
@@ -43,6 +44,7 @@ public class GUIFacade implements Observer, Serializable{
 	 * @throws ObjectStreamException
 	 */
 	public Object writeReplace() throws ObjectStreamException{
+		System.out.println(MachineAddress.getThisMachinesInetAddress());
 		String machineAddress = "localhost";
 		PortNumber portNumber = PeerCommunicator.getSingleton().getPortNumber();
 		GlobalObjectId globalId = new GlobalObjectId(machineAddress, portNumber, localId);

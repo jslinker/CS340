@@ -49,7 +49,7 @@ public class GUI extends JFrame implements Observer
 	/**
 	 * Creates and initializes the GUI as being the root
 	 */
-	public GUI(HyPeerWebSegment hypeerweb){
+	public GUI(PortNumber portNumber, HyPeerWebSegment hypeerweb){
 		this.hypeerweb = hypeerweb;
 		
 		LocalObjectId facadeLocalId = LocalObjectId.getFirstId();
@@ -57,7 +57,7 @@ public class GUI extends JFrame implements Observer
 		facade.setLocalId(facadeLocalId);
 		ObjectDB.getSingleton().store(facadeLocalId, this.facade);
 		
-		PeerCommunicator.createPeerCommunicator(DEFAULT_GUI_PORT_NUMBER);
+		PeerCommunicator.createPeerCommunicator(portNumber);
 		
 		this.setTitle("HyPeerWeb DEBUGGER V 1.1");
 
@@ -82,10 +82,10 @@ public class GUI extends JFrame implements Observer
 		System.exit(0);
 	}
 	
-	public static GUI getSingleton(HyPeerWebSegment hypeerweb){
+	public static GUI getSingleton(PortNumber portNumber, HyPeerWebSegment hypeerweb){
 		if(singleton == null){
 			try{
-				singleton = new GUI(hypeerweb);
+				singleton = new GUI(portNumber, hypeerweb);
 				singleton.setVisible(true);
 			}
 			catch(Exception e)	{
@@ -102,14 +102,25 @@ public class GUI extends JFrame implements Observer
 	 * Start Point of the Program
 	 */
 	public static void main (String[] args){
-		SwingUtilities.invokeLater(new Runnable() {		
-			@Override
-			public void run() {
-
-				GUI gui = GUI.getSingleton(new NullHyPeerWebSegment());
-				gui.setVisible(true);
+		if(args.length == 1){
+			try{
+				final int portNumber = Integer.parseInt(args[0]);
+				SwingUtilities.invokeLater(new Runnable() {		
+					@Override
+					public void run() {
+	
+						GUI gui = GUI.getSingleton(new PortNumber(portNumber), new NullHyPeerWebSegment());
+						gui.setVisible(true);
+					}
+				});
 			}
-		});
+			catch(NumberFormatException e){
+				System.out.println("Bad port number.");
+			}
+		}
+		else{
+			System.out.println("Enter a port number for the GUI to run on.");
+		}
 	}
 
 	/**
