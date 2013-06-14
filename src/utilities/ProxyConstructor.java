@@ -283,6 +283,6 @@ public class ProxyConstructor {
     }
 	
 	public static void main(String[] args){
-		create("gui.GUIFacade");
+		create("hypeerweb.node.Node");
 	}
 }

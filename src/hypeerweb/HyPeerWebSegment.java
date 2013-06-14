@@ -2,6 +2,7 @@ package hypeerweb;
 
 import hypeerweb.database.HyPeerWebDatabase;
 import hypeerweb.node.Node;
+import hypeerweb.node.NodeProxy;
 import hypeerweb.node.SimplifiedNodeDomain;
 import identification.GlobalObjectId;
 import identification.LocalObjectId;
@@ -64,20 +65,24 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 		assert (newNode != null && newNode != Node.NULL_NODE);
 		//assert ((startNode != null && startNode != Node.NULL_NODE) || nodes.isEmpty());
 		
+		ObjectDB.getSingleton().store(newNode.getLocalObjectId(), newNode);
 		if(nodes.isEmpty()){
-			getForeignNode().addToHyPeerWeb(newNode);
+			Node foreignNode = getForeignNode();
+			if(foreignNode == Node.NULL_NODE){
+				Node.NULL_NODE.addToHyPeerWeb(newNode);
+			} else {
+				foreignNode.addToHyPeerWeb(newNode);
+			}
 		}
 		else{
-			if(startNode == Node.NULL_NODE){
+			if(startNode == Node.NULL_NODE || startNode == null){
 				startNode = nodes.get(0);
 			}
 			startNode.addToHyPeerWeb(newNode);
 		}
-		
 		this.addNode(newNode);
 		this.fireNodeAdded(newNode.getWebIdValue());
-	}
-	
+	}	
 	
 	/**
 	 * Removes a node from the HyPeerWeb
@@ -113,7 +118,6 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 			startNode = this.getNode(startNodeIndex);
 		}
 		Node newNode = new Node(0);
-		ObjectDB.getSingleton().store(newNode.getLocalObjectId(), newNode);
 		this.addToHyPeerWeb(newNode, startNode);
 	}
 	
@@ -129,7 +133,11 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	}
 	
 	public void connectSegment(HyPeerWebSegment segment){
-		//connectedSegments.add(segment);
+		connectedSegments.add(segment);
+	}
+	
+	public void disconnectSegment(HyPeerWebSegment segment){
+		connectedSegments.remove(segment);
 	}
 	
 	public HyPeerWebSegment getSegment(){
@@ -175,11 +183,12 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	public Node getForeignNode(){
 		Node foreignNode = Node.NULL_NODE;
 		
-		/*for(HyPeerWebSegment segment: connectedSegments){
+		for(HyPeerWebSegment segment: connectedSegments){
 			if(segment.size() > 1){
 				foreignNode = segment.getANode();
+				break;
 			}
-		}*/
+		}
 		
 		return foreignNode;
 	}
@@ -203,6 +212,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 			for(int i = 0; i < nodes.size(); i++){
 				if(nodes.get(i).getWebIdValue() == webId){
 					existingNode = nodes.get(i);
+					break;
 				}
 			}			
 		}
@@ -336,10 +346,10 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	public int sizeOfHyPeerWeb(){
 		Node deletionPoint = Node.NULL_NODE;
 		if(nodes.isEmpty()){
-			
+			deletionPoint = getForeignNode().findDeletionPoint();
 		}
 		else{
-			nodes.get(0).findDeletionPoint();
+			deletionPoint = nodes.get(0).findDeletionPoint();
 		}
 		return (deletionPoint.getWebIdValue() + 1);
 	}
@@ -436,7 +446,8 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 				int portNumber = Integer.parseInt(args[0]);
 				
 				Class.forName("hypeerweb.HyPeerWebSegment");//ensures that the static block is executed
-				PeerCommunicator.createPeerCommunicator(new PortNumber(portNumber));
+				PortNumber port = new PortNumber(portNumber);
+				PeerCommunicator.createPeerCommunicator(port);
 			}
 			catch(NumberFormatException e){
 				e.printStackTrace(System.err);

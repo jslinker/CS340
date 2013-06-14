@@ -18,7 +18,7 @@ public interface NodeInterface{
 	public void setFold(Node newFold);
 	public void setSurrogateFold(Node newSurrogateFold);
 	public void setInverseSurrogateFold(Node newInverseSurrogateFold);
-	public void addNeighbor(Node neighbor);
+	public void addNeighbor(NodeInterface neighbor);
 	public void addUpPointer(Node upPointer);
 	public void addDownPointer(Node downPointer);
 	public void addToHyPeerWeb(Node newNode);
