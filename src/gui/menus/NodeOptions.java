@@ -36,7 +36,7 @@ public class NodeOptions extends JPopupMenu{
 	 */
 	public void init()
 	{
-		remoteOpen = new ObserverMenuItem(main);;
+		remoteOpen = new ObserverMenuItem(main);
 		this.add(remoteOpen);
 		
 		jumpTo = new JMenuItem("Jump To");
