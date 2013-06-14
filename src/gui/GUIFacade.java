@@ -44,10 +44,10 @@ public class GUIFacade implements Observer, Serializable{
 	 * @throws ObjectStreamException
 	 */
 	public Object writeReplace() throws ObjectStreamException{
-		System.out.println(MachineAddress.getThisMachinesInetAddress());
-		String machineAddress = "localhost";
 		PortNumber portNumber = PeerCommunicator.getSingleton().getPortNumber();
-		GlobalObjectId globalId = new GlobalObjectId(machineAddress, portNumber, localId);
+		GlobalObjectId globalId = new GlobalObjectId(MachineAddress.getThisMachinesInetAddress().getHostAddress(), 
+														portNumber, 
+														localId);
 		return new GUIProxy(globalId);
 	}
 
