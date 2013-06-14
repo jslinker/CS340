@@ -1,9 +1,11 @@
 package hypeerweb.node.roles;
 
+import java.io.Serializable;
+
 import hypeerweb.node.Node;
 import hypeerweb.node.NodeInterface;
 
-public class InverseSurrogateFold extends NodeRole{
+public class InverseSurrogateFold extends NodeRole {
 
 	public InverseSurrogateFold(NodeInterface node){
 		this.node = node.getNode();

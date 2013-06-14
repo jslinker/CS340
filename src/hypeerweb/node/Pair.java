@@ -1,11 +1,13 @@
 package hypeerweb.node;
 
+import java.io.Serializable;
+
 /**
  * Simple class to Pair two values together.
  * @author Craig Jacobson
  *
  */
-public class Pair<T>{
+public class Pair<T> implements Serializable{
 	private T lowerBound = null;
 	private T upperBound = null;
 	

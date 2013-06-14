@@ -1,5 +1,6 @@
 package hypeerweb.node;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -28,7 +29,7 @@ import java.util.Iterator;
  * 
  * @author Scott Woodfield
  */
-public class SimplifiedNodeDomain {
+public class SimplifiedNodeDomain implements Serializable {
     // Domain Implementation
     protected int webId;
     protected int height;

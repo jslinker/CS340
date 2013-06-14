@@ -1,14 +1,25 @@
 package hypeerweb.node.roles;
 
+import identification.GlobalObjectId;
+
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import communicator.PeerCommunicator;
+import communicator.PortNumber;
+
 import hypeerweb.broadcast.Contents;
 import hypeerweb.broadcast.Parameters;
 import hypeerweb.broadcast.Visitor;
 import hypeerweb.node.Node;
 import hypeerweb.node.NodeInterface;
+import hypeerweb.node.NodeProxy;
 import hypeerweb.node.SimplifiedNodeDomain;
 import hypeerweb.node.WebId;
 
-public abstract class NodeRole implements NodeInterface{
+public abstract class NodeRole implements NodeInterface, Serializable{
 	protected Node node = null;
 
 	public void setWebId(WebId webId) {
@@ -27,7 +38,7 @@ public abstract class NodeRole implements NodeInterface{
 		node.setInverseSurrogateFold(newInverseSurrogateFold);
 	}
 
-	public void addNeighbor(Node neighbor) {
+	public void addNeighbor(NodeInterface neighbor) {
 		node.addNeighbor(neighbor);
 	}
 
@@ -126,5 +137,9 @@ public abstract class NodeRole implements NodeInterface{
 	
 	public String toString(){
 		return getType() + " " + node.toString();
+	}
+	
+	public Object writeReplace() throws ObjectStreamException{
+		return node.writeReplace();
 	}
 }

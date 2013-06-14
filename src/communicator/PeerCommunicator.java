@@ -101,6 +101,7 @@ public class PeerCommunicator
     	try{
     		String myIPAddress = InetAddress.getLocalHost().getHostAddress();
        	    myGlobalObjectId = new GlobalObjectId(myIPAddress, port, null);
+       	    PortNumber.setApplicationsPortNumber(port);
        	    serverSocket = new ServerSocket(myGlobalObjectId.getPortNumber().getValue());
         	this.start();
     	} catch(Exception e){

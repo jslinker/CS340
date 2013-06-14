@@ -12,6 +12,8 @@ import identification.ObjectDB;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -259,15 +261,15 @@ public class Connections implements Serializable{
 		}
 	}
 	
-	public void addLowerNeighbor(Node lowerNeighbor){
+	public void addLowerNeighbor(NodeInterface lowerNeighbor){
 		if(this.lowerNeighbors != null){
 			this.lowerNeighbors.put(lowerNeighbor.getWebIdValue(), new Neighbor(lowerNeighbor));
 		}
 	}
 	
-	public void addUpperNeighbor(Node upperNeighbor){
+	public void addUpperNeighbor(NodeInterface lowerNeighbor){
 		if(this.upperNeighbors != null){
-			this.upperNeighbors.put(upperNeighbor.getWebIdValue(), new Neighbor(upperNeighbor));
+			this.upperNeighbors.put(lowerNeighbor.getWebIdValue(), new Neighbor(lowerNeighbor));
 		}
 	}
 	
@@ -516,7 +518,14 @@ public class Connections implements Serializable{
 	 */
 	public Object writeReplace() throws ObjectStreamException{
 		ObjectDB.getSingleton().store(localObjectId, this);
-		String machineAddress = "localhost";
+		String machineAddress = null;
+		try {
+			machineAddress = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 		PortNumber portNumber = PeerCommunicator.getSingleton().getPortNumber();
 		GlobalObjectId globalId = new GlobalObjectId(machineAddress, portNumber, localObjectId);
 		ConnectionsProxy result = new ConnectionsProxy(globalId);

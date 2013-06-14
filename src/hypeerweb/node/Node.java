@@ -12,6 +12,8 @@ import identification.ObjectDB;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +42,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		private static final long serialVersionUID = -4818395442433123461L;
 		
 		@Override public void addDownPointer(Node downPointer){ return; }
-		@Override public void addNeighbor(Node neighbor){ return; }
+		@Override public void addNeighbor(NodeInterface neighbor){ return; }
 		@Override public void addUpPointer(Node upPointer){ return; }
 		@Override public void removeDownPointer(Node downPointer){ return; }
 		@Override public void removeNeighbor(Node neighbor){ return; }
@@ -63,6 +65,9 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 			return this;
 		}
 		@Override public void accept(Visitor visitor, Parameters parameters){ return; }
+		@Override public String toString(){
+			return "NULL_NODE: webID = -1";
+		}
 	};
 	
 	protected Node(){
@@ -125,10 +130,8 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 */
 	public void addToHyPeerWeb(Node newNode){
 		assert (newNode != null && newNode != NULL_NODE);
-		
 		Node insertionPoint = findInsertionPoint();
 		int childWebId = calculateChildWebId(insertionPoint);
-
 		newNode.setWebId(childWebId);
 		insertionPoint.addChild(newNode);
 	}
@@ -208,15 +211,14 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	public void disconnect() {
 		List<Node> nodes = HyPeerWebSegment.getSingleton().getNodes();
 		assert(connections.getLowerNeighbors() != null && connections.getLowerNeighbors().size() != 0 &&
-			   nodes.size() >= 2);
+			   HyPeerWebSegment.getSingleton().sizeOfHyPeerWeb() >= 2);
 
 		
 		int parentId = BitManipulation.calculateSurrogateWebId(getWebIdValue());
 		Node parent = connections.getLowerNeighbors().get(parentId).getNode();
 		parent.setHeight(parent.getHeight() - 1);
-		parent.getUpperNeighbors().remove(this.getWebIdValue());
-		
-		connections.getLowerNeighbors().remove(parent.getWebIdValue());
+		parent.removeNeighbor(this);
+		connections.removeLowerNeighbor(parent);
 		
 		for(NodeInterface connection: connections.getDisconnectNodeList()){
 			connection.removeConnection(this, parent);
@@ -244,7 +246,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		NodeState.setNodeState(parent);
 		NodeState.setNodeState(fold);
 	}
-	
+
 	private boolean hasSurrogateFold() {
 		return connections.hasSurrogateFold();
 	}
@@ -305,18 +307,19 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	public void addChild(Node child){
 		this.height++;
 		
-		Connections childConnections = new Connections();
-		child.setConnections(childConnections);
+//		Connections childConnections = new Connections();
+//		child.setConnections(childConnections);
 		
 		//set child node's lower neighbors
 		Map<Integer,NodeInterface> upPointers = connections.getUpPointers();
-		childConnections.setLowerNeighbors(upPointers);
+
 		connections.setUpPointers(new TreeMap<Integer,NodeInterface>());
 		
 		//notify child node's lower neighbors
 		Iterator<NodeInterface> childsLowerNeighbors = upPointers.values().iterator();
 		while(childsLowerNeighbors.hasNext()){
 			NodeInterface lowerNeighbor = childsLowerNeighbors.next();
+			child.addNeighbor(lowerNeighbor);
 			lowerNeighbor.removeDownPointer(this);
 			lowerNeighbor.addNeighbor(child);
 		}
@@ -361,6 +364,11 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		NodeState.setNodeState(this);
 	}
 	
+	public void setLowerNeighbors(Map<Integer, NodeInterface> lowerNeighbors) {
+		System.out.println("Setting lower neighbors = " + lowerNeighbors);
+		connections.setLowerNeighbors(lowerNeighbors);		
+	}
+
 	//------------------
 	//  A D D E R S
 	//------------------
@@ -371,12 +379,12 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		}
 	}
 	
-	public void addNeighbor(Node neighbor){
-		if(neighbor.getWebIdValue() > this.getWebIdValue()){
-			connections.addUpperNeighbor(neighbor);
+	public void addNeighbor(NodeInterface lowerNeighbor){
+		if(lowerNeighbor.getWebIdValue() > this.getWebIdValue()){
+			connections.addUpperNeighbor(lowerNeighbor);
 		}
 		else{
-			connections.addLowerNeighbor(neighbor);
+			connections.addLowerNeighbor(lowerNeighbor);
 		}
 	}
 	
@@ -643,8 +651,14 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	}
 	
 	public Object writeReplace() throws ObjectStreamException{
-		ObjectDB.getSingleton().store(localObjectId, this);
-		String machineAddress = "localhost";
+		String machineAddress = null;
+		try {
+			machineAddress = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 		PortNumber portNumber = PeerCommunicator.getSingleton().getPortNumber();
 		GlobalObjectId globalId = new GlobalObjectId(machineAddress, portNumber, localObjectId);
 		NodeProxy result = new NodeProxy(globalId);
