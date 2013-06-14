@@ -35,14 +35,13 @@ public class GUIProxy extends GUIFacade implements Serializable{
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public boolean equals(java.lang.Object p0){
-        String[] parameterTypeNames = new String[1];
-        parameterTypeNames[0] = "java.lang.Object";
-        Object[] actualParameters = new Object[1];
-        actualParameters[0] = p0;
-        Command command = new Command(globalObjectId.getLocalObjectId(), "java.lang.Object", "equals", parameterTypeNames, actualParameters, true);
-        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (Boolean)result;
+    public boolean equals(java.lang.Object object){
+    	boolean result = false;
+    	if(object instanceof GUIProxy){
+    		GUIProxy proxy = (GUIProxy) object;
+    		result = this.globalObjectId.equals(proxy.globalObjectId);
+    	}
+        return result;
     }
 
     public java.lang.String toString(){

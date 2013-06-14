@@ -1,5 +1,6 @@
 package gui;
 
+import gui.controllers.SessionController;
 import gui.mapper.NodeListing;
 import gui.printer.DebugPrinter;
 import hypeerweb.HyPeerWebSegment;
@@ -76,6 +77,8 @@ public class GUI extends JFrame implements Observer
 	}
 	
 	public void shutdown(){
+		SessionController controller = new SessionController(this);
+		controller.leaveHyPeerWebSegment();
 		System.exit(0);
 	}
 	
