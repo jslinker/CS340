@@ -92,7 +92,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 		nodes.remove(HyPeerWebSegment.getSingleton().getNodeByWebId(removeNode.getWebIdValue()));
 		removeNode.removeFromHyPeerWeb(removeNode);		
 		
-		this.fireNodeRemoved(removeNode.getWebIdValue());
+		this.fireNodeRemoved();
 	}
 	
 	public synchronized void addNode(Node node){
@@ -355,10 +355,10 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	
 	
 	/**
-	 * Used to trigger a notification to all listening GUIs.
+	 * Triggers a notification to all registered Observers that a node was added.
 	 * @param webId The webId of the node that was added.
 	 * @pre The node with the given webId must be in the HyPeerWeb.
-	 * @post The GUIs have all been notified of the addition.
+	 * @post The Observers have all been notified of the addition.
 	 */
 	public void fireNodeAdded(int webId){
 		setChanged();
@@ -366,18 +366,35 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 		clearChanged();
 	}
 	
-	public void fireNodeRemoved(int webId){
+	/**
+	 * Triggers a notification to all registered Observers that a node was removed.
+	 * @pre A node was removed from this segment.
+	 * @post The Observers have all been notified of the removal.
+	 */
+	public void fireNodeRemoved(){
 		setChanged();
 		this.notifyObservers("removedNode");
 		clearChanged();
 	}
 	
+	/**
+	 * Triggers a notification to all registered Observers that all of the nodes in this segment
+	 *  have been cleared.
+	 * @pre No remaining nodes remain in this segment.
+	 * @post The Observers have all been notified of the change.
+	 */
 	public void fireCleared(){
 		setChanged();
 		this.notifyObservers("cleared");
 		clearChanged();
 	}
 	
+	/**
+	 * Triggers a notification to all registered Observers that this segment is shutting down.
+	 * @pre This segment has either been shutdown or killed, either way the effect on the 
+	 * Observers is the same.
+	 * @post The Observers have all been notified of the change.
+	 */
 	public void fireShutdown(){
 		setChanged();
 		this.notifyObservers("shutdown");
@@ -385,7 +402,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	}
 	
 	/**
-	 * Shuts down this segment distributing any remaining nodes to any other connected segments.
+	 * Kills this segment distributing any remaining nodes to any other connected segments.
 	 * Additionally, any segments connected to this segment will be reattached to a parent segment.
 	 * @pre None.
 	 * @post This segments nodes are distributed to any other segments
@@ -398,6 +415,17 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 		//TODO distribute this segments nodes to the other segments
 		//ensure the segments are connected properly
 		
+		System.exit(0);
+	}
+	
+	/**
+	 * Shuts down the entire web, saving all nodes to the database and saving the LocalObjectIds.
+	 * @pre None.
+	 * @post All nodes and hypeerweb segment connections are saved.
+	 */
+	public synchronized void shutdown(){
+		this.fireShutdown();
+		//TODO shutdown the entire web, persistence is required
 		System.exit(0);
 	}
 	

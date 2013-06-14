@@ -5,7 +5,9 @@ import gui.mapper.NodeListing;
 import gui.newWindows.BroadcastWindow;
 import gui.newWindows.SendWindow;
 import hypeerweb.HyPeerWebSegment;
+import hypeerweb.broadcast.Contents;
 import hypeerweb.node.Node;
+import hypeerweb.node.SimplifiedNodeDomain;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -34,6 +36,7 @@ public class StandardCommands extends JPanel
 	private GUI main;
 	
 	/* Container for tha Command Field and Execute Button */
+	@SuppressWarnings("unused")
 	private JPanel fieldPanel;
 	
 	/* Command Field for inputed Commands */
@@ -229,6 +232,34 @@ public class StandardCommands extends JPanel
 		//      C. Otherwise:
 		//      	1. invoke your "removeFromHyPeerWeb" command on the node to be deleted.
 		//			2. Decrease the nodeListing size (See the NodeListing class for details).
+	}
+	
+	public void observeButtonPressed(){
+		if(!main.isConnectedToHyPeerWeb()){
+			setDebugContent("Not connected to a HyPeerWebSegment.");
+			return;
+		}
+		
+		setDebugContent("");
+		
+		NodeListing listing = main.getNodeListing();
+		int listIndex = listing.getSelectedIndex();
+		if(listIndex < 0 || listIndex >= listing.listSize()){
+			setDebugContent("Please right-click on a node to observe.");
+		} else {
+			HyPeerWebSegment hypeerweb = main.getHyPeerWeb();
+			try{
+				Node observeNode = hypeerweb.getNode(listIndex);
+				SimplifiedNodeDomain simpleObservableNode = observeNode.constructSimplifiedNodeDomain();
+				StringBuilder nodeInformation = new StringBuilder(simpleObservableNode.toString());
+				Contents contents = observeNode.getContents();
+				nodeInformation.append("\n\n"+contents.toString());
+				setDebugContent(nodeInformation.toString());
+			}
+			catch(Exception e){
+				setDebugContent("Error in finding node, try again.");
+			}
+		}
 	}
 	
 	private void setDebugContent(String newContent){

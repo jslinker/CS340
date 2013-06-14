@@ -2,10 +2,11 @@ package hypeerweb.broadcast;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An arbitrary collection of named objects
- * @Domain contents : Map -- a set of key-value pairs such that
+ * @domain contents : Map -- a set of key-value pairs such that
  * no two key-value pairs have the same key.
  * @author Jason Robertson, Craig Jacobson
  *
@@ -17,8 +18,8 @@ public class Contents implements Serializable{
 
 	/**
 	 * The default constructor.
-	 * @precondition none
-	 * @postcondition |contents| = 0
+	 * @pre none
+	 * @post |contents| = 0
 	 */
 	public Contents(){
 	}
@@ -37,8 +38,8 @@ public class Contents implements Serializable{
 	 * Retrieves an object from the contents with the given key.
 	 * @param key
 	 * @return
-	 * @precondition none
-	 * @postcondition the object may be null
+	 * @pre none
+	 * @post the object may be null
 	 */
 	public Object get(String key){
 		return contents.get(key);
@@ -51,13 +52,32 @@ public class Contents implements Serializable{
 	 * The value may be null.
 	 * @param key - 
 	 * @param value - 
-	 * @precondition key != null
-	 * @postcondition (key,value) is a member of contents
+	 * @pre key != null
+	 * @post (key,value) is a member of contents
 	 */
 	public void set(String key, Object value){ 
 		assert (key != null);
 		
 		contents.put(key, value);
+	}
+	
+	@Override
+	public String toString(){
+		StringBuilder result = new StringBuilder();
+		
+		result.append("Contents:\n");
+		
+		if(contents.isEmpty()){
+			result.append("Empty");
+		}
+		else{
+			for(Map.Entry<String, Object> entry: contents.entrySet()){
+				result.append("Key: "+entry.getKey()+"\n");
+				result.append("Value: "+entry.getValue().toString()+"\n");
+			}
+		}
+		
+		return result.toString();
 	}
 	
 }

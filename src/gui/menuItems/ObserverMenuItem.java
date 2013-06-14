@@ -54,7 +54,8 @@ public class ObserverMenuItem extends JMenuItem implements ActionListener {
 		//If there isn't one print an appropriate error message.
 		//Otherwise get a representation of the node, and call the print operation on the content of the remoteViewer.
 		//It is then setVisible ("remoteViewer.setVisible(true);")
-
+		
+		main.getHyPeerWebDebugger().getStandardCommands().observeButtonPressed();
 	}
 	
 }

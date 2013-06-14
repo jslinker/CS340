@@ -43,4 +43,10 @@ public class SessionController {
 		main.setHyPeerWeb(new NullHyPeerWebSegment());
 		main.getNodeListing().reset();
 	}
+	
+	public void shutdownHyPeerWebSegment(){
+		main.getHyPeerWeb().shutdown();
+		main.setHyPeerWeb(new NullHyPeerWebSegment());
+		main.getNodeListing().reset();
+	}
 }

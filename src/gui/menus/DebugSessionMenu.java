@@ -4,6 +4,7 @@ import gui.GUI;
 import gui.menuItems.EndSessionMenuItem;
 import gui.menuItems.JoinSessionMenuItem;
 import gui.menuItems.LeaveSessionMenuItem;
+import gui.menuItems.ShutdownSessionMenuItem;
 import gui.menuItems.StartSessionMenuItem;
 
 import javax.swing.JMenu;
@@ -33,6 +34,9 @@ public class DebugSessionMenu extends JMenu{
 	/** End menu item */
 	private JMenuItem end;
 	
+	/** Shutdown menu item */
+	private JMenuItem shutdown;
+	
 	/**
 	 * Creates a debug session menu
 	 * @param main
@@ -61,6 +65,9 @@ public class DebugSessionMenu extends JMenu{
 		
 		end = new EndSessionMenuItem(main);
 		add(end);
+		
+		shutdown = new ShutdownSessionMenuItem(main);
+		add(shutdown);
 	}
 
 }

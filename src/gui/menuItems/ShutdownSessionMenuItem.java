@@ -1,30 +1,29 @@
 package gui.menuItems;
 
 import gui.GUI;
-import gui.newWindows.JoinWindow;
+import gui.controllers.SessionController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JMenuItem;
 
-
 /**
- * Represents the Join session menu item presented in the Help menu
+ * Represents the end session menu item presented in the Help menu
  * 
  * @author Matthew Smith
  *
  */
 @SuppressWarnings("serial")
-public class JoinSessionMenuItem extends JMenuItem implements ActionListener{
+public class ShutdownSessionMenuItem extends JMenuItem implements ActionListener{
 
 	GUI main;
 	
 	/**
-	 * Creates an Join session menu Item
+	 * Creates an End session menu Item
 	 * @param main
 	 */
-	public JoinSessionMenuItem (GUI main)
+	public ShutdownSessionMenuItem (GUI main)
 	{
 		this.main = main;
 		
@@ -36,7 +35,7 @@ public class JoinSessionMenuItem extends JMenuItem implements ActionListener{
 	 */
 	public void init()
 	{
-		this.setText("Join");
+		this.setText("Shutdown");
 		
 		this.addActionListener(this);
 	}
@@ -44,9 +43,10 @@ public class JoinSessionMenuItem extends JMenuItem implements ActionListener{
 	/**
 	 * Action when menu item is pressed
 	 */
-	@SuppressWarnings("unused")
 	public void actionPerformed(ActionEvent e) {
-		JoinWindow joinWindow = new JoinWindow(main, "Join HyPeerWebSegment");
+		// TODO Phase 6 -- provide functionality for terminating an existing HyPeerWeb
+		SessionController controller = new SessionController(this.main);
+		controller.shutdownHyPeerWebSegment();
 	}
 
 }

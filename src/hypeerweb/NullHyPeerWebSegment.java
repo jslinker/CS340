@@ -96,7 +96,7 @@ public class NullHyPeerWebSegment extends HyPeerWebSegment{
 	}
 
 	@Override
-	public void fireNodeRemoved(int webId) {
+	public void fireNodeRemoved() {
 	}
 
 	@Override
