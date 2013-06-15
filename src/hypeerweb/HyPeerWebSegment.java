@@ -459,7 +459,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	}
 	
 	public static void main(String[] args){
-		if(args.length == 1){
+		if(args.length == 1 || args.length == 3){
 			try{
 				System.out.println("Starting on port "+args[0]+ " on machine " + MachineAddress.getThisMachinesInetAddress().getHostAddress());
 				int portNumber = Integer.parseInt(args[0]);
@@ -467,6 +467,16 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 				Class.forName("hypeerweb.HyPeerWebSegment");//ensures that the static block is executed
 				PortNumber port = new PortNumber(portNumber);
 				PeerCommunicator.createPeerCommunicator(port);
+				
+				if(args.length == 3){
+					String machine = args[1];
+					System.out.println("Connecting to port " + args[2] + " on machine " + machine);
+					portNumber = Integer.parseInt(args[2]);
+					GlobalObjectId proxyID = new GlobalObjectId(machine, new PortNumber(portNumber), LocalObjectId.getFirstId());
+					HyPeerWebSegmentProxy proxy = new HyPeerWebSegmentProxy(proxyID);
+					HyPeerWebSegment.getSingleton().connectSegment(proxy);
+					proxy.connectSegment(HyPeerWebSegment.getSingleton());
+				}
 			}
 			catch(NumberFormatException e){
 				e.printStackTrace(System.err);
