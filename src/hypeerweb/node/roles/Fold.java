@@ -32,6 +32,7 @@ public class Fold extends NodeRole{
 	@Override
 	public void replaceConnection(Node aNode, Node replacementNode) {
 		node.setFold(replacementNode);
+		replacementNode.setFold(this.node);
 	}
 	
 	public String getType(){

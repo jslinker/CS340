@@ -362,5 +362,12 @@ public class ConnectionsProxy extends Connections implements Serializable{
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (hypeerweb.node.Node)result;
     }
+    
+    public void clear(){
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Connections", "clear", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
 
 }

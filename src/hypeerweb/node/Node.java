@@ -139,7 +139,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * @pre The node is in the web and is not null or NULL_NODE
 	 * @post The node was removed from the web and replaced with the last node in the web.
 	 */
-	public void removeFromHyPeerWeb(Node deleteNode) {
+	public synchronized void removeFromHyPeerWeb(Node deleteNode) {
 		Node deletionPoint = findDeletionPoint();
 		deletionPoint.disconnect();
 		deleteNode.replaceWithOtherNode(deletionPoint);
@@ -153,13 +153,14 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 */
 	public synchronized void replaceWithOtherNode(Node replacementNode) {
 		if(!this.equals(replacementNode)) {
+			replacementNode.clearConnections();
 			replacementNode.setWebId(this.webId.getValue());
 			replacementNode.setState(this.state);
 			
 			// Notify neighbors of the new node
 			this.connections.replaceNode(this, replacementNode);
 			
-			replacementNode.setConnections(this.connections);
+			//replacementNode.setConnections(this.connections);
 			replacementNode.setHeight(this.height);
 		}
 	}
@@ -168,15 +169,19 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * Finds the insertion point.
 	 * @return The insertion point.
 	 */
-	public Node findInsertionPoint(){
+	public synchronized Node findInsertionPoint(){
 		return findLowerBoundUpperBoundPair().getUpperBound();
+	}
+	
+	public synchronized void clearConnections(){
+		connections.clear();
 	}
 
 	/**
 	 * Finds the deletion point.
 	 * @return The deletion point.
 	 */
-	public Node findDeletionPoint(){
+	public synchronized Node findDeletionPoint(){
 		return findLowerBoundUpperBoundPair().getLowerBound();
 	}
 	

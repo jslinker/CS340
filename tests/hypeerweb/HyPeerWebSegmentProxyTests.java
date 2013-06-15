@@ -115,13 +115,6 @@ public class HyPeerWebSegmentProxyTests {
 		proxy.kill();
 		Enumeration<Object> e = ObjectDB.getSingleton().enumeration();
 
-		while(e.hasMoreElements()){
-			Object obj = e.nextElement();
-			
-			if(obj instanceof Node){
-				System.out.println("Node " + obj + " in database.");
-			}
-		}
 		
 		assertEquals(4, web.getNodes().size());
 		for(int i = 0; i < 4; i++){

@@ -379,6 +379,13 @@ public class NodeProxy extends Node implements Serializable{
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "removeNeighbor", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
+    
+    public void clearConnections(){
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "clearConnections", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
 
     public void removeUpPointer(hypeerweb.node.Node p0){
         String[] parameterTypeNames = new String[1];

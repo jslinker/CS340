@@ -228,7 +228,7 @@ public class Connections implements Serializable{
 		}
 	}
 	
-	private ArrayList<NodeInterface> getReplaceNodeList(){
+	private synchronized ArrayList<NodeInterface> getReplaceNodeList(){
 		ArrayList<NodeInterface> replaceNodeList = new ArrayList<NodeInterface>();
 		replaceNodeList.addAll(downPointers.values());
 		replaceNodeList.addAll(upPointers.values());
@@ -523,5 +523,15 @@ public class Connections implements Serializable{
 		GlobalObjectId globalId = new GlobalObjectId(MachineAddress.getThisMachinesInetAddress().getHostAddress(), portNumber, localObjectId);
 		ConnectionsProxy result = new ConnectionsProxy(globalId);
 		return result;
+	}
+
+	public void clear() {
+		fold = Node.NULL_NODE;
+		inverseSurrogateFold = Node.NULL_NODE;
+		surrogateFold = Node.NULL_NODE;
+		upperNeighbors.clear();
+		lowerNeighbors.clear();
+		upPointers.clear();
+		downPointers.clear();
 	}
 }
