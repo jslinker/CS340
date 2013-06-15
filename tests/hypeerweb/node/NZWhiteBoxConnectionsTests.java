@@ -10,7 +10,6 @@ import org.junit.*;
 import org.junit.runners.JUnit4;
 
 import hypeerweb.HyPeerWebSegment;
-import hypeerweb.node.Connections;
 import hypeerweb.node.Node;
 
 public class NZWhiteBoxConnectionsTests {

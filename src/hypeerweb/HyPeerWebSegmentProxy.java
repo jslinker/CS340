@@ -341,5 +341,11 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment implements Serializa
     public int hashCode(){
         return globalObjectId.hashCode();
     }
-
+    
+    public synchronized void removeAllNodesFromHyPeerWeb(){
+        String[] parameterTypeNames = new String[0];
+        Object[] actualParameters = new Object[0];
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "removeAllNodesFromHyPeerWeb", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
 }

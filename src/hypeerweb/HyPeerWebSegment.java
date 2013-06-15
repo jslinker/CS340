@@ -131,6 +131,12 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 		this.fireCleared();
 	}
 	
+	public synchronized void removeAllNodesFromHyPeerWeb(){
+		while(!nodes.isEmpty()){
+			this.removeFromHyPeerWeb(nodes.get(0));
+		}
+	}
+	
 	public boolean contains(Node node){
 		return this.nodes.contains(node);
 	}
