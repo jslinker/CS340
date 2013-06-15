@@ -12,6 +12,7 @@ public class GUIProxy extends GUIFacade implements Serializable{
     private GlobalObjectId globalObjectId;
 
     public GUIProxy(GlobalObjectId globalObjectId){
+    	super();
         this.globalObjectId = globalObjectId;
     }
 
