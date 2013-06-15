@@ -216,7 +216,8 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 
 		
 		int parentId = BitManipulation.calculateSurrogateWebId(getWebIdValue());
-		Node parent = connections.getLowerNeighbors().get(parentId).getNode();
+		Node parent = this.findNode(parentId);
+		
 		parent.setHeight(parent.getHeight() - 1);
 		parent.removeNeighbor(this);
 		connections.removeLowerNeighbor(parent);
