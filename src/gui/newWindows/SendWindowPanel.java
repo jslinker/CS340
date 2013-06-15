@@ -76,7 +76,7 @@ public class SendWindowPanel
     }
     
     private void sendButtonPressed(){
-    	//TODO Phase 5 -- starting at the indicated node, send the provided message to the target node.
+    	//Phase 5 -- starting at the indicated node, send the provided message to the target node.
     	//	I. Get the text in the "startingNode" component and convert it to an integer identifying the start node.
     	//		A. If the indicated start node is empty, or does not contain an integer, or does not identify an
     	//			existing node in the HyPeerWeb, post an error message in the "debugStatus" component of the GUI.

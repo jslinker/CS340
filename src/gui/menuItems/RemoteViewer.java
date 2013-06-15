@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 public class RemoteViewer extends JFrame{
 	
 	/** Root of the GUI */
+	@SuppressWarnings("unused")
 	private GUI main;
 	
 	/** Debug printer for printing messages from the remote node */

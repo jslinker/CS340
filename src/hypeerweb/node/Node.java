@@ -8,20 +8,17 @@ import hypeerweb.broadcast.Parameters;
 import hypeerweb.broadcast.Visitor;
 import identification.GlobalObjectId;
 import identification.LocalObjectId;
-import identification.ObjectDB;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import utilities.BitManipulation;
 
+import communicator.MachineAddress;
 import communicator.PeerCommunicator;
 import communicator.PortNumber;
 
@@ -209,7 +206,6 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * @post web does not contain this.  Connections of surrounding nodes updated.
 	 */
 	public void disconnect() {
-		List<Node> nodes = HyPeerWebSegment.getSingleton().getNodes();
 		assert(connections.getLowerNeighbors() != null && connections.getLowerNeighbors().size() != 0 &&
 			   HyPeerWebSegment.getSingleton().sizeOfHyPeerWeb() >= 2);
 
@@ -651,14 +647,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	}
 	
 	public Object writeReplace() throws ObjectStreamException{
-		String machineAddress = null;
-		try {
-			machineAddress = InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		String machineAddress = MachineAddress.getThisMachinesInetAddress().getHostAddress().toString();
 		PortNumber portNumber = PeerCommunicator.getSingleton().getPortNumber();
 		GlobalObjectId globalId = new GlobalObjectId(machineAddress, portNumber, localObjectId);
 		NodeProxy result = new NodeProxy(globalId);

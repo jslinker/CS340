@@ -38,9 +38,11 @@ public class MaxVerbosePanel extends JPanel implements DPrinter{
 	private JTextPane textPane;
 	
 	/** Toggles auto scrolling of the text pane */
+	@SuppressWarnings("unused")
 	private JCheckBox togglePause;
 	
 	/** Field for adding comments or notes to the text pane */
+	@SuppressWarnings("unused")
 	private JTextField commenter;
 	
 	/** Document that acts as the content of the text pane*/
@@ -50,6 +52,7 @@ public class MaxVerbosePanel extends JPanel implements DPrinter{
 	private JScrollPane textAreaContainer;
 	
 	/** container for the check box and commenter */
+	@SuppressWarnings("unused")
 	private JPanel textAreaController;
 	
 	/** Flag indicating whether this has a clear button.*/
@@ -59,6 +62,7 @@ public class MaxVerbosePanel extends JPanel implements DPrinter{
 	private JButton clearButton = null;
 	
 	/** Root of the GUI */
+	@SuppressWarnings("unused")
 	private GUI main;
 	
 	/**
@@ -131,6 +135,7 @@ public class MaxVerbosePanel extends JPanel implements DPrinter{
 	 * Returns a time stamp in the form of a string
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private String getDateTime() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();

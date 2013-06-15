@@ -6,8 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Random;
@@ -115,7 +113,7 @@ public class ObjectDB { //A Singleton
     public Object getRandomMember() {
     	//Assumes the DB never has more than Integer.MAX_VALUE members
     	int randomMemberIndex = random.nextInt(hashTable.size());
-    	return getRandomMember(hashTable.size());
+    	return getRandomMember(randomMemberIndex);
     }
     
     /**
@@ -290,7 +288,8 @@ public class ObjectDB { //A Singleton
      * @post If there is any error &rArr; LocalObjectId.nextId = LocalObjectId.INITIAL_ID and |hashTable| = 0
      *       Else the hashTable in the specified file is retrieved and stored in hashTable AND LocalObjectId.nextId = |hashTable|
      */
-    public void restore(String source){
+    @SuppressWarnings("unchecked")
+	public void restore(String source){
         String fileLocation = DEFAULT_FILE_LOCATION;
         if(FILE_LOCATION != null){
             fileLocation = FILE_LOCATION;

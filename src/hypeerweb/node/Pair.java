@@ -8,6 +8,8 @@ import java.io.Serializable;
  *
  */
 public class Pair<T> implements Serializable{
+	private static final long serialVersionUID = 7898652019966508045L;
+	
 	private T lowerBound = null;
 	private T upperBound = null;
 	

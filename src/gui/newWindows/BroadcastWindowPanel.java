@@ -3,7 +3,6 @@ package gui.newWindows;
 import gui.GUI;
 import gui.controllers.BroadcastArgs;
 import gui.controllers.BroadcastWindowController;
-import gui.mapper.NodeListing;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -73,7 +72,7 @@ public class BroadcastWindowPanel
     
     
     private void broadcastButtonPressed(){
-    	//TODO Phase 5 -- starting at the indicated node, broadcast the provided message to all nodes in the HyPeerWeb.
+    	//Phase 5 -- starting at the indicated node, broadcast the provided message to all nodes in the HyPeerWeb.
     	//I. Get the text in the "startingNode" component and convert it to an integer.
     	//		A. If the indicated start node is empty, or does not contain an integer, or does not identify an
     	//			existing node in the HyPeerWeb, post an error message in the "debugStatus" component of the GUI.

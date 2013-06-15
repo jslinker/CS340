@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import communicator.MachineAddress;
 import communicator.PortNumber;
 
 
@@ -55,7 +54,6 @@ public class GlobalObjectId implements Serializable{
 		try {
 			machineAddr = InetAddress.getLocalHost();
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		portNumber = PortNumber.getApplicationsPortNumber();
@@ -71,7 +69,6 @@ public class GlobalObjectId implements Serializable{
 		try {
 			machineAddr = InetAddress.getLocalHost();
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		portNumber = PortNumber.getApplicationsPortNumber();

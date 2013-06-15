@@ -1,6 +1,5 @@
 package hypeerweb;
 
-import gui.GUIProxy;
 import hypeerweb.node.Node;
 import identification.GlobalObjectId;
 
@@ -241,7 +240,6 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment implements Serializa
         parameterTypeNames[0] = "java.util.Observer";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
-        System.err.println("adding self to web as observer");//TODO remove
         Command command = new Command(globalObjectId.getLocalObjectId(), "java.util.Observable", "addObserver", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
@@ -304,7 +302,6 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment implements Serializa
     }
 
     public java.lang.String toString(){
-    	System.err.println("why is the hypeerwebproxy toString() being called?");//TODO remove
     	if(globalObjectId != null) throw new RuntimeException();
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];

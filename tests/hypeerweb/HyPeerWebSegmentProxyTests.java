@@ -1,12 +1,12 @@
 package hypeerweb;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import hypeerweb.node.ExpectedResult;
 import hypeerweb.node.Node;
 import identification.GlobalObjectId;
 import identification.LocalObjectId;
 import identification.ObjectDB;
-import junit.framework.TestCase;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -30,7 +30,6 @@ public class HyPeerWebSegmentProxyTests {
 		try {
 			Class.forName("hypeerweb.HyPeerWebSegment");
 		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}//ensures that the static block is executed
 		

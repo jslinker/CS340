@@ -13,7 +13,7 @@ public class BitManipulation{
 	/**
 	 * Finds the surrogate for a given webId. A surrogate is defined here as the number 
 	 * who's bit representation has a zero where the webId's leading 1 bit is, for example:
-	 * if the webId's three the bit representation is 11 then the surrogate is 01.
+	 * if the webId is three the bit representation is 11 then the surrogate is 01.
 	 * @param webId The id to find a surrogate of.
 	 * @return The webId's surrogate.
 	 * @pre An webId greater than or equal to one (zero does not have a surrogate).
@@ -85,7 +85,7 @@ public class BitManipulation{
 	 * @param webId The webId to test.
 	 * @return True if the webId is a cap node; false otherwise.
 	 * @pre The webId is assumed to be the highest webId in the HyPeerWeb; webId >= 0.
-	 * @post result = (webId is cap node? true: false)
+	 * @post result = true if (webId+1)=2^n where n is an integer; false otherwise
 	 */
 	public static boolean isCapNodeWebId(int webId){
 		assert (webId >= 0);

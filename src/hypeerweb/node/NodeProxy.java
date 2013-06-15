@@ -181,14 +181,15 @@ public class NodeProxy extends Node implements Serializable{
         return (hypeerweb.node.Node)result;
     }
 
-    public hypeerweb.node.Pair squeeze(hypeerweb.node.Pair p0){
+    @SuppressWarnings("unchecked")
+	public hypeerweb.node.Pair<Node> squeeze(hypeerweb.node.Pair<Node> p0){
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "hypeerweb.node.Pair";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "squeeze", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-        return (hypeerweb.node.Pair)result;
+        return (hypeerweb.node.Pair<Node>)result;
     }
 
     public hypeerweb.node.Node getNode(){

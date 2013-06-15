@@ -1,8 +1,6 @@
 package gui.newWindows;
 
 import gui.GUI;
-import gui.controllers.SendArgs;
-import gui.controllers.SendWindowController;
 import gui.controllers.SessionController;
 import identification.GlobalObjectId;
 import identification.LocalObjectId;
@@ -10,7 +8,6 @@ import identification.LocalObjectId;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -53,8 +50,6 @@ public class JoinWindowPanel
 			public void actionPerformed(ActionEvent e) {
 				joinButtonPressed();				
 			}
-			public void windowClosing(WindowEvent we) {
-			} 
 		});
 
 		

@@ -19,6 +19,7 @@ public class ObserverMenuItem extends JMenuItem implements ActionListener {
 
 	private GUI main;
 	
+	@SuppressWarnings("unused")
 	private RemoteViewer remoteViewer;
 	
 	/**
