@@ -430,7 +430,6 @@ public class NodeProxy extends Node implements Serializable{
         		Node localNode = (Node)possibleLocalNode;
         		if(localNode != null && localNode.getWebIdValue() == this.getWebIdValue()){
         			result = localNode;
-        			System.out.println(result + " was on this machine!");
         		}
         	}
     	}

@@ -2,6 +2,8 @@ package hypeerweb;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import hypeerweb.broadcast.BroadcastVisitor;
+import hypeerweb.broadcast.Parameters;
 import hypeerweb.node.ExpectedResult;
 import hypeerweb.node.Node;
 import identification.GlobalObjectId;
@@ -94,5 +96,16 @@ public class HyPeerWebSegmentProxyTests {
 		assertEquals( new ExpectedResult(4,0), proxy.getNode(0).constructSimplifiedNodeDomain());
 		assertEquals( new ExpectedResult(4,1), proxy.getNode(1).constructSimplifiedNodeDomain());
 		assertEquals( new ExpectedResult(4,2), proxy.getNode(2).constructSimplifiedNodeDomain());
+	}
+	
+	@Test
+	public void testBroadcast(){
+		BroadcastVisitor broadcastToAllNodes = new BroadcastVisitor(){
+			public void operation(Node node, Parameters parameters){
+				System.out.println("Currently broadcasting to " + node);
+			}
+		};
+		
+		broadcastToAllNodes.visit(web.getNodeByWebId(3), BroadcastVisitor.createInitialParameters());
 	}
 }
