@@ -25,7 +25,7 @@ import javax.swing.ListSelectionModel;
  * @author Matthew Smith
  *
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial", "unchecked", "rawtypes", "unused"})
 public class NodeListing extends JPanel {
 	
 	/* Root of the GUI */
@@ -143,7 +143,7 @@ public class NodeListing extends JPanel {
 	}
 	
 	private void clearButtonPressed(){
-		main.getHyPeerWeb().clear();
+		main.getHyPeerWeb().removeAllNodesFromHyPeerWeb();
 	}
 	
 	/**
