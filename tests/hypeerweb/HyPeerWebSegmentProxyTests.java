@@ -2,6 +2,10 @@ package hypeerweb;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import java.io.ObjectStreamException;
+import java.util.Enumeration;
+
 import hypeerweb.node.ExpectedResult;
 import hypeerweb.node.Node;
 import identification.GlobalObjectId;
@@ -13,6 +17,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import communicator.MachineAddress;
 import communicator.PeerCommunicator;
 import communicator.PortNumber;
 
@@ -22,7 +27,7 @@ public class HyPeerWebSegmentProxyTests {
 	private static HyPeerWebSegment proxy;
 	private static HyPeerWebSegment web;
 	private static GlobalObjectId serverGlobalId;
-	
+
 	@BeforeClass
 	public static void setupClass(){
 		LocalObjectId first = new LocalObjectId(LocalObjectId.INITIAL_ID);
@@ -34,27 +39,31 @@ public class HyPeerWebSegmentProxyTests {
 		}//ensures that the static block is executed
 		
 		
-		serverGlobalId = new GlobalObjectId("localhost", new PortNumber(49200), first);
+		serverGlobalId = new GlobalObjectId(MachineAddress.getThisMachinesInetAddress().getHostAddress(), new PortNumber(49200), first);
 		proxy = new HyPeerWebSegmentProxy(serverGlobalId);
-		
 		web = HyPeerWebSegment.getSingleton();
 		web.connectSegment(proxy);
 		web.clear();
-		//proxy.connectSegment(HyPeerWebSegment.getSingleton());
+		try {
+			proxy.connectSegment((HyPeerWebSegmentProxy)HyPeerWebSegment.getSingleton().writeReplace());
+		} catch (ObjectStreamException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
+
 	@Before
 	public void setup(){
-//		proxy.clear();
-//		web.clear();
+	//		proxy.clear();
+	//		web.clear();
 	}
-	
+		
 	@AfterClass
 	public static void teardownClass(){
 		//PeerCommunicator.stopConnection(serverGlobalId);
 		PeerCommunicator.stopThisConnection();
 	}
-	
+		
 	@Test
 	public void testAddNodes(){
 		
@@ -94,5 +103,22 @@ public class HyPeerWebSegmentProxyTests {
 		assertEquals( new ExpectedResult(4,0), proxy.getNode(0).constructSimplifiedNodeDomain());
 		assertEquals( new ExpectedResult(4,1), proxy.getNode(1).constructSimplifiedNodeDomain());
 		assertEquals( new ExpectedResult(4,2), proxy.getNode(2).constructSimplifiedNodeDomain());
+	}
+	
+	@Test
+	public void testBroadcast(){
+		web.sendBroadcast();		//had to create a method for testing, something weird was happening with JUNIT
+	}
+	
+	@Test
+	public void testKill(){
+		proxy.kill();
+		Enumeration<Object> e = ObjectDB.getSingleton().enumeration();
+
+		
+		assertEquals(4, web.getNodes().size());
+		for(int i = 0; i < 4; i++){
+			assertEquals(new ExpectedResult(4,i), web.getNodeByWebId(i).constructSimplifiedNodeDomain());
+		}
 	}
 }

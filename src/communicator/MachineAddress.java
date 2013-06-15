@@ -73,6 +73,14 @@ public class MachineAddress implements Serializable{
 	 * @result = machineAddress
 	 */
 	public static InetAddress getThisMachinesInetAddress(){
+		if(machineInetAddress == null){
+			try {
+				Class.forName("MachineAddress");
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return machineInetAddress;
 	}
 }

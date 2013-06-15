@@ -33,6 +33,7 @@ public class Neighbor extends NodeRole{
 	public void replaceConnection(Node aNode, Node replacementNode) {
 		node.removeNeighbor(aNode);
 		node.addNeighbor(replacementNode);
+		replacementNode.addNeighbor(this.node);
 	}
 	
 	public String getType(){

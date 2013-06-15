@@ -27,6 +27,7 @@ public class SurrogateNeighbor extends NodeRole{
 	public void replaceConnection(Node aNode, Node replacementNode) {
 		removeUpPointer(aNode);
 		addUpPointer(replacementNode);
+		replacementNode.addDownPointer(this.node);
 	}
 	
 	public String getType(){

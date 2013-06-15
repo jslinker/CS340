@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+import communicator.MachineAddress;
 import communicator.PeerCommunicator;
 import communicator.PortNumber;
 
@@ -227,7 +228,7 @@ public class Connections implements Serializable{
 		}
 	}
 	
-	private ArrayList<NodeInterface> getReplaceNodeList(){
+	private synchronized ArrayList<NodeInterface> getReplaceNodeList(){
 		ArrayList<NodeInterface> replaceNodeList = new ArrayList<NodeInterface>();
 		replaceNodeList.addAll(downPointers.values());
 		replaceNodeList.addAll(upPointers.values());
@@ -244,7 +245,7 @@ public class Connections implements Serializable{
 	//  R E P L A C E R S
 	//--------------------
 	
-	public void replaceNode(Node nodeToReplace, Node replacementNode){
+	public synchronized void replaceNode(Node nodeToReplace, Node replacementNode){
 		ArrayList<NodeInterface> replaceNodeList = getReplaceNodeList();
 		
 		for(NodeInterface nodeInterface : replaceNodeList){
@@ -518,17 +519,19 @@ public class Connections implements Serializable{
 	 */
 	public Object writeReplace() throws ObjectStreamException{
 		ObjectDB.getSingleton().store(localObjectId, this);
-		String machineAddress = null;
-		try {
-			machineAddress = InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
 		PortNumber portNumber = PeerCommunicator.getSingleton().getPortNumber();
-		GlobalObjectId globalId = new GlobalObjectId(machineAddress, portNumber, localObjectId);
+		GlobalObjectId globalId = new GlobalObjectId(MachineAddress.getThisMachinesInetAddress().getHostAddress(), portNumber, localObjectId);
 		ConnectionsProxy result = new ConnectionsProxy(globalId);
 		return result;
+	}
+
+	public void clear() {
+		fold = Node.NULL_NODE;
+		inverseSurrogateFold = Node.NULL_NODE;
+		surrogateFold = Node.NULL_NODE;
+		upperNeighbors.clear();
+		lowerNeighbors.clear();
+		upPointers.clear();
+		downPointers.clear();
 	}
 }

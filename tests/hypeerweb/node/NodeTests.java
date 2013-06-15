@@ -631,7 +631,7 @@ public class NodeTests extends TestCase{
 			//replace the node
 			Node replacementNode = new Node(230);
 			Node nodeToReplace = nodes.get(i);
-			nodeToReplace.replaceNode(replacementNode);
+			nodeToReplace.replaceWithOtherNode(replacementNode);
 			nodes.set(i, replacementNode);
 			
 			//Test references to ensure the node is actually replaced.

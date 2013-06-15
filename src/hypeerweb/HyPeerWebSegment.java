@@ -1,7 +1,10 @@
 package hypeerweb;
 
+import hypeerweb.broadcast.BroadcastVisitor;
+import hypeerweb.broadcast.Parameters;
 import hypeerweb.database.HyPeerWebDatabase;
 import hypeerweb.node.Node;
+import hypeerweb.node.NodeProxy;
 import hypeerweb.node.SimplifiedNodeDomain;
 import identification.GlobalObjectId;
 import identification.LocalObjectId;
@@ -17,6 +20,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 
+import communicator.MachineAddress;
 import communicator.PeerCommunicator;
 import communicator.PortNumber;
 
@@ -95,7 +99,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 		
 		nodes.remove(HyPeerWebSegment.getSingleton().getNodeByWebId(removeNode.getWebIdValue()));
 		removeNode.removeFromHyPeerWeb(removeNode);		
-		
+		ObjectDB.getSingleton().remove(removeNode.getLocalObjectId());
 		this.fireNodeRemoved();
 	}
 	
@@ -132,6 +136,11 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	}
 	
 	public void connectSegment(HyPeerWebSegment segment){
+		if(segment instanceof HyPeerWebSegmentProxy){
+			System.out.println("Connecting proxy");
+			HyPeerWebSegmentProxy proxy = (HyPeerWebSegmentProxy) segment;
+			System.out.println("ID = " + proxy.getGlobalID());
+		}
 		connectedSegments.add(segment);
 	}
 	
@@ -423,8 +432,14 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 		
 		//TODO distribute this segments nodes to the other segments
 		//ensure the segments are connected properly
+		if(!connectedSegments.isEmpty()){
+			HyPeerWebSegment segment = connectedSegments.iterator().next();
+			for(Node node : nodes){
+				segment.addNodeProxy(node);
+			}
+		}		
 		
-		System.exit(0);
+		//System.exit(0);
 	}
 	
 	/**
@@ -441,7 +456,7 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	public static void main(String[] args){
 		if(args.length == 1){
 			try{
-				System.out.println("Starting on port "+args[0]);
+				System.out.println("Starting on port "+args[0]+ " on machine " + MachineAddress.getThisMachinesInetAddress().getHostAddress());
 				int portNumber = Integer.parseInt(args[0]);
 				
 				Class.forName("hypeerweb.HyPeerWebSegment");//ensures that the static block is executed
@@ -473,5 +488,29 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 
 	private LocalObjectId getLocalId(){
 		return this.localId;
+	}
+	
+	/**
+	 * Used when migrating nodes from another segment to this one.
+	 * @param nodeProxy
+	 */
+	public synchronized void addNodeProxy(Node nodeProxy){
+		Node newNode = new Node(0);
+		nodeProxy.replaceWithOtherNode(newNode);
+		
+		ObjectDB.getSingleton().store(newNode.getLocalObjectId(), newNode);
+		this.addNode(newNode);		
+	}
+
+	public void sendBroadcast() {
+		BroadcastVisitor visitor = new BroadcastVisitor() {
+			
+			@Override
+			protected void operation(Node node, Parameters parameters) {
+				System.out.println("broadcasting to node " + node);				
+			}
+		};
+		
+		visitor.visit(nodes.get(0), BroadcastVisitor.createInitialParameters());
 	}
 }

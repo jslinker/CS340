@@ -28,6 +28,7 @@ public class InverseSurrogateNeighbor extends NodeRole{
 	public void replaceConnection(Node aNode, Node replacementNode) {
 		node.removeDownPointer(aNode);
 		node.addDownPointer(replacementNode);
+		replacementNode.addUpPointer(this.node);
 	}
 	
 	public String getType(){
