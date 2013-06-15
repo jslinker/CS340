@@ -2,7 +2,10 @@ package hypeerweb;
 
 import hypeerweb.node.Node;
 import identification.GlobalObjectId;
+import identification.LocalObjectId;
+import identification.ObjectDB;
 
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 
 import communicator.Command;
@@ -13,6 +16,10 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment implements Serializa
 
     public HyPeerWebSegmentProxy(GlobalObjectId globalObjectId){
         this.globalObjectId = globalObjectId;
+    }
+    
+    public GlobalObjectId getGlobalID(){
+    	return globalObjectId;
     }
 
     public void clear(){
@@ -136,6 +143,15 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment implements Serializa
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "kill", parameterTypeNames, actualParameters, false);
+        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+    }
+    
+    public void addNodeProxy(hypeerweb.node.Node p0){
+        String[] parameterTypeNames = new String[1];
+        parameterTypeNames[0] = "hypeerweb.node.Node";
+        Object[] actualParameters = new Object[1];
+        actualParameters[0] = p0;
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "addNodeProxy", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
@@ -302,13 +318,25 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment implements Serializa
     }
 
     public java.lang.String toString(){
-    	if(globalObjectId != null) throw new RuntimeException();
+    	//if(globalObjectId != null) throw new RuntimeException();
         String[] parameterTypeNames = new String[0];
         Object[] actualParameters = new Object[0];
         Command command = new Command(globalObjectId.getLocalObjectId(), "java.lang.Object", "toString", parameterTypeNames, actualParameters, true);
         Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
         return (java.lang.String)result;
     }
+    
+    public Object writeReplace() throws ObjectStreamException{
+		return this;
+	}
+    
+    public Object readResolve() throws ObjectStreamException{
+    	HyPeerWebSegment result = this;
+    	if(this.globalObjectId.getLocalObjectId() == null){
+    		globalObjectId = new GlobalObjectId(this.globalObjectId.getMachineAddr(), this.globalObjectId.getPortNumber(), LocalObjectId.getFirstId());
+    	}
+		return result;
+	}
 
     public int hashCode(){
         return globalObjectId.hashCode();

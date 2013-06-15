@@ -142,7 +142,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	public void removeFromHyPeerWeb(Node deleteNode) {
 		Node deletionPoint = findDeletionPoint();
 		deletionPoint.disconnect();
-		deleteNode.replaceNode(deletionPoint);
+		deleteNode.replaceWithOtherNode(deletionPoint);
 	}
 
 	/**
@@ -151,9 +151,9 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * @pre The node is in the web and is not null or NULL_NODE
 	 * @post All pointers to this node will now be pointing to replacementNode
 	 */
-	public void replaceNode(Node replacementNode) {
+	public synchronized void replaceWithOtherNode(Node replacementNode) {
 		if(!this.equals(replacementNode)) {
-			replacementNode.setWebId(this.webId);
+			replacementNode.setWebId(this.webId.getValue());
 			replacementNode.setState(this.state);
 			
 			// Notify neighbors of the new node
@@ -254,7 +254,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * @pre This node is connected to the HyPeerWeb.
 	 * @post Either the cap node (if it exists); otherwise an edge node.
 	 */
-	public Node findLargest(){
+	public synchronized Node findLargest(){
 		Node largest = this;
 		if(this.getFold().getWebIdValue() > largest.getWebIdValue()){
 			largest = this.getFold();
@@ -283,7 +283,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * @pre The node with the given webId exists and is connected to the HyPeerWeb.
 	 * @post result = Node with given webId
 	 */
-	public Node findNode(int webId){
+	public synchronized Node findNode(int webId){
 		if (webId == this.webId.getValue()) {
 			return this;
 		}
@@ -300,7 +300,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * @post The child node is connected to the HyPeerWeb, all connections are set, 
 	 * this node's height is correct.
 	 */
-	public void addChild(Node child){
+	public synchronized void addChild(Node child){
 		this.height++;
 		
 //		Connections childConnections = new Connections();
@@ -486,7 +486,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	//------------------
 	//  S E T T E R S
 	//------------------
-	public void setFold(Node fold){
+	public synchronized void setFold(Node fold){
 		assert (fold != null);
 		
 		connections.setFold(fold);

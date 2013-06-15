@@ -155,12 +155,12 @@ public class NodeProxy extends Node implements Serializable{
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
-    public void replaceNode(hypeerweb.node.Node p0){
+    public void replaceWithOtherNode(hypeerweb.node.Node p0){
         String[] parameterTypeNames = new String[1];
         parameterTypeNames[0] = "hypeerweb.node.Node";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "replaceNode", parameterTypeNames, actualParameters, false);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "replaceWithOtherNode", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
 
@@ -408,14 +408,6 @@ public class NodeProxy extends Node implements Serializable{
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "replaceConnection", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
-    
-//    public int getWebIdValue(){
-//        String[] parameterTypeNames = new String[0];
-//        Object[] actualParameters = new Object[0];
-//        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Node", "getWebIdValue", parameterTypeNames, actualParameters, true);
-//        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
-//        return (Integer)result;
-//    }
     
     public Object readResolve() throws ObjectStreamException{
     	Object result = this;

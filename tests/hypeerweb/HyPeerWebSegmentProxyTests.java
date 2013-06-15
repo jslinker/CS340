@@ -2,8 +2,10 @@ package hypeerweb;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import hypeerweb.broadcast.BroadcastVisitor;
-import hypeerweb.broadcast.Parameters;
+
+import java.io.ObjectStreamException;
+import java.util.Enumeration;
+
 import hypeerweb.node.ExpectedResult;
 import hypeerweb.node.Node;
 import identification.GlobalObjectId;
@@ -15,6 +17,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import communicator.MachineAddress;
 import communicator.PeerCommunicator;
 import communicator.PortNumber;
 
@@ -24,7 +27,7 @@ public class HyPeerWebSegmentProxyTests {
 	private static HyPeerWebSegment proxy;
 	private static HyPeerWebSegment web;
 	private static GlobalObjectId serverGlobalId;
-	
+
 	@BeforeClass
 	public static void setupClass(){
 		LocalObjectId first = new LocalObjectId(LocalObjectId.INITIAL_ID);
@@ -36,27 +39,31 @@ public class HyPeerWebSegmentProxyTests {
 		}//ensures that the static block is executed
 		
 		
-		serverGlobalId = new GlobalObjectId("localhost", new PortNumber(49200), first);
+		serverGlobalId = new GlobalObjectId(MachineAddress.getThisMachinesInetAddress().getHostAddress(), new PortNumber(49200), first);
 		proxy = new HyPeerWebSegmentProxy(serverGlobalId);
-		
 		web = HyPeerWebSegment.getSingleton();
 		web.connectSegment(proxy);
 		web.clear();
-		//proxy.connectSegment(HyPeerWebSegment.getSingleton());
+		try {
+			proxy.connectSegment((HyPeerWebSegmentProxy)HyPeerWebSegment.getSingleton().writeReplace());
+		} catch (ObjectStreamException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
+
 	@Before
 	public void setup(){
-//		proxy.clear();
-//		web.clear();
+	//		proxy.clear();
+	//		web.clear();
 	}
-	
+		
 	@AfterClass
 	public static void teardownClass(){
 		//PeerCommunicator.stopConnection(serverGlobalId);
 		PeerCommunicator.stopThisConnection();
 	}
-	
+		
 	@Test
 	public void testAddNodes(){
 		
@@ -100,12 +107,25 @@ public class HyPeerWebSegmentProxyTests {
 	
 	@Test
 	public void testBroadcast(){
-		BroadcastVisitor broadcastToAllNodes = new BroadcastVisitor(){
-			public void operation(Node node, Parameters parameters){
-				System.out.println("Currently broadcasting to " + node);
+		web.sendBroadcast();		//had to create a method for testing, something weird was happening with JUNIT
+	}
+	
+	@Test
+	public void testKill(){
+		proxy.kill();
+		Enumeration<Object> e = ObjectDB.getSingleton().enumeration();
+
+		while(e.hasMoreElements()){
+			Object obj = e.nextElement();
+			
+			if(obj instanceof Node){
+				System.out.println("Node " + obj + " in database.");
 			}
-		};
+		}
 		
-		broadcastToAllNodes.visit(web.getNodeByWebId(3), BroadcastVisitor.createInitialParameters());
+		assertEquals(4, web.getNodes().size());
+		for(int i = 0; i < 4; i++){
+			assertEquals(new ExpectedResult(4,i), web.getNodeByWebId(i).constructSimplifiedNodeDomain());
+		}
 	}
 }

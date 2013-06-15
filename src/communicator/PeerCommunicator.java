@@ -81,7 +81,7 @@ public class PeerCommunicator
      */
     private PeerCommunicator() {
     	try{
-    		String myIPAddress = InetAddress.getLocalHost().getHostAddress();
+    		String myIPAddress = MachineAddress.getThisMachinesInetAddress().getHostName();
        	    myGlobalObjectId = new GlobalObjectId(myIPAddress, PortNumber.DEFAULT_PORT_NUMBER, null);
     	    serverSocket = new ServerSocket(myGlobalObjectId.getPortNumber().getValue());
         	this.start();
@@ -99,7 +99,7 @@ public class PeerCommunicator
      */
     private PeerCommunicator(PortNumber port) {
     	try{
-    		String myIPAddress = InetAddress.getLocalHost().getHostAddress();
+    		String myIPAddress = MachineAddress.getThisMachinesInetAddress().getHostName();
        	    myGlobalObjectId = new GlobalObjectId(myIPAddress, port, null);
        	    PortNumber.setApplicationsPortNumber(port);
        	    serverSocket = new ServerSocket(myGlobalObjectId.getPortNumber().getValue());
