@@ -9,6 +9,9 @@ http://students.cs.byu.edu/~nz3004/doc
 Coverage Report
 http://students.cs.byu.edu/~nz3004/coverage
 
+Use Cases
+http://students.cs.byu.edu/~nz3004/use_cases.html
+
 Below is a UML diagram representing the conceptual model of the HyPeerWeb itself.
 ![Conceptual Model](/extra_content/IMG_0313.jpg "Conceptual Model")
 ![Conceptual Model](/extra_content/IMG_0314.jpg "Conceptual Model")
@@ -31,8 +34,5 @@ Test Database - Craig - May 7
 UML Diagram - Everyone - May 8
 
 Create PERT Charts - Joseph
-
-The Following Are The Required Use Cases:
-![Use Cases](/extra_content/use_cases.html "Use Cases")
 
 ![Contacts](/extra_content/contact_info.png "Contacts")
