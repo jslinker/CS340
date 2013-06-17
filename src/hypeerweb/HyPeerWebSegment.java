@@ -3,6 +3,7 @@ package hypeerweb;
 import hypeerweb.broadcast.BroadcastVisitor;
 import hypeerweb.broadcast.Parameters;
 import hypeerweb.database.HyPeerWebDatabase;
+import hypeerweb.node.ExpectedResult;
 import hypeerweb.node.Node;
 import hypeerweb.node.SimplifiedNodeDomain;
 import identification.GlobalObjectId;
@@ -30,7 +31,7 @@ import communicator.PortNumber;
 public class HyPeerWebSegment extends Observable implements Serializable{
 	
 	private static HyPeerWebSegment singleton = null;
-	private List<Node> nodes = null;
+	protected List<Node> nodes = null;
 	private LocalObjectId localId = null;
 	private Set<HyPeerWebSegment> connectedSegments;
 	
@@ -217,6 +218,10 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	 * @post result = Node with given webId in HyPeerWeb
 	 */
 	public Node getNodeByWebId(int webId){
+		if(webId == -1){
+			return Node.NULL_NODE;
+		}
+		
 		Node existingNode = Node.NULL_NODE;
 		if(nodes.isEmpty()){
 			existingNode = getForeignNode();
@@ -439,9 +444,12 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 		//ensure the segments are connected properly
 		if(!connectedSegments.isEmpty()){
 			HyPeerWebSegment segment = connectedSegments.iterator().next();
+			ArrayList<Integer> myWebIds = new ArrayList<Integer>();
 			for(Node node : nodes){
-				segment.addNodeProxy(node);
+				myWebIds.add(node.getWebIdValue());
 			}
+			
+			boolean wait = segment.addNodeProxy(myWebIds);
 		}		
 		
 		//System.exit(0);
@@ -507,15 +515,30 @@ public class HyPeerWebSegment extends Observable implements Serializable{
 	
 	/**
 	 * Used when migrating nodes from another segment to this one.
-	 * @param nodeProxy
+	 * @param myWebIds
 	 */
-	public synchronized void addNodeProxy(Node nodeProxy){
-		Node newNode = new Node(0);
-		nodeProxy.replaceWithOtherNode(newNode);
+	public synchronized boolean addNodeProxy(ArrayList<Integer> myWebIds){
 		
-		ObjectDB.getSingleton().store(newNode.getLocalObjectId(), newNode);
-		this.addNode(newNode);		
+		int size = sizeOfHyPeerWeb();
+		
+		for(Integer id : myWebIds){
+			Node node = new Node(id);
+			nodes.add(node);
+			ObjectDB.getSingleton().store(node.getLocalObjectId(), node);
+		}
+		
+		for(Node node : nodes){
+			node.clearConnections();
+			ExpectedResult result = new ExpectedResult(size, node.getWebIdValue());
+			node.connectExpectedResult(result);
+		}
+		
+		return true;
 	}
+	
+//	public void takeNodes(NodeList nodes){
+//		
+//	}
 
 	public void sendBroadcast() {
 		BroadcastVisitor visitor = new BroadcastVisitor() {
