@@ -30,7 +30,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	
 	private WebId webId = null;
 	private int height = -1;
-	private Connections connections = null;
+	protected Connections connections = null;
 	private NodeState state = NodeState.STANDARD;
 	private Contents contents = new Contents();
 	private LocalObjectId localObjectId = new LocalObjectId(); 
@@ -256,9 +256,8 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	/**
 	 * This is a greedy algorithm and only guarantees finding the largest node if the
 	 * HyPeerWeb is also a HyperCube; otherwise this algorithm only guarantees finding an edge node.
-	 * @return
 	 * @pre This node is connected to the HyPeerWeb.
-	 * @post Either the cap node (if it exists); otherwise an edge node.
+	 * @post result = Either the cap node (if it exists); otherwise an edge node.
 	 */
 	public synchronized Node findLargest(){
 		Node largest = this;
@@ -285,7 +284,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	
 	/**
 	 * Finds the node with the given webId.
-	 * @param webId The webId of the node to be found.
+	 * @param webId The webIdValue of the node to be found.
 	 * @pre The node with the given webId exists and is connected to the HyPeerWeb.
 	 * @post result = Node with given webId
 	 */
@@ -300,7 +299,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	
 	/**
 	 * Adds the given node to the HyPeerWeb.
-	 * @param child The child node of this node.
+	 * @param child The node that will be added as the child of this node.
 	 * @pre The child node has the appropriate webId (webId = N + 1) and the child node is a
 	 * child of this node.
 	 * @post The child node is connected to the HyPeerWeb, all connections are set, 
@@ -500,27 +499,27 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		NodeState.setNodeState(this);
 	}
 	
-	public void setLocalObjectId(LocalObjectId id){
+	public synchronized void setLocalObjectId(LocalObjectId id){
 		localObjectId = id;
 	}
 	
-	public void setHeight(int height){
+	public synchronized void setHeight(int height){
 		this.height = height;
 	}
 	
-	public void setInverseSurrogateFold(Node inverseSurrogateFold){
+	public synchronized void setInverseSurrogateFold(Node inverseSurrogateFold){
 		assert (inverseSurrogateFold != null);
 		
 		connections.setInverseSurrogateFold(inverseSurrogateFold);
 	}
 	
-	public void setSurrogateFold(Node surrogateFold){
+	public synchronized void setSurrogateFold(Node surrogateFold){
 		assert (surrogateFold != null);
 		
 		connections.setSurrogateFold(surrogateFold);
 	}
 	
-	public void setWebId(int newWebId) {
+	public synchronized void setWebId(int newWebId) {
 		setWebId(new WebId(newWebId));
 	}
 	
@@ -598,7 +597,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * Duplicate method. Defined in specs though.
 	 */
 	@Override
-	public void changeFold(Node newFold) {
+	public synchronized void changeFold(Node newFold) {
 		assert (getConnections().hasFold());
 		this.setFold(newFold);
 	}
@@ -621,7 +620,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 
 	@Override
 	public void removeConnection(Node aNode, Node parent) {	
-	}
+	}	
 	
 	@Override
 	public void addConnection(Node aNode) {
@@ -660,5 +659,29 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		NodeProxy result = new NodeProxy(globalId);
 		result.setWebId(this.getWebId());
 		return result;
+	}
+
+	public void connectExpectedResult(ExpectedResult result) {
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
+		clearConnections();
+		
+		for(Integer id : result.getDownPointers()){
+			addDownPointer(web.getNodeByWebId(id));
+		}
+		
+		for(Integer id : result.getUpPointers()){
+			addUpPointer(web.getNodeByWebId(id));
+		}
+		
+		for(Integer id : result.getNeighbors()){
+			addNeighbor(web.getNodeByWebId(id));
+		}
+		
+		setFold(web.getNodeByWebId(result.getFold()));
+		setSurrogateFold(web.getNodeByWebId(result.getSurrogateFold()));
+		setInverseSurrogateFold(web.getNodeByWebId(result.getInverseSurrogateFold()));
+		
+		setState(NodeState.getNodeState(result.getState()));
+		setHeight(result.getHeight());
 	}
 }

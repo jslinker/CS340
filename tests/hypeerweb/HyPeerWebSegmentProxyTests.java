@@ -8,6 +8,7 @@ import java.util.Enumeration;
 
 import hypeerweb.node.ExpectedResult;
 import hypeerweb.node.Node;
+import hypeerweb.node.SimplifiedNodeDomain;
 import identification.GlobalObjectId;
 import identification.LocalObjectId;
 import identification.ObjectDB;
@@ -87,7 +88,6 @@ public class HyPeerWebSegmentProxyTests {
 		
 		assertEquals(new ExpectedResult(4, 3),web.getNodeByWebId(3).constructSimplifiedNodeDomain());
 		
-		ObjectDB.getSingleton().dump();
 		newNode = new Node(6000);
 		HyPeerWebSegment.getSingleton().addToHyPeerWeb(newNode, null);
 		assertEquals(newNode.getWebIdValue(), 4);
@@ -100,9 +100,14 @@ public class HyPeerWebSegmentProxyTests {
 	public void testRemove(){
 		web.removeFromHyPeerWeb(web.getNodeByWebId(3));
 		assertEquals(new ExpectedResult(4,3),web.getNodeByWebId(3).constructSimplifiedNodeDomain());
-		assertEquals( new ExpectedResult(4,0), proxy.getNode(0).constructSimplifiedNodeDomain());
-		assertEquals( new ExpectedResult(4,1), proxy.getNode(1).constructSimplifiedNodeDomain());
-		assertEquals( new ExpectedResult(4,2), proxy.getNode(2).constructSimplifiedNodeDomain());
+		SimplifiedNodeDomain domain = proxy.getNode(0).constructSimplifiedNodeDomain();
+		assertEquals( new ExpectedResult(4,0), domain);
+		
+		domain = proxy.getNode(1).constructSimplifiedNodeDomain();
+		assertEquals( new ExpectedResult(4,1), domain);
+		
+		domain = proxy.getNode(2).constructSimplifiedNodeDomain();
+		assertEquals( new ExpectedResult(4,2), domain);
 	}
 	
 	@Test
@@ -112,13 +117,23 @@ public class HyPeerWebSegmentProxyTests {
 	
 	@Test
 	public void testKill(){
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
 		proxy.kill();
-		Enumeration<Object> e = ObjectDB.getSingleton().enumeration();
-
 		
 		assertEquals(4, web.getNodes().size());
 		for(int i = 0; i < 4; i++){
 			assertEquals(new ExpectedResult(4,i), web.getNodeByWebId(i).constructSimplifiedNodeDomain());
 		}
+		
+		//add some stuff to see if i exploded anything
+		int size = 16;
+		for(int i = 4; i < size; i++){
+			web.addToHyPeerWeb(new Node(i), web.getNodeByWebId(0));
+		}
+		
+		for(int i = 0; i < size; i++){
+			assertEquals(new ExpectedResult(size, i), web.getNodeByWebId(i).constructSimplifiedNodeDomain());
+		}
+		
 	}
 }

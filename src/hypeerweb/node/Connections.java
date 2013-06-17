@@ -46,6 +46,7 @@ public class Connections implements Serializable{
 	 * @post result = initialized Connections
 	 */
 	public Connections(){
+		ObjectDB.getSingleton().store(localObjectId, this);
 	}
 	
 	//--------------------
@@ -518,7 +519,6 @@ public class Connections implements Serializable{
 	 * @throws ObjectStreamException
 	 */
 	public Object writeReplace() throws ObjectStreamException{
-		ObjectDB.getSingleton().store(localObjectId, this);
 		PortNumber portNumber = PeerCommunicator.getSingleton().getPortNumber();
 		GlobalObjectId globalId = new GlobalObjectId(MachineAddress.getThisMachinesInetAddress().getHostAddress(), portNumber, localObjectId);
 		ConnectionsProxy result = new ConnectionsProxy(globalId);

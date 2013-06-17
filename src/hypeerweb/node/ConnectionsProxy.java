@@ -1,7 +1,6 @@
 package hypeerweb.node;
 
 import identification.GlobalObjectId;
-
 import java.io.Serializable;
 
 import communicator.Command;
@@ -369,5 +368,4 @@ public class ConnectionsProxy extends Connections implements Serializable{
         Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.node.Connections", "clear", parameterTypeNames, actualParameters, false);
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
-
 }

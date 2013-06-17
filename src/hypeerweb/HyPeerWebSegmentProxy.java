@@ -145,15 +145,16 @@ public class HyPeerWebSegmentProxy extends HyPeerWebSegment implements Serializa
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
     
-    public void addNodeProxy(hypeerweb.node.Node p0){
+    public synchronized boolean addNodeProxy(java.util.ArrayList p0){
         String[] parameterTypeNames = new String[1];
-        parameterTypeNames[0] = "hypeerweb.node.Node";
+        parameterTypeNames[0] = "java.util.ArrayList";
         Object[] actualParameters = new Object[1];
         actualParameters[0] = p0;
-        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "addNodeProxy", parameterTypeNames, actualParameters, false);
-        PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
+        Command command = new Command(globalObjectId.getLocalObjectId(), "hypeerweb.HyPeerWebSegment", "addNodeProxy", parameterTypeNames, actualParameters, true);
+        Object result = PeerCommunicator.getSingleton().sendSynchronous(globalObjectId, command);
+        return (Boolean)result;
     }
-
+    
     public void addToHyPeerWeb(hypeerweb.node.Node p0, hypeerweb.node.Node p1){
         String[] parameterTypeNames = new String[2];
         parameterTypeNames[0] = "hypeerweb.node.Node";
