@@ -601,19 +601,6 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 		assert (getConnections().hasFold());
 		this.setFold(newFold);
 	}
-
-	@Override
-	public void addConnection(Node aNode) {
-	}
-
-	@Override
-	public void removeConnection(Node aNode) {
-	}
-
-	@Override
-	public void replaceConnection(Node aNode, Node replacementNode) {
-	}
-
 	public Node getNode(){
 		return this;
 	}
@@ -632,6 +619,19 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	@Override
 	public void removeConnection(Node aNode, Node parent) {	
 	}	
+	
+	@Override
+	public void addConnection(Node aNode) {
+	}
+
+	@Override
+	public void removeConnection(Node aNode) {
+	}
+
+	@Override
+	public void replaceConnection(Node aNode, Node replacementNode) {
+	}
+	
 	
 	//I was writing this and a similar method in connections for testing purposes
 	//but they are not working yet.  Haven't worked out the creation of new objects
