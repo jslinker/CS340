@@ -3,7 +3,6 @@ package hypeerweb.node.roles;
 import hypeerweb.node.Node;
 import hypeerweb.node.NodeInterface;
 import hypeerweb.node.NodeState;
-import utilities.BitManipulation;
 
 public class Neighbor extends NodeRole{
 
