@@ -1,7 +1,5 @@
 package hypeerweb.node.roles;
 
-import java.io.Serializable;
-
 import hypeerweb.node.Node;
 import hypeerweb.node.NodeInterface;
 

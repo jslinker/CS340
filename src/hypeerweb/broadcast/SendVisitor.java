@@ -9,8 +9,9 @@ import utilities.BitManipulation;
  * The "targetOperation" is abstract and is to be overridden in a visitor that 
  * does the actual work. There is also an intermediateOperation that may be 
  * performed on nodes visited on the way to the target node.
- * @Domain None
- * @author Jason Robertson, Craig Jacobson
+ * @domain None.
+ * @invariant The Node invariant is upheld.
+ * @author Craig Jacobson
  */
 public abstract class SendVisitor implements Visitor{
 	private static final long serialVersionUID = -8671980259552421681L;

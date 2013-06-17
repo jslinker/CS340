@@ -9,7 +9,8 @@ import utilities.BitManipulation;
  * The message is actually the method operation(Node, Parameters) to be 
  * performed on all nodes. The method operation(Node, Parameters) must be 
  * overridden in an implementing subclass.
- * @domain None
+ * @domain None.
+ * @invariant The Node invariant is upheld.
  * @author Jason Robertson
  *
  */

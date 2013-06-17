@@ -2,12 +2,12 @@ package hypeerweb.node.roles;
 
 import hypeerweb.node.Node;
 import hypeerweb.node.NodeInterface;
-import hypeerweb.node.NodeState;
 
 /**
  * Extends the abstract class NodeRole.  This class contains a single node that is a fold to another node.
  * Implements the delegate pattern to ease the modifying of connections.
- * @pre For domain and invariants, see NodeRole
+ * @domain See NodeRole.
+ * @invariant See NodeRole.
  * @author Nathan Zabriskie
  *
  */

@@ -12,8 +12,6 @@ import identification.ObjectDB;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;

@@ -23,6 +23,22 @@ import communicator.PeerCommunicator;
 import communicator.PortNumber;
 
 /**
+ * A Node represents a point on the HyPeerWeb
+ * @domain
+ * webId: WebId <br>
+ * neighbors: SetOf<Node> <br>
+ * upPointers: SetOf<Node> <br>
+ * downPointers: SetOf<Node> <br>
+ * fold: Node <br>
+ * surrogateFold: Node <br>
+ * inverseSurrogateFold: Node <br>
+ * state: NodeState <br>
+ * 
+ * @invariant
+ * If webId = -1 then |neighbors|=|upPointers|=|downPointers|=0 AND <br>
+ * fold = surrogateFold = inverseSurrogateFold = NULL_NODE <br>
+ * If webId >= 0 then the constraints on our website must be met.
+ * 
  * @author Joseph
  */
 public class Node implements NodeInterface, Comparable<Node>, Serializable{
@@ -122,8 +138,8 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	/**
 	 * Adds the node to the HyPeerWeb.
 	 * @param newNode The new Node to add to the HyPeerWeb.
-	 * @pre newNode is not null AND newNode is not NULL_NODE
-	 * @post newNode is properly connected to the HyPeerWeb
+	 * @pre newNode is not null AND newNode is not NULL_NODE AND newNode is not in the web already
+	 * @post newNode is properly connected to the HyPeerWeb such that the constraints are met
 	 */
 	public void addToHyPeerWeb(Node newNode){
 		assert (newNode != null && newNode != NULL_NODE);
@@ -136,7 +152,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	/**
 	 * Removes the node from the HyPeerWeb.
 	 * @param deleteNode The node that is to be deleted.
-	 * @pre The node is in the web and is not null or NULL_NODE
+	 * @pre The node is in the web and is not null or NULL_NODE.
 	 * @post The node was removed from the web and replaced with the last node in the web.
 	 */
 	public synchronized void removeFromHyPeerWeb(Node deleteNode) {

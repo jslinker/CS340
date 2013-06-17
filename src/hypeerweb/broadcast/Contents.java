@@ -8,7 +8,8 @@ import java.util.Map;
  * An arbitrary collection of named objects
  * @domain contents : Map -- a set of key-value pairs such that
  * no two key-value pairs have the same key.
- * @author Jason Robertson, Craig Jacobson
+ * @invariant Every key is unique and is of type String.
+ * @author Craig Jacobson
  *
  */
 public class Contents implements Serializable{

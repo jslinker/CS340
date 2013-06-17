@@ -1,23 +1,15 @@
 package hypeerweb.node.roles;
 
-import identification.GlobalObjectId;
-
-import java.io.ObjectStreamException;
-import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import communicator.PeerCommunicator;
-import communicator.PortNumber;
-
 import hypeerweb.broadcast.Contents;
 import hypeerweb.broadcast.Parameters;
 import hypeerweb.broadcast.Visitor;
 import hypeerweb.node.Node;
 import hypeerweb.node.NodeInterface;
-import hypeerweb.node.NodeProxy;
 import hypeerweb.node.SimplifiedNodeDomain;
 import hypeerweb.node.WebId;
+
+import java.io.ObjectStreamException;
+import java.io.Serializable;
 
 /**
  * An abstract class whose overriding classes each represent a type of connection 
@@ -25,11 +17,10 @@ import hypeerweb.node.WebId;
  * Fold, SurrogateFold, InverseSurrogateFold).  These classes follow the delegation pattern
  * to allow for easier replacement of nodes in the web and adding and removing specific types of connections.
  * 
- *  @pre
- *  <b>Domain</b><br>
+ *  @domain
  *  &#09 node : Node<br><br>
  *
- *	<b>Invariant</b><br>
+ *	@invariant
  *  &#09 node != null AND<br>
  *  &#09 node != Node.NULL_NODE<br>
  */
