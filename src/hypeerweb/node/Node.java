@@ -128,6 +128,8 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	public void addToHyPeerWeb(Node newNode){
 		assert (newNode != null && newNode != NULL_NODE);
 		Node insertionPoint = findInsertionPoint();
+		int childWebId = calculateChildWebId(insertionPoint);
+		newNode.setWebId(childWebId);
 		insertionPoint.addChild(newNode);
 	}
 	
@@ -208,7 +210,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * @pre |web| >= 2, web.contains(this), this.connections.lowerNeighbors != null, this.webId = web.maxWebId
 	 * @post web does not contain this.  Connections of surrounding nodes updated.
 	 */
-	public void disconnect() {
+	public synchronized void disconnect() {
 		assert(connections.getLowerNeighbors() != null && connections.getLowerNeighbors().size() != 0 &&
 			   HyPeerWebSegment.getSingleton().sizeOfHyPeerWeb() >= 2);
 
@@ -288,7 +290,7 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * @post result = Node with given webId
 	 */
 	public synchronized Node findNode(int webId){
-		if (webId == this.webId.getValue()){
+		if (webId == this.webId.getValue()) {
 			return this;
 		}
 		
@@ -299,13 +301,12 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	/**
 	 * Adds the given node to the HyPeerWeb.
 	 * @param child The child node of this node.
-	 * @pre The child node is not null and is not already connected to the HyPeerWeb.
+	 * @pre The child node has the appropriate webId (webId = N + 1) and the child node is a
+	 * child of this node.
 	 * @post The child node is connected to the HyPeerWeb, all connections are set, 
 	 * this node's height is correct.
 	 */
 	public synchronized void addChild(Node child){
-		int childWebId = calculateChildWebId(this);
-		child.setWebId(childWebId);
 		this.height++;
 		
 //		Connections childConnections = new Connections();
