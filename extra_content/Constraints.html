@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.4.1  (Win32)">
+	<META NAME="AUTHOR" CONTENT="V ">
+	<META NAME="CREATED" CONTENT="20130616;17435167">
+	<META NAME="CHANGEDBY" CONTENT="V ">
+	<META NAME="CHANGED" CONTENT="20130616;19174471">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { margin: 0.79in }
+		P { margin-bottom: 0.08in }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<P STYLE="margin-bottom: 0in"><B>Fold</B>:</P>
+<P STYLE="margin-bottom: 0in">Node x has a fold y if and only if the
+web id w<SUB>y</SUB> of y is the binary complement of the web id w<SUB>x</SUB>
+of x. The fold relationship is symmetric, thus if x R y then y R x.
+Note that the fold relationship is only reflexive if and only if
+there is one node in the HyPeerWeb, then node zero is the fold of
+node zero.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><B>Surrogate Fold and Inverse Surrogate
+Fold</B>:</P>
+<P STYLE="margin-bottom: 0in">Node x has a surrogate fold z if and
+only if node y with web id w<SUB>y</SUB>, from the above example, is
+not yet added to the HyPeerWeb. The relationship between x and z is
+that w<SUB>x</SUB> and w<SUB>z</SUB> differ in every bit but the most
+significant bit and w<SUB>z</SUB> and w<SUB>y</SUB> differ only in
+the most significant bit. Furthermore, if z is a surrogate fold to x
+then x is an inverse surrogate fold to z.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><B>A note on folds</B>:</P>
+<P STYLE="margin-bottom: 0in">Any given node can have a fold, a fold
+and an inverse surrogate fold, or a surrogate fold.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><B>Neighbors</B>:</P>
+<P STYLE="margin-bottom: 0in">Node u and node v are neighbors iff
+their web ids w<SUB>u</SUB> and w<SUB>v</SUB> differ by a single bit.
+If u is a neighbor of v then v is a neighbor of u, therefore the
+neighbor property is symmetric.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><B>Surrogate Neighbors and Inverse
+Surrogate Neighbors</B>:</P>
+<P STYLE="margin-bottom: 0in">Node b is a surrogate neighbor to c iff
+the neighbor d does not yet exist in the HyPeerWeb. The web id of d,
+w<SUB>d</SUB>, differs by a single bit from w<SUB>c</SUB>, the web id
+of c. The web id w<SUB>b</SUB> differs from w<SUB><SPAN STYLE="font-weight: normal">d</SPAN></SUB>
+only in the most significant bit. If b is a surrogate neighbor to c,
+then c is an inverse surrogate neighbor to b.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><B>Parent and Child</B>:</P>
+<P STYLE="margin-bottom: 0in">A node c has a parent p when w<SUB>c</SUB>
+and w<SUB>p</SUB> differ in the most significant bit and w<SUB>c</SUB>
+&gt; w<SUB>p</SUB>, additionally the height of p and c is the same.
+If p is the parent of c, then c is the child of p. Every node has
+either a parent p or a child c; except in the case where the
+HyPeerWeb has only one node.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><B>Dimension/height of HyPeerWeb</B>:</P>
+<P STYLE="margin-bottom: 0in">h = ceiling(log<SUB>2</SUB>(N)) where N
+is the number of nodes in the HyPeerWeb.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><B>Deletion Point</B>:</P>
+<P STYLE="margin-bottom: 0in">Always the node with web id w<SUB>N-1</SUB>,
+where w<SUB>N-1</SUB> &gt; w<SUB>N-n,</SUB> 1 &lt; n <FONT FACE="Times New Roman, serif">&le;</FONT>
+N, and n is an integer and N is the number of nodes in the HyPeerWeb.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><B>Cap Node</B>:</P>
+<P STYLE="margin-bottom: 0in">A HyPeerWeb has zero or one cap node at
+any given time. A node c is a cap node if c is a deletion point, w<SUB>c</SUB>
+= 2<SUP>h</SUP> where w<SUB>c</SUB> is the web id of c, and the web
+id of the fold of c is zero.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><B>Insertion Point</B>:</P>
+<P STYLE="margin-bottom: 0in">The node i is the insertion point if
+web id w<SUB>i</SUB> = w<SUB>p</SUB> + 1, where w<SUB>p</SUB> is the
+deletion point parent's web id; the exception to this rule is if the
+deletion point is a cap node, then i is node zero.</P>
+</BODY>
+</HTML>
