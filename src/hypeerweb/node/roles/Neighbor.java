@@ -15,7 +15,7 @@ public class Neighbor extends NodeRole{
 	public void addConnection(Node aNode) {
 		node.addNeighbor(aNode);
 	}
-
+	
 	@Override
 	public void removeConnection(Node aNode) {
 		removeNeighbor(aNode);

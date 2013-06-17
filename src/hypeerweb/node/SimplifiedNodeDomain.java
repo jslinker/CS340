@@ -42,6 +42,9 @@ public class SimplifiedNodeDomain implements Serializable{
     protected int surrogateFold;
     protected int inverseSurrogateFold;
     protected int state;
+    protected String port;
+    protected String machine_addr;
+    protected String local_id;
 
     // Constructors
     /**
@@ -70,6 +73,9 @@ public class SimplifiedNodeDomain implements Serializable{
         surrogateFold = -1;
         inverseSurrogateFold = -1;
         state = NodeState.STANDARD.STATE_ID;
+        this.machine_addr = "";
+        this.port = "";
+        this.local_id = "";
     }
 
     /**
@@ -368,6 +374,16 @@ public class SimplifiedNodeDomain implements Serializable{
     public int getState(){
         return state;
     }
+    
+    public String getPort(){
+    	return port;
+    }
+    public String getMachine_addr(){
+    	return machine_addr;
+    }
+    public String getLocal_id(){
+    	return local_id;
+    }
 
     /**
      * Determines whether there is an id in neighbors, upPointers, downPointers, fold, surrogateFold, or inverseSurrogateFold that is
@@ -482,6 +498,16 @@ public class SimplifiedNodeDomain implements Serializable{
         assert downPointers != null;
         
         this.downPointers = downPointers;
+    }
+    
+    public void setPort(String port){
+    	this.port = port;
+    }
+    public void setMachine_addr(String machine_addr){
+    	this.machine_addr = machine_addr;
+    }
+    public void setLocal_id(String local_id){
+    	this.local_id = local_id;
     }
 
     //Auxiliary Constants, Variables, Methods, and Classes

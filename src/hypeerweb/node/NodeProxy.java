@@ -416,6 +416,10 @@ public class NodeProxy extends Node implements Serializable{
         PeerCommunicator.getSingleton().sendASynchronous(globalObjectId, command);
     }
     
+    public GlobalObjectId getGlobalObjectId(){
+    	return this.globalObjectId;
+    }
+    
     public Object readResolve() throws ObjectStreamException{
     	Object result = this;
     	
