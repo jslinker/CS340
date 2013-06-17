@@ -3,7 +3,6 @@ package hypeerweb;
 import hypeerweb.node.Node;
 import identification.GlobalObjectId;
 import identification.LocalObjectId;
-import identification.ObjectDB;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;

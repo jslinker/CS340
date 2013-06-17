@@ -4,7 +4,6 @@ import hypeerweb.broadcast.BroadcastVisitor;
 import hypeerweb.broadcast.Parameters;
 import hypeerweb.database.HyPeerWebDatabase;
 import hypeerweb.node.Node;
-import hypeerweb.node.NodeProxy;
 import hypeerweb.node.SimplifiedNodeDomain;
 import identification.GlobalObjectId;
 import identification.LocalObjectId;

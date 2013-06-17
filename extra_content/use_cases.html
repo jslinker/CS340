@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.4.1  (Win32)">
+	<META NAME="AUTHOR" CONTENT="V ">
+	<META NAME="CREATED" CONTENT="20130615;19080026">
+	<META NAME="CHANGEDBY" CONTENT="V ">
+	<META NAME="CHANGED" CONTENT="20130615;21080381">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { margin: 0.79in }
+		P { margin-bottom: 0.08in }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=3><U><B>Use
+Cases</B></U></FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<BR>
+</P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Name</B>:
+Add Node</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Description</B>:
+The requirements and results of requesting to add a node to the
+HyPeerWeb. Regardless of the source of the request, requirements and
+outcomes are the same.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Triggers</B>:
+Direct method invocation (probably caused by GUI interaction with the
+&quot;Add Node&quot; button).</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Input</B>:
+No input required. Insertion point is an optional input.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Output</B>:
+No output.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Pre-Conditions</B>:
+HyPeerWeb must exist. If HyPeerWeb does not yet exist it must be
+created and allowed to go through it's standard &quot;life cycle&quot;
+of initialization before adding, otherwise results are undefined.
+HyPeerWeb must be empty or have a non-empty network of nodes.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Post-Conditions</B>:
+The HyPeerWeb is fully initialized; if the HyPeerWeb is empty then
+the new node becomes the first node with WebId of zero. The node that
+was added must exist within the HyPeerWeb. If an insertion point was
+given, the insertion node must be the parent of the new node.
+Pre-existing nodes must have the same WebId as before the operation
+began. All constraints defined by the conceptual model must be met.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<BR>
+</P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Name</B>
+: Remove Node</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Description</B>:
+The requirements and results of requesting to delete a node from the
+HyPeerWeb. Outcomes are not dependent on source of the request.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Triggers</B>:
+Direct method invocation (probably caused by GUI interaction with the
+&quot;Add Node&quot; button) </FONT></FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Input</B>:
+A Node to be removed from the HyPeerWeb.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Output</B>:
+No output.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Pre-Conditions</B>:
+HyPeerWeb must exist and have a non-empty network of nodes. The Node
+to be deleted must be a node that exists in the web.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Post-Conditions</B>:
+The node that was deleted must not exist within the HyPeerWeb. All
+surrogates, neighbors, etc must be updated to reflect the rearranged
+web. Remove can only result in an empty web when the last node
+remaining is removed. The last node in the web, the node with the
+largest WebId, is disconnected and used to replace the node that is
+being removed; the replacement node will be given the WebId and
+connections of the node being removed. The exception to this case is
+when the node to be removed is the last node, then it is simply
+disconnected. All constraints defined by the conceptual model must be
+met.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<BR>
+</P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Name</B>
+: Send Visitor</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Description</B>:
+The requirements and results of requesting to have a node send a
+visitor to another node. Outcomes are dependent on the node called on
+and the node being targeted.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Triggers</B>:
+Called directly, frequently through the GUI.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Input</B>:
+A destination node, or WebId, will be the end destination to which
+the visitor will be sent. A start node will begin the journey to the
+destination. The visitor will have the opportunity to perform some
+undefined operation at each node along the path between the target
+node and the start node. The parameters will be passed along with the
+visitor.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Output</B>:
+No required output. Note that Visitors may have some behavior that
+gives an output.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Pre-Conditions</B>:
+The start node that accept() is called on is connected to the web.
+The target node is connected to the web. The visitor must implement
+Visitor. The visitor must not be null. The parameters must not be
+null and the target must be contained in the parameters.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Post-Conditions</B>:
+The start Node will have the visitor visit it. The target Node will
+have had the visitor visit it. All nodes in-between will have had the
+visitor visit it. In-between is loosely defined as the path taken to
+get to the target node that is length ceiling(log<SUB>2</SUB>(N))+1
+or less, the plus one is to take into account the start node. The
+target will have a special operation called on it, where the
+intermediate nodes will have a different operation call on them. This
+path cannot be controlled by the caller. All constraints defined by
+the conceptual model must be met.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<BR>
+</P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Name</B>
+: Broadcast Visitor</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Description</B>:
+The requirements and results of requesting to have a node broadcast a
+visitor to all other nodes. Outcomes are not dependent on the start
+node.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Triggers</B>:
+Called directly, frequently through the GUI.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Input</B>:
+A visitor, start node, and parameters.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Output</B>:
+No required output. Visitors may have some behavior that gives an
+output.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; font-style: normal; font-weight: normal; line-height: 100%">
+<FONT COLOR="#333333"><FONT FACE="Times New Roman, serif"><FONT SIZE=2><B>Pre-Conditions</B>:
+The start node that broadcast is called on is connected to the web.
+The visitor must implement visitor. The visitor must not be null,
+parameters must not be null.</FONT></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in; border: none; padding: 0in; line-height: 100%">
+<FONT FACE="Times New Roman, serif"><FONT SIZE=2><FONT COLOR="#333333"><SPAN STYLE="font-style: normal"><B>Post-Conditions</B></SPAN></FONT><FONT COLOR="#333333"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">:
+All nodes in the web will have had the visitor visit it. All
+constraints defined by the conceptual model must be met.</SPAN></SPAN></FONT></FONT></FONT></P>
+</BODY>
+</HTML>
