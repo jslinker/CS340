@@ -509,6 +509,25 @@ public class NodeTests extends TestCase{
 		}
 	}
 	
+	public void testRemoveRandomNodes(){
+		HyPeerWebSegment web = HyPeerWebSegment.getSingleton();
+		web.clear();
+		
+		int size = 100;
+		web.addToHyPeerWeb(new Node(0), Node.NULL_NODE);
+		for(int i = 1; i < size; i++){
+			web.addToHyPeerWeb(new Node(i), web.getNodeByWebId(0));
+			checkWeb(web);
+		}
+		
+		Random rand = new Random();
+		
+		for(int i = 0; i < size - 2; i++){
+			web.removeFromHyPeerWeb(web.getNodeByWebId(rand.nextInt(size-i)));
+			checkWeb(web);
+		}
+	}
+	
 	private void checkWeb(HyPeerWebSegment web){
 		for(int i = 0; i < web.size(); i++){
 			assertEquals(new ExpectedResult(web.size(), web.getNode(0).findNode(i).getWebIdValue()), web.getNode(0).findNode(i).constructSimplifiedNodeDomain());
