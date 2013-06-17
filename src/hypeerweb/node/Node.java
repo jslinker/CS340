@@ -634,18 +634,6 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	public void replaceConnection(Node aNode, Node replacementNode) {
 	}
 	
-	@Override
-	public void addConnection(Node aNode) {
-	}
-
-	@Override
-	public void removeConnection(Node aNode) {
-	}
-
-	@Override
-	public void replaceConnection(Node aNode, Node replacementNode) {
-	}
-	
 	
 	//I was writing this and a similar method in connections for testing purposes
 	//but they are not working yet.  Haven't worked out the creation of new objects
