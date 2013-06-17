@@ -22,10 +22,20 @@ import communicator.PortNumber;
 
 
 /**
- * Holds connections for a single node.
- * 
+ * Holds all connections for a <b>single<b> node.
+ * <pre>
+ *  <b>Domain:</b>
+ *  	downPointers:		TreeMap<Integer, NodeInterface>
+ *  	upPointer:			TreeMap<Integer, NodeInterface>
+ *  	lowerNeighbors		TreeMap<Integer, NodeInterface>
+ *  	upperNeightbors		TreeMap<Integer, NodeInterface>
+ *  	fold				Node
+ *  	surrogateFold		Node
+ *  	inverseSurrogateFold Node
+ * </pre>
  * @author Nathan Zabriskie
  */
+
 public class Connections implements Serializable{
 	private TreeMap<Integer,NodeInterface> downPointers = new TreeMap<Integer,NodeInterface>();
 	private TreeMap<Integer,NodeInterface> upPointers = new TreeMap<Integer,NodeInterface>();
@@ -53,8 +63,9 @@ public class Connections implements Serializable{
 
 	/**
 	 * Returns a map of all this Connection's downpointers.
-	 * @pre NONE
-	 * @post result = Map of all downpointers.
+	 * @pre None
+	 * @post None
+	 * @return This connection's downpointers
 	 */
 	public Map<Integer,NodeInterface> getDownPointers() {
 		return downPointers;
@@ -64,8 +75,9 @@ public class Connections implements Serializable{
 	 * Contructs a list of every node that a node must notify when it is
 	 * disconnected from the HyPeerWeb
 	 * 
-	 * @pre NONE
-	 * @post result = List of nodes that the disconnected node must notify.
+	 * @pre None
+	 * @post None
+	 * @return A list of nodes that the disconnected node must notify. 
 	 */
 	public ArrayList<NodeInterface> getDisconnectNodeList(){
 		ArrayList<NodeInterface> nodeList = new ArrayList<NodeInterface>();
@@ -92,10 +104,24 @@ public class Connections implements Serializable{
 		}
 	}
 
+	/**
+	 * Get this Connection's upPointers.
+	 * @pre None
+	 * @post None
+	 * @return Returns all up pointers for the node
+	 */
 	public Map<Integer,NodeInterface> getUpPointers() {
 		return upPointers;
 	}
 
+	/**
+	 * A setter for upPointers that copies the nodes out of the given map
+	 * 
+	 * @param Map<Integer, NodeInterface> upPointers
+	 * 	The map of up pointers to replace the current map of up pointers
+	 * @pre None
+	 * @post The nodes map of uppointers is replaced with a copy of the up pointers passed in
+	 */
 	public void setUpPointers(Map<Integer,NodeInterface> upPointers) {
 		this.upPointers = new TreeMap<Integer, NodeInterface>();
 		if(upPointers != null){
@@ -107,10 +133,25 @@ public class Connections implements Serializable{
 		}
 	}
 	
+	/**
+	 * A getter for lower neighbors
+	 * 
+	 * @pre None
+	 * @post None
+	 * @return This nodes lowerNeighbors
+	 */
 	public Map<Integer,NodeInterface> getLowerNeighbors() {
 		return lowerNeighbors;
 	}
 
+	/**
+	 * A setter for lowerNeighbors that copies the nodes out of the given map
+	 * 
+	 * @param Map<Integer, NodeInterface> lowerNeighbors
+	 * 	The map of lowerNeighbors to replace the current map of lowerNeighbors
+	 * @pre None
+	 * @post The nodes map of lowerNeightbors is replaced with a copy of the lowerNeighbors passed in
+	 */
 	public void setLowerNeighbors(Map<Integer, NodeInterface> lowerNeighbors) {
 		this.lowerNeighbors = new TreeMap<Integer, NodeInterface>();
 		if(lowerNeighbors != null){
@@ -122,10 +163,25 @@ public class Connections implements Serializable{
 		}
 	}
 
+	/**
+	 * A getter for upper neighbors
+	 * 
+	 * @pre None
+	 * @post None
+	 * @return This nodes upper neighbors
+	 */
 	public Map<Integer,NodeInterface> getUpperNeighbors() {
 		return upperNeighbors;
 	}
 
+	/**
+	 * A setter for upperNeighbors that copies the nodes out of the given map
+	 * 
+	 * @param Map<Integer, NodeInterface> upperNeighbors
+	 * 	The map of upper neighbors to replace the current map of upper neighbors
+	 * @pre None
+	 * @post The nodes map of upperNeighbors is replaced with a copy of the upperNeighbors passed in
+	 */
 	public void setUpperNeighbors(Map<Integer,NodeInterface> upperNeighbors) {
 		this.upperNeighbors = new TreeMap<Integer, NodeInterface>();
 		if(upperNeighbors != null){
@@ -137,10 +193,23 @@ public class Connections implements Serializable{
 		}
 	}
 
+	/**
+	 * A getter for folds
+	 * 
+	 * @pre None
+	 * @post None
+	 * @return This nodes fold
+	 */
 	public Node getFold() {
 		return this.fold.getNode();
 	}
 
+	/**
+	 * A setter for folds
+	 * 
+	 * @pre None
+	 * @post The fold of this node is set to a copy of the node passed in
+	 */
 	public void setFold(Node fold) {
 		if(fold == Node.NULL_NODE){
 			this.fold = Node.NULL_NODE;
@@ -149,6 +218,13 @@ public class Connections implements Serializable{
 		}
 	}
 
+	/**
+	 * A getter for surrogateFolds
+	 * 
+	 * @pre None
+	 * @post None
+	 * @return This nodes surrogate fold
+	 */
 	public Node getSurrogateFold() {
 		return surrogateFold.getNode();
 	}
@@ -161,10 +237,23 @@ public class Connections implements Serializable{
 		}
 	}
 
+	/**
+	 * A getter for inverseSurrogateFold
+	 * 
+	 * @pre None
+	 * @post None
+	 * @return This nodes inverse surrogate fold
+	 */
 	public Node getInverseSurrogateFold() {
 		return inverseSurrogateFold.getNode();
 	}
 
+	/**
+	 * A setter for inverseSurrogateFold
+	 * 
+	 * @pre None
+	 * @post this.inverseSurrogateFold is a copy of inverseSurrogateFold
+	 */
 	public void setInverseSurrogateFold(Node inverseSurrogateFold){
 		if(inverseSurrogateFold == Node.NULL_NODE){
 			this.inverseSurrogateFold = Node.NULL_NODE;
@@ -173,6 +262,13 @@ public class Connections implements Serializable{
 		}
 	}
 	
+	/**
+	 * A getter for the largest upPointer
+	 * 
+	 * @pre None
+	 * @post None
+	 * @return The node with the largest web id in this nodes up pointers
+	 */
 	public Node getLargestUpPointer(){
 		if(upPointers.size() > 0){
 			return upPointers.get(upPointers.lastKey()).getNode();
@@ -182,6 +278,13 @@ public class Connections implements Serializable{
 		}
 	}
 	
+	/**
+	 * A getter for neighbor with largest web id
+	 * 
+	 * @pre None
+	 * @post None
+	 * @return The node with the largest web id in this nodes neighbors
+	 */
 	public Node getBiggestNeighbor(){
 		if(upperNeighbors.size() > 0){
 			return upperNeighbors.get(upperNeighbors.lastKey()).getNode();
@@ -191,6 +294,13 @@ public class Connections implements Serializable{
 		}
 	}
 	
+	/**
+	 * A getter next neighbor with next closest web id
+	 * 
+	 * @pre None
+	 * @post None
+	 * @return The node with the closest web id to the target web id
+	 */
 	public Node getNextClosestNeighbor(int myWebId, int webId){
 		assert(myWebId != webId);
 		
@@ -226,7 +336,14 @@ public class Connections implements Serializable{
 			return nextClosest.getNode();
 		}
 	}
-	
+
+	/**
+	 * A convenience method that returns a list of nodes that need to be notified during a replacement operation
+	 * 
+	 * @pre None
+	 * @post None
+	 * @return A list of all the nodes that need to be notified during a replacement
+	 */
 	private synchronized ArrayList<NodeInterface> getReplaceNodeList(){
 		ArrayList<NodeInterface> replaceNodeList = new ArrayList<NodeInterface>();
 		replaceNodeList.addAll(downPointers.values());
@@ -244,6 +361,13 @@ public class Connections implements Serializable{
 	//  R E P L A C E R S
 	//--------------------
 	
+	/**
+	 * Replacing nodes in a web
+	 * 
+	 * @pre None
+	 * @post The nodeToReplace will be removed from the web all replacementNode will take its place.
+	 * @param The node to be replaced.  The node to replace with.
+	 */
 	public synchronized void replaceNode(Node nodeToReplace, Node replacementNode){
 		ArrayList<NodeInterface> replaceNodeList = getReplaceNodeList();
 		
@@ -254,25 +378,50 @@ public class Connections implements Serializable{
 	
 	//--------------------
 	//  A D D E R S
-	//--------------------		
+	//--------------------	
+	
+	/**
+	 * Adds a downpointer to the list of downpointers
+	 * @pre this.downPointers is not null.  downPointer is not null.
+	 * @post downPointer will be properly inserted into the list of downPointers
+	 * @param downPointer
+	 */
 	public void addDownPointer(Node downPointer){
 		if(this.downPointers != null){
 			this.downPointers.put(downPointer.getWebIdValue(), new SurrogateNeighbor(downPointer));
 		}
 	}
 	
+	/**
+	 * Adds a node to the list of lower neighbors
+	 * @pre this.lowerNeighbors is not null.  lowerNeighbor is not null.
+	 * @post lowerNeighbor will be properly inserted into the list of lowerNeighbors
+	 * @param lowerNeighbor to be inserted
+	 */
 	public void addLowerNeighbor(NodeInterface lowerNeighbor){
 		if(this.lowerNeighbors != null){
 			this.lowerNeighbors.put(lowerNeighbor.getWebIdValue(), new Neighbor(lowerNeighbor));
 		}
 	}
 	
+	/**
+	 * Adds a node to the list of upper neighbors
+	 * @pre this.upperNeighbors is not null.  upperNeighbor is not null.
+	 * @post upperNeighbor will be properly inserted into the list of upperNeighbors
+	 * @param upperNeighbor to be inserted
+	 */
 	public void addUpperNeighbor(NodeInterface lowerNeighbor){
 		if(this.upperNeighbors != null){
 			this.upperNeighbors.put(lowerNeighbor.getWebIdValue(), new Neighbor(lowerNeighbor));
 		}
 	}
 	
+	/**
+	 * Adds a node to the list of up pointers
+	 * @pre this.upPointers is not null.  upPointer is not null.
+	 * @post lowerNeighbor will be properly inserted into the list of upPointers
+	 * @param upPointer to be inserted
+	 */
 	public void addUpPointer(Node upPointer){
 		if(this.upPointers != null){
 			this.upPointers.put(upPointer.getWebIdValue(), new InverseSurrogateNeighbor(upPointer));
@@ -282,24 +431,48 @@ public class Connections implements Serializable{
 	//--------------------
 	//  R E M O V E R S
 	//--------------------	
+	/**
+	 * Removes a node from the list of downPointers
+	 * @pre this.downPointers is not null.  downPointer is not null.
+	 * @post downPointer will be properly removed from the list of downPointers
+	 * @param downPointer to be removed
+	 */
 	public void removeDownPointer(Node downPointer){
 		if(this.downPointers != null){
 			this.downPointers.remove(downPointer.getWebIdValue());
 		}
 	}
 	
+	/**
+	 * Removes a node from the list of lower neighbors
+	 * @pre this.lowerNeighbors is not null.  lowerNeighbor is not null.
+	 * @post lowerNeighbor will be properly removed from the list of lowerNeighbors
+	 * @param lowerNeighbor to be removed
+	 */
 	public void removeLowerNeighbor(Node lowerNeighbor){
 		if(this.lowerNeighbors != null){
 			this.lowerNeighbors.remove(lowerNeighbor.getWebIdValue());
 		}
 	}
 	
+	/**
+	 * Removes a node from the list of upperNeighbors
+	 * @pre this.upperNeighbors is not null.  upperNeighbor is not null.
+	 * @post upperNeighbor will be properly removed from the list of upperNeighbors
+	 * @param upperNeighbor to be removed
+	 */
 	public void removeUpperNeighbor(Node upperNeighbor){
 		if(this.upperNeighbors != null){
 			this.upperNeighbors.remove(upperNeighbor.getWebIdValue());
 		}
 	}
 	
+	/**
+	 * Removes a node from the list of upPointers
+	 * @pre this.upPointers is not null.  upPointer is not null.
+	 * @post upPointer will be properly removed from the list of upPointer
+	 * @param upPointer to be removed
+	 */
 	public void removeUpPointer(Node upPointer){
 		if(this.upPointers != null){
 			this.upPointers.remove(upPointer.getWebIdValue());
@@ -310,6 +483,10 @@ public class Connections implements Serializable{
 	//  Q U E R I E S
 	//--------------------
 	
+	/**
+	 * Checks to see if an node has an inverseSurrogateFold
+	 * @return returns true if inverserSurrogateFold is not a null node
+	 */
 	public boolean hasInverseSurrogateFold(){
 		if(inverseSurrogateFold == Node.NULL_NODE) {
 			return false;
@@ -319,6 +496,10 @@ public class Connections implements Serializable{
 		}
 	}
 	
+	/**
+	 * Checks to see if an node has an surrogateFold
+	 * @return returns true if surrogateFold is not a null node
+	 */
 	public boolean hasSurrogateFold() {
 		if(surrogateFold == Node.NULL_NODE) {
 			return false;
@@ -328,6 +509,10 @@ public class Connections implements Serializable{
 		}
 	}
 	
+	/**
+	 * Checks to see if an node has a fold
+	 * @return returns true if fold is not a null node
+	 */
 	public boolean hasFold(){
 		if(fold == Node.NULL_NODE) {
 			return false;
@@ -336,6 +521,11 @@ public class Connections implements Serializable{
 			return true;
 		}
 	}
+	
+	/**
+	 * A convenience method for getting a hashcode for this connection
+	 * @return The hashcode for this connectoin
+	 */
 
 	@Override
 	public int hashCode() {
@@ -357,6 +547,10 @@ public class Connections implements Serializable{
 		return result;
 	}
 
+	/**
+	 * Comparator method for connections
+	 * @return Returns true if the objects are the same object, or if all properties are the same
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj){
@@ -407,6 +601,10 @@ public class Connections implements Serializable{
 		return true;
 	}
 
+	/**
+	 * Convenience method for getting the total number of upPointers
+	 * @return The number of upPointers
+	 */
 	public int getUpPointerCount() {
 		if(upPointers == null){
 			return 0;
@@ -414,6 +612,10 @@ public class Connections implements Serializable{
 		return upPointers.size();
 	}
 	
+	/**
+	 * Convenience method for getting the total number of downPointers
+	 * @return The number of downPointers
+	 */
 	public int getDownPointerCount() {
 		if(downPointers == null){
 			return 0;
@@ -421,6 +623,10 @@ public class Connections implements Serializable{
 		return downPointers.size();
 	}
 
+	/**
+	 * Convenience method for getting the smallest downPointer
+	 * @return The smallest downPointer
+	 */
 	public NodeInterface getSmallestDownPointer() {
 		if(downPointers == null){
 			return Node.NULL_NODE;
@@ -428,6 +634,10 @@ public class Connections implements Serializable{
 		return downPointers.get(downPointers.firstKey());
 	}
 
+	/**
+	 * Convenience method for getting the smallest neighbor with no child
+	 * @return The smallest childless neighbor
+	 */
 	public Node getSmallestChildlessNeighbor() {
 		if(lowerNeighbors == null){
 			return Node.NULL_NODE;
@@ -441,6 +651,10 @@ public class Connections implements Serializable{
 		return result;
 	}
 	
+	/**
+	 * To string method, mostly useful for debugging.
+	 * @return A string representing this connection
+	 */
 	public String toString(){
 		String info = "";
 		info += String.format("Fold WebId: %d\n", fold.getWebIdValue());
@@ -495,7 +709,7 @@ public class Connections implements Serializable{
 
 	/**
 	 * Returns a copy of this Connections.  Used primarily for testing.
-	 * @return
+	 * @return A deep copy of this connection
 	 */
 	public Connections deepCopy(){
 		Connections con = new Connections();

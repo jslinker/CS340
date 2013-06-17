@@ -226,10 +226,9 @@ public class Node implements NodeInterface, Comparable<Node>, Serializable{
 	 * @pre |web| >= 2, web.contains(this), this.connections.lowerNeighbors != null, this.webId = web.maxWebId
 	 * @post web does not contain this.  Connections of surrounding nodes updated.
 	 */
-	public synchronized void disconnect() {
-		assert(connections.getLowerNeighbors() != null && connections.getLowerNeighbors().size() != 0 &&
-			   HyPeerWebSegment.getSingleton().sizeOfHyPeerWeb() >= 2);
-
+    public synchronized void disconnect() {
+        assert(connections.getLowerNeighbors() != null && connections.getLowerNeighbors().size() != 0 &&
+        HyPeerWebSegment.getSingleton().sizeOfHyPeerWeb() >= 2);
 		
 		int parentId = BitManipulation.calculateSurrogateWebId(getWebIdValue());
 		Node parent = this.findNode(parentId);
