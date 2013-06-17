@@ -6,17 +6,26 @@ import static org.junit.Assert.assertTrue;
 import hypeerweb.HyPeerWebSegment;
 import hypeerweb.database.HyPeerWebDatabase;
 import hypeerweb.node.Node;
+import hypeerweb.node.NodeProxy;
 import hypeerweb.node.NodeState;
 import hypeerweb.node.SimplifiedNodeDomain;
+import identification.GlobalObjectId;
+import identification.LocalObjectId;
 
 import java.awt.List;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import communicator.MachineAddress;
+import communicator.PeerCommunicator;
+import communicator.PortNumber;
 
 public class HyPeerWebDatabaseTests {
 	
@@ -27,6 +36,8 @@ public class HyPeerWebDatabaseTests {
 	
 	private static final int TEST_HEIGHT = 1, TEST_ID = 1;
 	private static final int NEIGHBOR_HEIGHT = 2, NEIGHBOR_ID = 2;
+	
+	private static NodeProxy nodeProxies[] = new NodeProxy[3];
 	
 	@BeforeClass
 	public static void setupClass(){
@@ -41,8 +52,15 @@ public class HyPeerWebDatabaseTests {
 
 		db = HyPeerWebDatabase.getSingleton();
 		HyPeerWebDatabase.initHyPeerWebDatabase("test_db2.sqlite");
+		
+		String machineAddress = MachineAddress.getThisMachinesInetAddress().getHostAddress().toString();
+		PortNumber portNumber = new PortNumber(49152);
+		
+		nodeProxies[0] = new NodeProxy(new GlobalObjectId(machineAddress, portNumber, new LocalObjectId()));
+		nodeProxies[1] = new NodeProxy(new GlobalObjectId(machineAddress, portNumber, new LocalObjectId()));
+		nodeProxies[2] = new NodeProxy(new GlobalObjectId(machineAddress, portNumber, new LocalObjectId()));
 	}
-
+	
 	/**
 	 * Simple case that inserts a node into the database, retrieves it, and checks
 	 * that the retrieved values match what should have been put in.
@@ -104,6 +122,15 @@ public class HyPeerWebDatabaseTests {
 		result = db.getNode(node1.getWebIdValue());
 		confirm = node1.constructSimplifiedNodeDomain();
 		assertTrue(result.equals(confirm));
+	}
+	
+	@Test
+	public void testSaveProxyNodeToDatabase(){
+		db.storeNode(nodeProxies[0]);
+		ArrayList<Integer> webIds = (ArrayList<Integer>) db.getAllWebIds();
+		assertTrue(webIds.size() != 0);
+		SimplifiedNodeDomain snd = db.getNode(webIds.get(0));
+		assertTrue(snd != null);
 	}
 	
 	/**

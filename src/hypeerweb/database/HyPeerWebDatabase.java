@@ -2,6 +2,7 @@ package hypeerweb.database;
 
 import hypeerweb.node.Node;
 import hypeerweb.node.NodeInterface;
+import hypeerweb.node.NodeProxy;
 import hypeerweb.node.SimplifiedNodeDomain;
 
 import java.io.File;
@@ -77,7 +78,10 @@ public class HyPeerWebDatabase {
 														"fold INTEGER,"+
 														"surrogate_fold INTEGER,"+
 														"inverse_surrogate_fold INTEGER,"+
-														"state INTEGER);";
+														"state INTEGER" +
+														"port TEXT,"+
+														"machine_addr TEXT," + 
+														"local_id TEXT);";
 	
 	private static final String CREATE_TABLE_NEIGHBORS = "CREATE TABLE IF NOT EXISTS " + tableNames[1] + "("+
 															"node INTEGER NOT NULL,"+
@@ -204,6 +208,9 @@ public class HyPeerWebDatabase {
 			surrogate_fold = rs.getInt(4);
 			inverse_surrogate_fold = rs.getInt(5);
 			state = rs.getInt(6);
+			String port = rs.getString(7);
+			String machine_addr = rs.getString(8);
+			String local_id = rs.getString(9);
 
 			HashSet<Integer> neighbors = findNearbyFriends(webId, tableNames[1]);
 			HashSet<Integer> upPointers = findNearbyFriends(webId, tableNames[2]); 
@@ -211,6 +218,12 @@ public class HyPeerWebDatabase {
 
 			result = new SimplifiedNodeDomain(web_id, height, neighbors,
 					upPointers, downPointers, fold, surrogate_fold, inverse_surrogate_fold, state);
+			
+			if (port != null && machine_addr != null && local_id != null) {
+				result.setPort(port);
+				result.setMachine_addr(machine_addr);
+				result.setLocal_id(local_id);
+			}
 			
 			rs.close();
 			stmt.close();
@@ -303,21 +316,14 @@ public class HyPeerWebDatabase {
 			stmt.executeUpdate(sql_neighbors);					
 			
 			// Store General Info
-
-			String sql = String.format("INSERT INTO " + tableNames[0] +
-					"(web_id, height, fold, surrogate_fold, inverse_surrogate_fold, state) " +
-					"VALUES ('%d', '%d', '%d', '%d', '%d', '%d');",
-					node.getWebIdValue(),
-					node.getHeight(),
-					node.getFold().getWebIdValue(),
-					node.getSurrogateFold().getWebIdValue(),
-					node.getInverseSurrogateFold().getWebIdValue(),
-					node.getState().STATE_ID
-					);
-			stmt.executeUpdate(sql);
+			if (node instanceof NodeProxy) {
+				this.writeNodeProxyToDatabase((NodeProxy)node, stmt);
+			} else { // it's an instance of just normal node
+				this.writeNodeToDatabase(node, stmt);
+			}
 
 			// Store Neighbors
-
+			String sql = "";
 			for(NodeInterface neighbor : node.getNeighbors().values()){
 				sql = String.format("INSERT INTO " + tableNames[1] +
 						"(node, neighbor) " +
@@ -356,6 +362,58 @@ public class HyPeerWebDatabase {
 			e.printStackTrace();
 		}
 
+	}
+	
+	/**
+	 * A method for storing a node in the database
+	 * @param node, stmt to perform the update
+	 * @throws SQLException 
+	 * @pre Node must not be null
+	 * @post Node will be written to the database
+	 */
+	public void writeNodeToDatabase(Node node, Statement stmt) throws SQLException{
+		if(node == Node.NULL_NODE || stmt == null){
+			return;
+		}
+		String sql = String.format("INSERT INTO " + tableNames[0] +
+				"(web_id, height, fold, surrogate_fold, inverse_surrogate_fold, state) " +
+				"VALUES ('%d', '%d', '%d', '%d', '%d', '%d');",
+				node.getWebIdValue(),
+				node.getHeight(),
+				node.getFold().getWebIdValue(),
+				node.getSurrogateFold().getWebIdValue(),
+				node.getInverseSurrogateFold().getWebIdValue(),
+				node.getState().STATE_ID
+				);
+		stmt.executeUpdate(sql);
+	}
+	
+	/**
+	 * A method for storing a node proxy in the database
+	 * @param nodeProxy
+	 * @param stmt
+	 * @throws SQLException
+	 * @pre Neither parameter may be null
+	 * @post Node Proxy will be written to the database
+	 */
+	public void writeNodeProxyToDatabase(NodeProxy nodeProxy, Statement stmt) throws SQLException{
+		if (nodeProxy == NodeProxy.NULL_NODE || stmt == null) {
+			return;
+		}
+		String sql = String.format("INSERT INTO " + tableNames[0] +
+				"(web_id, height, fold, surrogate_fold, inverse_surrogate_fold, state, port, machine_addr, local_id) " +
+				"VALUES ('%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d');",
+				nodeProxy.getWebIdValue(),
+				nodeProxy.getHeight(),
+				nodeProxy.getFold().getWebIdValue(),
+				nodeProxy.getSurrogateFold().getWebIdValue(),
+				nodeProxy.getInverseSurrogateFold().getWebIdValue(),
+				nodeProxy.getState().STATE_ID,
+				nodeProxy.getGlobalObjectId().getPortNumber().toString(),
+				nodeProxy.getGlobalObjectId().getMachineAddr(),
+				nodeProxy.getGlobalObjectId().getLocalObjectId().toString()
+				);
+		stmt.executeUpdate(sql);
 	}
 
 	/**
