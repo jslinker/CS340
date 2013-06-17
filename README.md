@@ -10,7 +10,10 @@ Coverage Report
 http://students.cs.byu.edu/~nz3004/coverage
 
 Use Cases
-http://students.cs.byu.edu/~nz3004/use_cases.html
+http://students.cs.byu.edu/~nz3004/usecases/use_cases.html
+
+Constraints
+http://students.cs.byu.edu/~nz3004/usecases/Constraints.html
 
 Below is a UML diagram representing the conceptual model of the HyPeerWeb itself.
 ![Conceptual Model](/extra_content/IMG_0313.jpg "Conceptual Model")
