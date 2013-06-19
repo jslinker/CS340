@@ -105,5 +105,4 @@ Pre-Conditions:
 Post-Conditions:
 	The start Node will have had the visitor "visit" it.
 	All nodes in the web will have had the visitor "visit" it.
-
-![Contacts](/extra_content/contact_info.png "Contacts")
+	
